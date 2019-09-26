@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using TankzClient.Framework;
+using TankzClient.Game;
 
 namespace TankzClient
 {
@@ -23,6 +25,9 @@ namespace TankzClient
         {
             // Initialize your game here...
             // ...
+
+            // Load starting scene
+            SceneManager.Instance.LoadScene<TestScene>();
 
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
@@ -63,8 +68,8 @@ namespace TankzClient
         /// <param name="deltaTime">Time since last frame</param>
         private void Update(float deltaTime)
         {
-            // Update your game logic here...
-            // ...
+            // Update active scene
+            SceneManager.Instance.CurrentScene.Update(deltaTime);
 
             // Request window redraw
             Invalidate();
@@ -77,13 +82,9 @@ namespace TankzClient
         protected override void OnPaint(PaintEventArgs e)
         {
             Graphics context = e.Graphics;
-            // Render your game here ...
-            // ...
 
-            //TODO: remove later
-            // just for testing
-            Random rand = new Random();
-            context.Clear(Color.FromArgb(rand.Next(255), rand.Next(255), rand.Next(255)));
+            // Render the currently active scene
+            SceneManager.Instance.CurrentScene.Render(context);
 
             base.OnPaint(e);
         }
