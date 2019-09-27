@@ -5,7 +5,7 @@ namespace TankzClient.Framework.Components
     public class TransformComponent : IComponent
     {
         public Vector2 position { get; private set; }
-        public float angle { get; private set; }
+        public float angle { get; private set; }            //TODO: implement rotation
         public Vector2 size { get; private set; }
         
         public Rectangle Rect

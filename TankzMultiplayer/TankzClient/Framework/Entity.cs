@@ -13,6 +13,14 @@ namespace TankzClient.Framework
         private Dictionary<Type, IComponent> components = new Dictionary<Type, IComponent>();
 
         /// <summary>
+        /// By default all entities have Transform component applied
+        /// </summary>
+        protected Entity()
+        {
+            AddComponent<TransformComponent>();
+        }
+
+        /// <summary>
         /// Gets specific component from this entity
         /// </summary>
         /// <returns></returns>

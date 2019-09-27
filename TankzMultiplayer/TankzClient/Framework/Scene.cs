@@ -47,6 +47,7 @@ namespace TankzClient.Framework
         /// </summary>
         /// <param name="newEntity">Instance of newly created entity</param>
         /// <returns>The same entity that was created</returns>
+        /// TODO: rename to 'AddToScene' ???
         public Entity CreateEntity(Entity newEntity)
         {
             // Put entity into the list
