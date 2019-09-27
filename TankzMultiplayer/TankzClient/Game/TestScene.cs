@@ -15,6 +15,7 @@ namespace TankzClient.Game
             debug = CreateEntity(new AnimatedSprite(Image.FromFile("../../res/debug.jpg"), new Vector2(200, 200), new Vector2(100, 100), 10, 10)) as AnimatedSprite;
             debug.GetComponent<AnimationComponent>().AddAnimation("debug_anim", new FrameAnimation(10.0f, true, 0, 100));
             debug.GetComponent<AnimationComponent>().PlayAnimation("debug_anim");
+            debug.GetComponent<TransformComponent>().Rotate(30);
 
             player = CreateEntity(new AnimatedSprite(Image.FromFile("../../res/test_spritesheet.png"), new Vector2(300, 300), new Vector2(64, 64), 10, 4)) as AnimatedSprite;
             AnimationComponent animator = player.GetComponent<AnimationComponent>();
@@ -24,7 +25,6 @@ namespace TankzClient.Game
             animator.AddAnimation("run_right", new FrameAnimation(0.5f, true, 30, 10));
 
             animator.PlayAnimation("run_right");
-
         }
 
         public override void Render(Graphics context)
@@ -37,12 +37,15 @@ namespace TankzClient.Game
         }
 
         Vector2 direction = new Vector2(-1.0f, 0.0f);
-
+        float roll = 0.0f;
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
 
             TransformComponent playerTransform = player.GetComponent<TransformComponent>();
+            playerTransform.SetAngle(roll);
+            roll += deltaTime * 360f * direction.x;
+
             Vector2 position = playerTransform.position;
             playerTransform.SetPosition(position + direction * 4.0f);
             if (position.x > 500)

@@ -37,7 +37,9 @@ namespace TankzClient.Framework
             {
                 foreach (IRenderable renderable in renderLayers[layer])
                 {
+                    context.Transform = renderable.OrientationMatrix;
                     renderable.Render(context);
+                    context.ResetTransform();
                 }
             }
         }
