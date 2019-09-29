@@ -33,6 +33,10 @@ namespace TankzClient.Framework
 
         public void SetFrame(int index)
         {
+            // Make sure index is valid
+            if (index < 0 || index >= horSpan * vertSpan)
+                throw new System.IndexOutOfRangeException();
+
             frameOffset.x = index % horSpan * frameSize.x;
             frameOffset.y = index / horSpan * frameSize.y;
         }
