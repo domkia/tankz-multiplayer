@@ -26,16 +26,30 @@ namespace TankzClient.Game
             barrel.GetComponent<TransformComponent>().SetPosition(chassisPosition + new Vector2(0, -20));
             barrel.GetComponent<TransformComponent>().SetAngle(angle);
 
-            Input.OnKeyDown += RotateBarrel;
+            Input.OnKeyDown += (o, k) => {
+               
+                if (k == System.Windows.Forms.Keys.Left)
+                {
+                    rotDir = -1;
+                }
+                else if(k == System.Windows.Forms.Keys.Right)
+                {
+                    rotDir = 1;
+                }
+            };
+            Input.OnKeyUp += (o, k) => rotDir = 0;
         }
 
+        int rotDir = 0;
+
         float angle = -90;
-        private void RotateBarrel(object sender, System.Windows.Forms.Keys e)
+        private void RotateBarrel()
         {
-            if (e == System.Windows.Forms.Keys.Right)
-                angle += 5f;
-            else if (e == System.Windows.Forms.Keys.Left)
-                angle -= 5f;
+            if (rotDir == 0)
+            {
+                return;
+            }
+            angle += rotDir * 5;
             if (angle < -180)
                 angle = -180;
             else if (angle > 0)
@@ -55,6 +69,7 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
+            RotateBarrel();
             base.Update(deltaTime);
         }
     }
