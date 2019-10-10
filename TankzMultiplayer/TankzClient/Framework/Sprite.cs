@@ -20,7 +20,8 @@ namespace TankzClient.Framework
         public virtual void Render(Graphics context)
         {
             TransformComponent transform = base.GetComponent<TransformComponent>();
-            context.DrawImage(image, transform.position.x, transform.position.y, transform.size.x, transform.size.y);
+            Rectangle rect = transform.Rect;
+            context.DrawImage(image, rect.X, rect.Y, rect.Size.Width, rect.Size.Height);
         }
     }
 }
