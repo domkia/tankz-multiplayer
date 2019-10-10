@@ -59,6 +59,9 @@
     <Compile Include="Framework\Scene.cs" />
     <Compile Include="Framework\SceneManager.cs" />
     <Compile Include="Game\Tank.cs" />
+    <Compile Include="Game\TankAiming.cs" />
+    <Compile Include="Game\TankMovement.cs" />
+    <Compile Include="Game\TankPhase.cs" />
     <Compile Include="Game\TestScene.cs" />
     <Compile Include="Game\MainMenuScene.cs" />
     <Compile Include="TankzWindow.cs">

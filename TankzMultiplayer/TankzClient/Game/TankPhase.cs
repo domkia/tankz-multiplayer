@@ -5,6 +5,6 @@
     /// </summary>
     abstract class TankPhase
     {
-        public abstract void Update(Tank tank, float deltaTime);
+        public abstract void Update(float deltaTime);
     }
 }
