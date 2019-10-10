@@ -50,7 +50,7 @@ namespace TankzClient
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            while (Application.AllowQuit)
+            while (true)
             {
                 startTime = timer.ElapsedMilliseconds;
 
