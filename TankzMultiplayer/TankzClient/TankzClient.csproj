@@ -51,6 +51,7 @@
     <Compile Include="Framework\Components\IComponent.cs" />
     <Compile Include="Framework\Components\TransformComponent.cs" />
     <Compile Include="Framework\FrameAnimation.cs" />
+    <Compile Include="Framework\Input.cs" />
     <Compile Include="Framework\IRenderable.cs" />
     <Compile Include="Framework\Entity.cs" />
     <Compile Include="Framework\Sprite.cs" />

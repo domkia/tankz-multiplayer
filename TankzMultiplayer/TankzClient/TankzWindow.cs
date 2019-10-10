@@ -58,7 +58,8 @@ namespace TankzClient
                 Update(frameTime);
 
                 // Wait for the next frame
-                while (timer.ElapsedMilliseconds - startTime < frameMs) ;
+                // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep
+                Thread.Sleep(33);
             }
         }
 
@@ -95,7 +96,7 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            // Handle mouse clicks here ...
+            Input.HandleMouseClick(e);
             // ...
         }
 
@@ -105,8 +106,13 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            // Handle keyboard input here ...
+            Input.HandleKeyDown(e);
             // ...
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            Input.HandleKeyUp(e);
         }
     }
 }
