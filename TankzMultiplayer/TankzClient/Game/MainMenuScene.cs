@@ -5,9 +5,11 @@ namespace TankzClient.Game
 {
     public class MainMenuScene : Scene
     {
+        Tank tank;
+
         public MainMenuScene()
         {
-            
+            tank = CreateEntity(new Tank()) as Tank;
         }
 
         public override void Render(Graphics context)

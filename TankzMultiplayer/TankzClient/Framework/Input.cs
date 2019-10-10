@@ -13,9 +13,9 @@ namespace TankzClient.Framework
         public static event EventHandler<Keys> OnKeyDown;
         public static event EventHandler<Keys> OnKeyUp;
 
-        static internal void HandleMouseClick(MouseEventArgs args) => OnMouseClick.Invoke(null, new MouseArgs(args));
-        static internal void HandleKeyDown(KeyEventArgs args) => OnKeyDown.Invoke(null, args.KeyCode);
-        static internal void HandleKeyUp(KeyEventArgs args) => OnKeyUp.Invoke(null, args.KeyCode);
+        static internal void HandleMouseClick(MouseEventArgs args) => OnMouseClick?.Invoke(null, new MouseArgs(args));
+        static internal void HandleKeyDown(KeyEventArgs args) => OnKeyDown?.Invoke(null, args.KeyCode);
+        static internal void HandleKeyUp(KeyEventArgs args) => OnKeyUp?.Invoke(null, args.KeyCode);
     }
 
     public class MouseArgs : EventArgs

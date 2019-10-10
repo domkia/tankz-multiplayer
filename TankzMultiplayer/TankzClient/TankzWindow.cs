@@ -27,7 +27,7 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<TestScene>();
+            SceneManager.Instance.LoadScene<MainMenuScene>();
 
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
