@@ -16,6 +16,7 @@ namespace TankzClient.Game
         const string barrrelSpritePath = "../../res/tank_barrel.png";
 
         private Sprite barrel;
+        private TankPhase currentPhase = null;
 
         public Tank() : base(Image.FromFile(chassisSpritePath), new Vector2(128, 128), new Vector2(64, 48))
         {
@@ -70,6 +71,8 @@ namespace TankzClient.Game
         public override void Update(float deltaTime)
         {
             RotateBarrel();
+            if (currentPhase != null)
+                currentPhase.Update(this, deltaTime);
             base.Update(deltaTime);
         }
     }
