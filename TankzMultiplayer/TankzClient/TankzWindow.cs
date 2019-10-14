@@ -28,7 +28,8 @@ namespace TankzClient
 
             // Load starting scene
             SceneManager.Instance.LoadScene<MainMenuScene>();
-
+            NetworkManager.Instance.ConnectToServer();
+            
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
             updateThread.IsBackground = true;
@@ -56,6 +57,9 @@ namespace TankzClient
 
                 // Update and redraw the game
                 Update(frameTime);
+
+                // Checks for response
+                NetworkManager.Instance.ReceiveResponse();
 
                 // Wait for the next frame
                 // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep
@@ -96,6 +100,8 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            NetworkManager.Instance.SendRequest(e.Location.ToString());
+            NetworkManager.Instance.SendRequest("meeting");
             Input.HandleMouseClick(e);
             // ...
         }

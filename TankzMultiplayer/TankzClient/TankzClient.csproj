@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{ACEE50F6-435C-43B5-98D7-327C028A7166}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>TankzClient</RootNamespace>
     <AssemblyName>TankzClient</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,6 +57,7 @@
     <Compile Include="Framework\Input.cs" />
     <Compile Include="Framework\IRenderable.cs" />
     <Compile Include="Framework\Entity.cs" />
+    <Compile Include="Framework\NetworkManager.cs" />
     <Compile Include="Framework\Sprite.cs" />
     <Compile Include="Framework\Vector2.cs" />
     <Compile Include="Framework\Scene.cs" />
