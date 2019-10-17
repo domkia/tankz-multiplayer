@@ -10,44 +10,41 @@ namespace TankzClient.Game
 {
     class TankAiming : TankPhase
     {
-        //int rotDir = 0;
+        int rotDir = 0;
 
-        public TankAiming(Tank tank, float angle) : base (tank)
+        public TankAiming(Tank tank) : base (tank)
         {
-           /* this.angle = angle;
             this.tank = tank;
-            Input.OnKeyDown += (o, k) => {
-
-                if (k == System.Windows.Forms.Keys.Left)
-                {
-                    rotDir = -1;
-                }
-                else if (k == System.Windows.Forms.Keys.Right)
-                {
-                    rotDir = 1;
-                }
-            };
-            Input.OnKeyUp += (o, k) => rotDir = 0;*/
         }
 
-        private void RotateBarrel()
+        private void RotateBarrel(float deltaTime)
         {
-           /* if (rotDir == 0)
+            if (rotDir == 0)
             {
                 return;
             }
-            angle += rotDir * 5;
-            if (angle < -180)
-                angle = -180;
-            else if (angle > 0)
-                angle = 0;
+            
+            tank.barrel.angle += rotDir * 5;
+            if (tank.barrel.angle < -180)
+                tank.barrel.angle = -180;
+            else if (tank.barrel.angle > 0)
+                tank.barrel.angle = 0;
             TransformComponent t = tank.barrel.GetComponent<TransformComponent>();
-            t.SetAngle(angle);*/
+            t.SetAngle(tank.barrel.angle);
         }
         
         public override void Update(float deltaTime)
         {
-            throw new NotImplementedException();
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
+            {
+                rotDir = -1;
+            }
+            else if (Input.IsKeyDown(System.Windows.Forms.Keys.Right))
+            {
+                rotDir = 1;
+            }
+            else rotDir = 0;
+            RotateBarrel(deltaTime);
         }
 
     }

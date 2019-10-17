@@ -23,7 +23,7 @@ namespace TankzClient.Game
             // Setup barrel
             barrel = new TankBarrel(this, Image.FromFile(barrrelSpritePath), new Vector2(50, 50), new Vector2(64, 8));
 
-            currentPhase = new TankMovement(this);
+            currentPhase = new TankAiming(this);
         }
 
         public override void Render(Graphics context)
