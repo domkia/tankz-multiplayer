@@ -37,7 +37,7 @@ namespace TankzClient.Framework
         internal static void HandleKeyUp(Keys key)
         {
             if(inputQueue.Contains(key))
-                inputQueue.Remove(key));
+                inputQueue.Remove(key);
         }
 
         internal static void HandleMousePosition(int x, int y)
