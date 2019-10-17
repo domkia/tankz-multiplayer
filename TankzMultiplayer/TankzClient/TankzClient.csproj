@@ -56,6 +56,7 @@
     <Compile Include="Framework\Components\TransformComponent.cs" />
     <Compile Include="Framework\FrameAnimation.cs" />
     <Compile Include="Framework\Input.cs" />
+    <Compile Include="Framework\InputField.cs" />
     <Compile Include="Framework\IRenderable.cs" />
     <Compile Include="Framework\Entity.cs" />
     <Compile Include="Framework\NetworkManager.cs" />
