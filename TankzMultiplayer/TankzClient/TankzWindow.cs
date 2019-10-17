@@ -60,7 +60,7 @@ namespace TankzClient
                 Input.Reset();
 
                 // Checks for response
-                NetworkManager.Instance.ReceiveResponse();
+                //NetworkManager.Instance.ReceiveResponse();
 
                 // Wait for the next frame
                 // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep

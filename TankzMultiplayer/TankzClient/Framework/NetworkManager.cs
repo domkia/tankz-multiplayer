@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -72,7 +70,6 @@ namespace TankzClient.Framework
                 Array.Copy(buffer, data, received);
                 string text = Encoding.ASCII.GetString(data);
                 Console.WriteLine(text);
-                //MessageBox.Show(text);
             }
             catch (Exception ex)
             {
@@ -96,7 +93,6 @@ namespace TankzClient.Framework
 
         public void Disconnect()
         {
-            //SendString("exit");
             ClientSocket.Shutdown(SocketShutdown.Both);
             ClientSocket.Close();
             Environment.Exit(0);
