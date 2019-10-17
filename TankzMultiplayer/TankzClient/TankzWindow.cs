@@ -28,7 +28,7 @@ namespace TankzClient
 
             // Load starting scene
             SceneManager.Instance.LoadScene<MainMenuScene>();
-            NetworkManager.Instance.ConnectToServer();
+            //NetworkManager.Instance.ConnectToServer();
             
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
@@ -117,7 +117,7 @@ namespace TankzClient
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            //Input.HandleKeyUp(e.KeyCode);
+            Input.HandleKeyUp(e.KeyCode);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)

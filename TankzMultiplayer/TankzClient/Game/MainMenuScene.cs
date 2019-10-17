@@ -18,5 +18,14 @@ namespace TankzClient.Game
             base.Render(context);
             context.DrawString("Scene: Main Menu", SystemFonts.MenuFont, Brushes.Red, new Point(0, 0));
         }
+
+        public override void Update(float deltaTime)
+        {
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
+            {
+                bool a = false;
+            }
+            base.Update(deltaTime);
+        }
     }
 }

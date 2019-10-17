@@ -33,7 +33,10 @@ namespace TankzClient.Framework.Components
             this.orientationMatrix = new Matrix();
         }
 
-        public void SetPosition(Vector2 newPosition) => this.position = newPosition;
+        public void SetPosition(Vector2 newPosition)
+        {
+            this.position = newPosition;
+        }
 
         public void SetAngle(float newAngle)
         {

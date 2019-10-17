@@ -15,32 +15,20 @@ namespace TankzClient.Game
         const string chassisSpritePath = "../../res/tank_chassis_1.png";
         const string barrrelSpritePath = "../../res/tank_barrel.png";
 
-        public Sprite barrel;
+        public TankBarrel barrel;
         private TankPhase currentPhase = null;
-        private float startAngle = -90;
 
         public Tank() : base(Image.FromFile(chassisSpritePath), new Vector2(128, 128), new Vector2(64, 48))
         {
-            Vector2 chassisPosition = GetComponent<TransformComponent>().position;
-
             // Setup barrel
-            barrel = new Sprite(Image.FromFile(barrrelSpritePath), new Vector2(50, 50), new Vector2(64, 8));
-            barrel.GetComponent<TransformComponent>().SetPosition(chassisPosition + new Vector2(0, -20));
-            barrel.GetComponent<TransformComponent>().SetAngle(startAngle);
+            barrel = new TankBarrel(this, Image.FromFile(barrrelSpritePath), new Vector2(50, 50), new Vector2(64, 8));
 
             currentPhase = new TankMovement(this);
         }
 
-        
-
-        
-
         public override void Render(Graphics context)
         {
-            context.Transform = barrel.OrientationMatrix;
             barrel.Render(context);
-            context.ResetTransform();
-
             base.Render(context);
         }
 
@@ -49,8 +37,7 @@ namespace TankzClient.Game
             if (currentPhase != null)
                 currentPhase.Update(deltaTime);
             base.Update(deltaTime);
-            barrel.GetComponent<TransformComponent>().SetPosition(GetComponent<TransformComponent>().position + new Vector2(0, -20));
-
+            barrel.Update(deltaTime);
         }
     }
 }

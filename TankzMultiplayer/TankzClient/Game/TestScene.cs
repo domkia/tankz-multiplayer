@@ -65,6 +65,8 @@ namespace TankzClient.Game
                 anim.PlayAnimation("run_left");
             else if (direction.x > 0 && !anim.IsAnimationPlaying("run_right"))
                 anim.PlayAnimation("run_right");
+
+
         }
     }
 }

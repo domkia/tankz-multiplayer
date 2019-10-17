@@ -64,6 +64,7 @@
     <Compile Include="Framework\SceneManager.cs" />
     <Compile Include="Game\Tank.cs" />
     <Compile Include="Game\TankAiming.cs" />
+    <Compile Include="Game\TankBarrel.cs" />
     <Compile Include="Game\TankIdle.cs" />
     <Compile Include="Game\TankMovement.cs" />
     <Compile Include="Game\TankPhase.cs" />

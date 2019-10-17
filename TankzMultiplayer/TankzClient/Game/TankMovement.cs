@@ -10,7 +10,7 @@ namespace TankzClient.Game
 {
     class TankMovement : TankPhase
     {
-        float speed = 3;
+        float speed = 30;
         int movDir;
         Vector2 position;
 
@@ -28,7 +28,7 @@ namespace TankzClient.Game
 
             position = tank.GetComponent<TransformComponent>().position;
             //TODO: apribojimai 
-            tank.GetComponent<TransformComponent>().SetPosition(position+new Vector2(movDir* deltaTime * speed, 0));
+            tank.GetComponent<TransformComponent>().SetPosition(position + new Vector2(movDir* deltaTime * speed, 0));
 
 
         }
@@ -43,6 +43,8 @@ namespace TankzClient.Game
             {
                 movDir = 1;
             }
+            else
+                movDir = 0;
             MoveTank(deltaTime);
         }
     }

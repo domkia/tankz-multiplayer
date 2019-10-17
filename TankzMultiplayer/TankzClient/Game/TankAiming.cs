@@ -10,8 +10,7 @@ namespace TankzClient.Game
 {
     class TankAiming : TankPhase
     {
-        int rotDir = 0;
-        float angle = -90;
+        //int rotDir = 0;
 
         public TankAiming(Tank tank, float angle) : base (tank)
         {
