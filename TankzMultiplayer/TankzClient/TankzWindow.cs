@@ -56,6 +56,7 @@ namespace TankzClient
 
                 // Update and redraw the game
                 Update(frameTime);
+                Input.Reset();
 
                 // Wait for the next frame
                 // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep
@@ -97,7 +98,6 @@ namespace TankzClient
         protected override void OnMouseClick(MouseEventArgs e)
         {
             Input.HandleMouseClick(e);
-            // ...
         }
 
         /// <summary>
@@ -106,13 +106,17 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            Input.HandleKeyDown(e);
-            // ...
+            Input.HandleKeyDown(e.KeyCode);
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            Input.HandleKeyUp(e);
+            Input.HandleKeyUp(e.KeyCode);
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            Input.HandleMousePosition(e.Location.X, e.Location.Y);
         }
     }
 }

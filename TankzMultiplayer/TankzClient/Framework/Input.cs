@@ -1,21 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TankzClient.Framework
 {
     static class Input
     {
-        public static event EventHandler<MouseArgs> OnMouseClick;
-        public static event EventHandler<Keys> OnKeyDown;
-        public static event EventHandler<Keys> OnKeyUp;
+        public static List<Keys> inputQueue = new List<Keys>();
 
-        static internal void HandleMouseClick(MouseEventArgs args) => OnMouseClick?.Invoke(null, new MouseArgs(args));
-        static internal void HandleKeyDown(KeyEventArgs args) => OnKeyDown?.Invoke(null, args.KeyCode);
-        static internal void HandleKeyUp(KeyEventArgs args) => OnKeyUp?.Invoke(null, args.KeyCode);
+        public static event EventHandler<MouseArgs> OnMouseClick;
+
+        public static bool IsKeyDown(Keys key) => inputQueue.Contains(key);
+
+        public static bool IsKeyUp(Keys key) => !IsKeyDown(key);
+
+        public static bool MouseButtonDown => mouseDown;
+
+        private static bool mouseDown = false;
+        private static Vector2 mousePosition = new Vector2();
+        private static Vector2 MousePosition => mousePosition;
+
+        internal static void HandleMouseClick(MouseEventArgs args) => OnMouseClick?.Invoke(null, new MouseArgs(args));
+
+        internal static void Reset()
+        {
+            mouseDown = false;
+            inputQueue.Clear();
+        }
+
+        internal static void HandleKeyDown(Keys key)
+        {
+            if (!inputQueue.Contains(key))
+                inputQueue.Add(key);
+        }
+
+        internal static void HandleKeyUp(Keys key)
+        {
+            if(inputQueue.Contains(key))
+                inputQueue.Remove(key));
+        }
+
+        internal static void HandleMousePosition(int x, int y)
+        {
+            mousePosition.x = x;
+            mousePosition.y = y;
+        }
     }
 
     public class MouseArgs : EventArgs
