@@ -15,7 +15,7 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

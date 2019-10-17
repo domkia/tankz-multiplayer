@@ -11,40 +11,57 @@ namespace TankzClient.Game
     class TankAiming : TankPhase
     {
         int rotDir = 0;
-
+        bool isKeyDown = false;
         public TankAiming(Tank tank) : base (tank)
         {
-            this.tank = tank;
+
         }
 
         private void RotateBarrel(float deltaTime)
         {
-            if (rotDir == 0)
+            if (isKeyDown)
             {
-                return;
+                if (rotDir == 0)
+                {
+                    return;
+                }
+
+                tank.barrel.angle += rotDir * 5;
+                if (tank.barrel.angle < -180)
+                    tank.barrel.angle = -180;
+                else if (tank.barrel.angle > 0)
+                    tank.barrel.angle = 0;
+                TransformComponent t = tank.barrel.GetComponent<TransformComponent>();
+                t.SetAngle(tank.barrel.angle);
             }
             
-            tank.barrel.angle += rotDir * 5;
-            if (tank.barrel.angle < -180)
-                tank.barrel.angle = -180;
-            else if (tank.barrel.angle > 0)
-                tank.barrel.angle = 0;
-            TransformComponent t = tank.barrel.GetComponent<TransformComponent>();
-            t.SetAngle(tank.barrel.angle);
         }
-        
+        //TODO: Fix input to be smooth without spagetti
         public override void Update(float deltaTime)
         {
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Left) || Input.IsKeyDown(System.Windows.Forms.Keys.Right))
             {
-                rotDir = -1;
+                isKeyDown = true;
+                if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
+                {
+                    rotDir = -1;
+                }
+                else if (Input.IsKeyDown(System.Windows.Forms.Keys.Right))
+                {
+                    rotDir = 1;
+                }
             }
-            else if (Input.IsKeyDown(System.Windows.Forms.Keys.Right))
+            else if (Input.IsKeyUp(System.Windows.Forms.Keys.Left) || Input.IsKeyUp(System.Windows.Forms.Keys.Right))
             {
-                rotDir = 1;
+                rotDir = 0;
+                isKeyDown = false;
             }
-            else rotDir = 0;
-            RotateBarrel(deltaTime);
+
+            //else rotDir = 0;
+            if (isKeyDown == true)
+            {
+                RotateBarrel(deltaTime);
+            }
         }
 
     }
