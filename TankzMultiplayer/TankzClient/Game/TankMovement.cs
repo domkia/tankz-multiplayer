@@ -10,9 +10,40 @@ namespace TankzClient.Game
 {
     class TankMovement : TankPhase
     {
+        float speed = 3;
+        int movDir;
+        Vector2 position;
+
+        public TankMovement(Tank tank) : base (tank)
+        {
+            
+        }
+
+        private void MoveTank(float deltaTime)
+        {
+            if (movDir == 0)
+            {
+                return;
+            }
+
+            position = tank.GetComponent<TransformComponent>().position;
+            //TODO: apribojimai 
+            tank.GetComponent<TransformComponent>().SetPosition(position+new Vector2(movDir* deltaTime * speed, 0));
+
+
+        }
         public override void Update(float deltaTime)
         {
-            //tank.GetComponent<TransformComponent>().SetPosition();
+
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
+            {
+                movDir = -1;
+            }
+            else if (Input.IsKeyDown(System.Windows.Forms.Keys.Right))
+            {
+                movDir = 1;
+            }
+            MoveTank(deltaTime);
         }
     }
 }

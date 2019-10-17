@@ -27,6 +27,8 @@ namespace TankzClient.Game
             barrel = new Sprite(Image.FromFile(barrrelSpritePath), new Vector2(50, 50), new Vector2(64, 8));
             barrel.GetComponent<TransformComponent>().SetPosition(chassisPosition + new Vector2(0, -20));
             barrel.GetComponent<TransformComponent>().SetAngle(startAngle);
+
+            currentPhase = new TankMovement(this);
         }
 
         
@@ -47,6 +49,8 @@ namespace TankzClient.Game
             if (currentPhase != null)
                 currentPhase.Update(deltaTime);
             base.Update(deltaTime);
+            barrel.GetComponent<TransformComponent>().SetPosition(GetComponent<TransformComponent>().position + new Vector2(0, -20));
+
         }
     }
 }

@@ -10,11 +10,12 @@ namespace TankzClient.Game
 {
     class TankAiming : TankPhase
     {
-        private Tank tank;
+        int rotDir = 0;
+        float angle = -90;
 
-        public TankAiming(Tank tank, float angle)
+        public TankAiming(Tank tank, float angle) : base (tank)
         {
-            this.angle = angle;
+           /* this.angle = angle;
             this.tank = tank;
             Input.OnKeyDown += (o, k) => {
 
@@ -27,13 +28,12 @@ namespace TankzClient.Game
                     rotDir = 1;
                 }
             };
-            Input.OnKeyUp += (o, k) => rotDir = 0;
+            Input.OnKeyUp += (o, k) => rotDir = 0;*/
         }
 
-        float angle = -90;
         private void RotateBarrel()
         {
-            if (rotDir == 0)
+           /* if (rotDir == 0)
             {
                 return;
             }
@@ -43,9 +43,9 @@ namespace TankzClient.Game
             else if (angle > 0)
                 angle = 0;
             TransformComponent t = tank.barrel.GetComponent<TransformComponent>();
-            t.SetAngle(angle);
+            t.SetAngle(angle);*/
         }
-        int rotDir = 0;
+        
         public override void Update(float deltaTime)
         {
             throw new NotImplementedException();

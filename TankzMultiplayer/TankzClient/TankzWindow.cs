@@ -117,7 +117,7 @@ namespace TankzClient
 
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            Input.HandleKeyUp(e.KeyCode);
+            //Input.HandleKeyUp(e.KeyCode);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
