@@ -12,7 +12,7 @@ namespace TankzClient.Framework
 
         private Brush brush = Brushes.Gray;
         private Brush textBrush = Brushes.White;
-        private Font font;        
+        private Font font;
 
         public event Action OnClickCallback;
 
@@ -38,8 +38,9 @@ namespace TankzClient.Framework
             context.DrawString(this.Text, this.font, textBrush, rect);
         }
 
-        public void Click()
+        public override void Click(Point point)
         {
+            if(rect.Contains(point))
             if (OnClickCallback != null)
                 OnClickCallback.Invoke();
         }

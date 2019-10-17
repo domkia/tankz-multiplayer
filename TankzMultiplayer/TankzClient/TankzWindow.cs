@@ -101,8 +101,8 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            NetworkManager.Instance.SendRequest(e.Location.ToString());
-            NetworkManager.Instance.SendRequest("meeting");
+            //NetworkManager.Instance.SendRequest(e.Location.ToString());
+            //NetworkManager.Instance.SendRequest("meeting");
             Input.HandleMouseClick(e);
         }
 

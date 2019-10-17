@@ -10,9 +10,6 @@ namespace TankzClient.Framework
         protected Rectangle rect;
         protected Color tintColor;
 
-
-
-
         public virtual int SortingLayer => 10;
 
         protected UIElement(Rectangle rect)
@@ -50,5 +47,6 @@ namespace TankzClient.Framework
         {
             return rect.Contains(mousePos);
         }
+        public abstract void Click(Point mousePos);
     }
 }
