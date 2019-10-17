@@ -7,6 +7,7 @@ namespace TankzClient.Game
     {
         Tank tank;
         private Button startButton;
+        private InputField inputField;
 
         private void StartButton_OnClickCallback()
         {
@@ -15,6 +16,7 @@ namespace TankzClient.Game
         public MainMenuScene()
         {
             tank = CreateEntity(new Tank()) as Tank;
+            inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
             startButton = CreateEntity(new Button(100, 100, 50, 50, null, "test")) as Button;
             startButton.OnClickCallback += StartButton_OnClickCallback;
         }
@@ -28,10 +30,6 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
-            {
-                bool a = false;
-            }
             base.Update(deltaTime);
         }
     }
