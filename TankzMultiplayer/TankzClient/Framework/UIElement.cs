@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Framework
 {
@@ -17,12 +16,6 @@ namespace TankzClient.Framework
             this.rect = rect;
         }
 
-        public Point Position()
-        {
-            Point point = new Point((int)GetComponent<TransformComponent>().position.x, (int)GetComponent<TransformComponent>().position.x);
-            return point;
-        }
-
         public Size Size
         {
             get { return rect.Size; }
@@ -31,7 +24,7 @@ namespace TankzClient.Framework
 
         public Rectangle Rect => this.rect;
 
-        public Matrix OrientationMatrix => GetComponent<TransformComponent>().OrientationMatrix;
+        public Matrix OrientationMatrix => transform.OrientationMatrix;
 
         public virtual void Render(Graphics context)
         {

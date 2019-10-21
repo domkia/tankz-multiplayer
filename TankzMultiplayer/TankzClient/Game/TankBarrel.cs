@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using TankzClient.Framework;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Game
 {
@@ -9,14 +8,14 @@ namespace TankzClient.Game
         const float startAngle = -90;
         public float angle = startAngle;
 
-        private Tank parent;
+        private Tank tank;
 
         public TankBarrel(Tank tank, Image image, Vector2 position, Vector2 size) : base(image, position, size)
         {
-            this.parent = tank;
-            Vector2 tankPosition = tank.GetComponent<TransformComponent>().position;
-            GetComponent<TransformComponent>().SetPosition(tankPosition + new Vector2(0, -20));
-            GetComponent<TransformComponent>().SetAngle(startAngle);
+            this.tank = tank;
+            Vector2 tankPosition = tank.transform.position;
+            transform.SetPosition(tankPosition + new Vector2(0, -20));
+            transform.SetAngle(startAngle);
         }
 
         public override void Render(Graphics context)
@@ -29,9 +28,9 @@ namespace TankzClient.Game
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
-            GetComponent<TransformComponent>().Rotate(-angle);
-            GetComponent<TransformComponent>().SetPosition(parent.GetComponent<TransformComponent>().position + new Vector2(0, -20));
-            GetComponent<TransformComponent>().Rotate(angle);
+            transform.Rotate(-angle);
+            transform.SetPosition(tank.transform.position + new Vector2(0, -20));
+            transform.Rotate(angle);
         }
     }
 }

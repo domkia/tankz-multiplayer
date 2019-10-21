@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Framework
 {
@@ -9,59 +8,51 @@ namespace TankzClient.Framework
     /// </summary>
     public abstract class Entity
     {
-        // Components attached to this entity
-        private Dictionary<Type, IComponent> components = new Dictionary<Type, IComponent>();
+        public Entity parent { get; internal set; }
+        public List<Entity> children { get; internal set; }
+
+        public Transform transform { get; protected set; }
 
         /// <summary>
-        /// By default all entities have Transform component applied
+        /// Default constructor
         /// </summary>
-        protected Entity()
+        protected Entity(Entity parent = null)
         {
-            AddComponent<TransformComponent>();
-        }
-
-        /// <summary>
-        /// Gets specific component from this entity
-        /// </summary>
-        /// <returns></returns>
-        public TComponent GetComponent<TComponent>() where TComponent : class, IComponent
-        {
-            if (components.ContainsKey(typeof(TComponent)))
+            transform = new Transform();
+            children = new List<Entity>();
+            if (parent != null)
             {
-                return (TComponent)components[typeof(TComponent)];
+                SetParent(parent);
             }
-            return null;
         }
 
         /// <summary>
-        /// Add initialized component to this entity
+        /// Set this entity as a child of given parent
         /// </summary>
-        public IComponent AddComponent<TComponent>(TComponent component) where TComponent : IComponent, new()
+        /// <param name="parent"></param>
+        private void SetParent(Entity parent)
         {
-            if (!components.ContainsKey(typeof(TComponent)))
+            if (children.Contains(parent))
             {
-                components.Add(typeof(TComponent), component);
-                return component;
+                throw new Exception("Can't set child as a parent. Possible loop");
             }
-            return null;
+
+            if (parent != null)
+            {
+                this.parent = parent;
+                parent.children.Add(this);
+            }
+            else
+            {
+                this.parent.children.Remove(this);
+                this.parent = null;
+            }
         }
 
         /// <summary>
-        /// Add new component to this entity
-        /// </summary>
-        public IComponent AddComponent<TComponent>() where TComponent : IComponent, new()
-        {
-            return AddComponent<TComponent>(new TComponent());
-        }
-
-        /// <summary>
-        /// Update each compoent added to this entity
+        /// Update this entity
         /// </summary>
         /// <param name="deltaTime">Time since last frame</param>
-        public virtual void Update(float deltaTime)
-        {
-            foreach (IComponent component in components.Values)
-                component.Update(deltaTime, this);
-        }
+        public virtual void Update(float deltaTime) { }
     }
 }

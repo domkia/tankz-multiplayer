@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Framework
 {
@@ -10,6 +9,8 @@ namespace TankzClient.Framework
     {
         public int horSpan { get; private set; }
         public int vertSpan { get; private set; }
+        public IAnimator animator { get; protected set; }
+
         private Vector2 frameSize;
         private Vector2 frameOffset;
 
@@ -20,15 +21,19 @@ namespace TankzClient.Framework
             this.vertSpan = vertSpan;
             frameOffset = new Vector2(0, 0);
             frameSize = new Vector2(image.Width / horSpan, image.Height / vertSpan);
-            AddComponent<AnimationComponent>();
 
+            this.animator = new SpriteAnimator();
             SetFrame(0);
         }
 
         public override void Render(Graphics context)
         {
-            TransformComponent transform = GetComponent<TransformComponent>();
             context.DrawImage(image, transform.Rect, frameOffset.x, frameOffset.y, frameSize.x, frameSize.y, GraphicsUnit.Pixel);
+        }
+
+        public override void Update(float deltaTime)
+        {
+            animator.Update(deltaTime, this);
         }
 
         public void SetFrame(int index)

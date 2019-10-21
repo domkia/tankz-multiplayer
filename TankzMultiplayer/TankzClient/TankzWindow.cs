@@ -27,7 +27,7 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<MainMenuScene>();
+            SceneManager.Instance.LoadScene<TestScene>();
             NetworkManager.Instance.ConnectToServer();
             
             // Begin counting frames

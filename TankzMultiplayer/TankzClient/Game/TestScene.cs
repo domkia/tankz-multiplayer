@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using TankzClient.Framework;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Game
 {
@@ -13,12 +12,12 @@ namespace TankzClient.Game
         public TestScene()
         {
             debug = CreateEntity(new AnimatedSprite(Image.FromFile("../../res/debug.jpg"), new Vector2(200, 200), new Vector2(100, 100), 10, 10)) as AnimatedSprite;
-            debug.GetComponent<AnimationComponent>().AddAnimation("debug_anim", new FrameAnimation(10.0f, true, 0, 100));
-            debug.GetComponent<AnimationComponent>().PlayAnimation("debug_anim");
-            debug.GetComponent<TransformComponent>().Rotate(30);
+            debug.animator.AddAnimation("debug_anim", new FrameAnimation(10.0f, true, 0, 100));
+            debug.animator.PlayAnimation("debug_anim");
+            debug.transform.Rotate(30);
 
             player = CreateEntity(new AnimatedSprite(Image.FromFile("../../res/test_spritesheet.png"), new Vector2(300, 300), new Vector2(64, 64), 10, 4)) as AnimatedSprite;
-            AnimationComponent animator = player.GetComponent<AnimationComponent>();
+            IAnimator animator = player.animator;
             animator.AddAnimation("run_down", new FrameAnimation(0.5f, true, 0, 10));
             animator.AddAnimation("run_left", new FrameAnimation(0.5f, true, 10, 10));
             animator.AddAnimation("run_up", new FrameAnimation(0.5f, true, 20, 10));
@@ -31,7 +30,7 @@ namespace TankzClient.Game
 
         private void Input_OnMouseClick(object sender, MouseArgs e)
         {
-            player.GetComponent<TransformComponent>().SetPosition(e.mousePosition);
+            player.transform.SetPosition(e.mousePosition);
         }
 
         public override void Render(Graphics context)
@@ -49,7 +48,7 @@ namespace TankzClient.Game
         {
             base.Update(deltaTime);
 
-            TransformComponent playerTransform = player.GetComponent<TransformComponent>();
+            Transform playerTransform = player.transform;
             playerTransform.SetAngle(roll);
             roll += deltaTime * 360f * direction.x;
 
@@ -60,7 +59,7 @@ namespace TankzClient.Game
            //if (position.x < 100)
            //    direction.x = 1.0f;
 
-            AnimationComponent anim = player.GetComponent<AnimationComponent>();
+            IAnimator anim = player.animator;
             if (direction.x < 0 && !anim.IsAnimationPlaying("run_left"))
                 anim.PlayAnimation("run_left");
             else if (direction.x > 0 && !anim.IsAnimationPlaying("run_right"))

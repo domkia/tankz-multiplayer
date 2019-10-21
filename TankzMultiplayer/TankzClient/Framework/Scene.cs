@@ -69,7 +69,15 @@ namespace TankzClient.Framework
             if (entities.Contains(newEntity))
                 return null;
             entities.Add(newEntity);
+            if (newEntity.children.Count > 0)
+            {
+                foreach (Entity child in newEntity.children)
+                {
+                    entities.Add(child);
+                }
+            }
 
+            // TODO: Possible double update bug
             UIElement element = newEntity as UIElement;
             if(element != null)
             {
@@ -112,7 +120,16 @@ namespace TankzClient.Framework
 
             // Remove entity from the list
             if (entities.Contains(entity))
+            {
+                if (entity.children.Count > 0)
+                {
+                    foreach (Entity child in entity.children)
+                    {
+                        DestroyEntity(child);
+                    }
+                }
                 return entities.Remove(entity);
+            }
 
             return false;
         }

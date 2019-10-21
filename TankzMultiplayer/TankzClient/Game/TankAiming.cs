@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Game
 {
@@ -31,7 +30,7 @@ namespace TankzClient.Game
                     tank.barrel.angle = -180;
                 else if (tank.barrel.angle > 0)
                     tank.barrel.angle = 0;
-                TransformComponent t = tank.barrel.GetComponent<TransformComponent>();
+                Transform t = tank.barrel.transform;
                 t.SetAngle(tank.barrel.angle);
             }
             

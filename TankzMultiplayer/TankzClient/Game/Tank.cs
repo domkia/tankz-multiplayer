@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Game
 {

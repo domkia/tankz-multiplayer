@@ -1,9 +1,9 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace TankzClient.Framework.Components
+namespace TankzClient.Framework
 {
-    public class TransformComponent : IComponent
+    public sealed class Transform
     {
         public Vector2 position { get; private set; }
         public float angle { get; private set; }            
@@ -25,7 +25,7 @@ namespace TankzClient.Framework.Components
             }
         }
 
-        public TransformComponent()
+        public Transform()
         {
             this.position = new Vector2(0, 0);
             this.size = new Vector2(100, 100);
@@ -59,7 +59,5 @@ namespace TankzClient.Framework.Components
         }
 
         public void SetSize(Vector2 newSize) => this.size = newSize;
-
-        public void Update(float deltaTime, Entity entity) { }
     }
 }

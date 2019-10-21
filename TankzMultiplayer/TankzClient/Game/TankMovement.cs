@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
-using TankzClient.Framework.Components;
 
 namespace TankzClient.Game
 {
@@ -26,9 +25,9 @@ namespace TankzClient.Game
                 return;
             }
 
-            position = tank.GetComponent<TransformComponent>().position;
+            position = tank.transform.position;
             //TODO: apribojimai 
-            tank.GetComponent<TransformComponent>().SetPosition(position + new Vector2(movDir* deltaTime * speed, 0));
+            tank.transform.SetPosition(position + new Vector2(movDir* deltaTime * speed, 0));
 
 
         }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TankzClient.Framework.Components
+namespace TankzClient.Framework
 {
     /// <summary>
     /// Sprite frame animation component.
     /// Supports only NxM spritesheets
     /// </summary>
-    public class AnimationComponent : IComponent
+    public class SpriteAnimator : IAnimator
     {
         // Dictionary of animations we can access by their name
         private Dictionary<string, FrameAnimation> animations;
@@ -20,7 +20,7 @@ namespace TankzClient.Framework.Components
 
         private float timer;
 
-        public AnimationComponent()
+        public SpriteAnimator()
         {
             animations = new Dictionary<string, FrameAnimation>();
             timer = 0.0f;
@@ -30,13 +30,14 @@ namespace TankzClient.Framework.Components
         /// <summary>
         /// Add a new animation
         /// </summary>
-        public void AddAnimation(string name, FrameAnimation animation)
+        public void AddAnimation(string name, IAnimationData animation)
         {
             //TODO: check for the same name
-            animations.Add(name, animation);
+            FrameAnimation frameAnimation = animation as FrameAnimation;
+            animations.Add(name, frameAnimation);
             if (animations.Count == 1)
             {
-                currentAnimation = animation;
+                currentAnimation = frameAnimation;
             }
         }
 
@@ -66,7 +67,7 @@ namespace TankzClient.Framework.Components
             isPlaying = false;
         }
 
-        public void Update(float deltaTime, Entity entity)
+        public void Update(float deltaTime, AnimatedSprite animatedSprite)
         {
             if (isPlaying == false || animations.Count == 0)
                 return;
@@ -92,8 +93,7 @@ namespace TankzClient.Framework.Components
 
             // Set frame based on timer
             int currFrame = currentAnimation.GetFrame(timer);
-            AnimatedSprite sprite = entity as AnimatedSprite;
-            sprite.SetFrame(currFrame);
+            animatedSprite.SetFrame(currFrame);
 
             // Increment timer
             timer += deltaTime;

@@ -4,7 +4,7 @@ namespace TankzClient.Framework
     /// <summary>
     /// Simple spritesheet animation data structure
     /// </summary>
-    public class FrameAnimation
+    public class FrameAnimation : IAnimationData
     {
         public readonly float duration;
         public readonly bool loop;

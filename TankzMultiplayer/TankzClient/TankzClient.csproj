@@ -51,15 +51,17 @@
   <ItemGroup>
     <Compile Include="Framework\AnimatedSprite.cs" />
     <Compile Include="Framework\Button.cs" />
-    <Compile Include="Framework\Components\AnimationComponent.cs" />
-    <Compile Include="Framework\Components\IComponent.cs" />
-    <Compile Include="Framework\Components\TransformComponent.cs" />
+    <Compile Include="Framework\SpriteAnimator.cs" />
+    <Compile Include="Framework\Transform.cs" />
     <Compile Include="Framework\FrameAnimation.cs" />
+    <Compile Include="Framework\IAnimationData.cs" />
+    <Compile Include="Framework\IAnimator.cs" />
     <Compile Include="Framework\Input.cs" />
     <Compile Include="Framework\InputField.cs" />
     <Compile Include="Framework\IRenderable.cs" />
     <Compile Include="Framework\Entity.cs" />
     <Compile Include="Framework\NetworkManager.cs" />
+    <Compile Include="Framework\ProgressBar.cs" />
     <Compile Include="Framework\Sprite.cs" />
     <Compile Include="Framework\UIElement.cs" />
     <Compile Include="Framework\Vector2.cs" />
