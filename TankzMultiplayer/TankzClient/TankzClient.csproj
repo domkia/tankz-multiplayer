@@ -65,12 +65,15 @@
     <Compile Include="Framework\Vector2.cs" />
     <Compile Include="Framework\Scene.cs" />
     <Compile Include="Framework\SceneManager.cs" />
+    <Compile Include="Game\InventoryUI.cs" />
+    <Compile Include="Game\Projectile.cs" />
     <Compile Include="Game\Tank.cs" />
     <Compile Include="Game\TankAiming.cs" />
     <Compile Include="Game\TankBarrel.cs" />
     <Compile Include="Game\TankIdle.cs" />
     <Compile Include="Game\TankMovement.cs" />
     <Compile Include="Game\TankPhase.cs" />
+    <Compile Include="Game\TankWeaponSelection.cs" />
     <Compile Include="Game\TestScene.cs" />
     <Compile Include="Game\MainMenuScene.cs" />
     <Compile Include="TankzWindow.cs">
