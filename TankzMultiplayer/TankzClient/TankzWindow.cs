@@ -28,12 +28,20 @@ namespace TankzClient
 
             // Load starting scene
             SceneManager.Instance.LoadScene<MainMenuScene>();
-            //NetworkManager.Instance.ConnectToServer();
+            NetworkManager.Instance.ConnectToServer();
             
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
+            Thread networkThread = new Thread(NetworkLoop);
             updateThread.IsBackground = true;
             updateThread.Start();
+            networkThread.IsBackground = true;
+            networkThread.Start();
+        }
+        private void NetworkLoop()
+        {
+            // Checks for response
+            NetworkManager.Instance.ReceiveResponse();
         }
 
         /// <summary>
@@ -59,8 +67,6 @@ namespace TankzClient
                 Update(frameTime);
                 Input.Reset();
 
-                // Checks for response
-                //NetworkManager.Instance.ReceiveResponse();
 
                 // Wait for the next frame
                 // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep
