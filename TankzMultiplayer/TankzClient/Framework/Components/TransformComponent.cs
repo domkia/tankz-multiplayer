@@ -38,6 +38,11 @@ namespace TankzClient.Framework.Components
             this.position = newPosition;
         }
 
+        public void Translate(Vector2 offset)
+        {
+            this.position += offset;
+        }
+
         public void SetAngle(float newAngle)
         {
             this.angle = newAngle;

@@ -94,5 +94,10 @@ namespace TankzClient.Framework
             double radians = System.Math.Acos(dot / (am * bm));
             return (float)(radians / System.Math.PI) * 180.0f;
         }
+
+        public static implicit operator Vector2(System.Drawing.Point point)
+        {
+            return new Vector2(point.X, point.Y);
+        }
     }
 }
