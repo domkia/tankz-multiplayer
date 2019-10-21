@@ -52,6 +52,8 @@
     <Compile Include="Framework\AnimatedSprite.cs" />
     <Compile Include="Framework\Button.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
+    <Compile Include="Game\Grenade.cs" />
+    <Compile Include="Game\ProjectileFactory.cs" />
     <Compile Include="Framework\SpriteAnimator.cs" />
     <Compile Include="Framework\Transform.cs" />
     <Compile Include="Framework\FrameAnimation.cs" />

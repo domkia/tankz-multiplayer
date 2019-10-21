@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using TankzClient.Framework;
 
 namespace TankzClient.Game
 {
-    class Projectile : Sprite
+    public abstract class Projectile : Sprite
     {
-        const string projectileSpritePath = "../../res/projectile_1.png";
-        int projectileRadius;
-        int explosionRadius;
-        int speed;
-        public Projectile() : base(Image.FromFile(projectileSpritePath), new Vector2(200, 200), new Vector2(20,20))
+        public float radius { get; protected set; }
+        public float explosionRadius { get; protected set; }
+        public float speed { get; protected set; }
+
+        public Projectile(Image image, Vector2 position, float radius, float explosionRadius, float speed) 
+            : base(image, position, new Vector2(radius / 2f, radius / 2f))
         {
-            
+            this.radius = radius;
+            this.explosionRadius = explosionRadius;
+            this.speed = speed;
         }
 
-        public override void Update(float deltaTime)
-        {
-            base.Update(deltaTime);
-        }
+        public abstract void Explode();
     }
 }

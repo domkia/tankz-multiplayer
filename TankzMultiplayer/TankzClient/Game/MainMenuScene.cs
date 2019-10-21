@@ -31,6 +31,9 @@ namespace TankzClient.Game
             {
                 testButtons[i] = uiFactory.Create(new UICreateArgs("button", new Vector2(200, 200 + i * 50))) as Button;
             }
+
+            Grenade grenade = new ProjectileFactory().Create("grenade") as Grenade;
+            grenade.transform.SetPosition(new Vector2(400, 100));
         }
 
         public override void Render(Graphics context)
