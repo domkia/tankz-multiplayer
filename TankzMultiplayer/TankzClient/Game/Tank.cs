@@ -11,24 +11,30 @@ namespace TankzClient.Game
 {
     class Tank : Sprite
     {
-        const string chassisSpritePath = "../../res/tank_chassis_1.png";
-        const string barrrelSpritePath = "../../res/tank_barrel.png";
+        private TankBarrel _barrel = null;
+        public TankBarrel barrel
+        {
+            get
+            {
+                if (_barrel == null)
+                    _barrel = FindChild<TankBarrel>();
+                return _barrel;
+            }
+        }
 
-        public TankBarrel barrel;
         private TankPhase currentPhase = null;
 
-        public Tank() : base(Image.FromFile(chassisSpritePath), new Vector2(128, 128), new Vector2(64, 48))
+        public Tank(Image sprite, Vector2 position, Vector2 size) 
+            : base(sprite, position, size)
         {
-            // Setup barrel
-            barrel = new TankBarrel(this, Image.FromFile(barrrelSpritePath), new Vector2(50, 50), new Vector2(64, 8));
-
+            // Set tank phase
             currentPhase = new TankAiming(this);
         }
 
         public override void Render(Graphics context)
         {
-            barrel.Render(context);
             base.Render(context);
+            context.DrawString(string.Format($"Tank Phase: {currentPhase.GetType().Name}"), SystemFonts.MenuFont, Brushes.LightGreen, new Point(0, 50));
         }
 
         public override void Update(float deltaTime)
@@ -36,7 +42,6 @@ namespace TankzClient.Game
             if (currentPhase != null)
                 currentPhase.Update(deltaTime);
             base.Update(deltaTime);
-            barrel.Update(deltaTime);
         }
     }
 }

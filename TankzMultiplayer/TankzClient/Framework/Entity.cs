@@ -18,7 +18,7 @@ namespace TankzClient.Framework
         /// </summary>
         protected Entity(Entity parent = null)
         {
-            transform = new Transform();
+            transform = new Transform(this);
             children = new List<Entity>();
             if (parent != null)
             {
@@ -30,7 +30,7 @@ namespace TankzClient.Framework
         /// Set this entity as a child of given parent
         /// </summary>
         /// <param name="parent"></param>
-        private void SetParent(Entity parent)
+        public void SetParent(Entity parent)
         {
             if (children.Contains(parent))
             {
@@ -40,6 +40,9 @@ namespace TankzClient.Framework
             if (parent != null)
             {
                 this.parent = parent;
+
+                //TODO: test if this works (by setting parent after the creation of both entities)
+                transform.SetPosition(transform.position - parent.transform.GetParentWorldPos());
                 parent.children.Add(this);
             }
             else
@@ -47,6 +50,20 @@ namespace TankzClient.Framework
                 this.parent.children.Remove(this);
                 this.parent = null;
             }
+        }
+
+        /// <summary>
+        /// Finds the first child of type specified
+        /// from this entity's children list
+        /// </summary>
+        public TEntity FindChild<TEntity>() where TEntity : Entity
+        {
+            if (children == null)
+                return null;
+            foreach (Entity child in children)
+                if (child is TEntity)
+                    return child as TEntity;
+            return null;
         }
 
         /// <summary>

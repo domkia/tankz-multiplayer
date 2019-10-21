@@ -53,6 +53,7 @@
     <Compile Include="Framework\Button.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
     <Compile Include="Game\Grenade.cs" />
+    <Compile Include="Game\ITankBuilder.cs" />
     <Compile Include="Game\ProjectileFactory.cs" />
     <Compile Include="Framework\SpriteAnimator.cs" />
     <Compile Include="Framework\Transform.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Game\Tank.cs" />
     <Compile Include="Game\TankAiming.cs" />
     <Compile Include="Game\TankBarrel.cs" />
+    <Compile Include="Game\TankBuilder.cs" />
     <Compile Include="Game\TankIdle.cs" />
     <Compile Include="Game\TankMovement.cs" />
     <Compile Include="Game\TankPhase.cs" />

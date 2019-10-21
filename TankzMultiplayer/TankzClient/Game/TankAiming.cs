@@ -18,22 +18,18 @@ namespace TankzClient.Game
 
         private void RotateBarrel(float deltaTime)
         {
-            if (isKeyDown)
+            if (rotDir == 0)
             {
-                if (rotDir == 0)
-                {
-                    return;
-                }
-
-                tank.barrel.angle += rotDir * 5;
-                if (tank.barrel.angle < -180)
-                    tank.barrel.angle = -180;
-                else if (tank.barrel.angle > 0)
-                    tank.barrel.angle = 0;
-                Transform t = tank.barrel.transform;
-                t.SetAngle(tank.barrel.angle);
+                return;
             }
-            
+
+            tank.barrel.angle += rotDir * 5;
+            if (tank.barrel.angle < -180)
+                tank.barrel.angle = -180;
+            else if (tank.barrel.angle > 0)
+                tank.barrel.angle = 0;
+            Transform t = tank.barrel.transform;
+            t.SetAngle(tank.barrel.angle);
         }
         //TODO: Fix input to be smooth without spagetti
         public override void Update(float deltaTime)
@@ -56,11 +52,7 @@ namespace TankzClient.Game
                 isKeyDown = false;
             }
 
-            //else rotDir = 0;
-            if (isKeyDown == true)
-            {
-                RotateBarrel(deltaTime);
-            }
+            RotateBarrel(deltaTime);
         }
 
     }

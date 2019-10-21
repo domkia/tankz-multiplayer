@@ -5,7 +5,6 @@ namespace TankzClient.Game
 {
     public class MainMenuScene : Scene
     {
-        Tank tank;
         private Button startButton;
         private InputField inputField;
         private ProgressBar progressBar;
@@ -18,7 +17,30 @@ namespace TankzClient.Game
 
         public override void Load()
         {
-            tank = CreateEntity(new Tank()) as Tank;
+            Tank usaTank = new TankBuilder()
+                .SetChassis(1, 1)
+                .SetTurret(1)
+                .SetTracks(0)
+                .Build();
+            CreateEntity(usaTank);
+            usaTank.transform.SetPosition(new Vector2(500, 100));
+
+            Tank nazziTank = new TankBuilder()
+                .SetChassis(3, 0)
+                .SetTurret(0)
+                .SetTracks(1)
+                .Build();
+            CreateEntity(nazziTank);
+            nazziTank.transform.SetPosition(new Vector2(500, 200));
+
+            Tank jpTank = new TankBuilder()
+                .SetChassis(0, 2)
+                .SetTurret(2)
+                .SetTracks(2)
+                .Build();
+            CreateEntity(jpTank);
+            jpTank.transform.SetPosition(new Vector2(500, 300));
+
             inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
             startButton = CreateEntity(new Button(100, 100, 50, 50, null, "test")) as Button;
             startButton.OnClickCallback += StartButton_OnClickCallback;

@@ -72,11 +72,14 @@ namespace TankzClient.Framework
             if (entities.Contains(newEntity))
                 return null;
             entities.Add(newEntity);
+
+            // Also don't forget to put children 
+            // into the list as well
             if (newEntity.children.Count > 0)
             {
                 foreach (Entity child in newEntity.children)
                 {
-                    entities.Add(child);
+                    CreateEntity(child);
                 }
             }
 
