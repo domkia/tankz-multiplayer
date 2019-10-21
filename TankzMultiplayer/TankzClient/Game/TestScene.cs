@@ -9,7 +9,7 @@ namespace TankzClient.Game
         AnimatedSprite debug;
         AnimatedSprite player;
 
-        public TestScene()
+        public override void Load()
         {
             debug = CreateEntity(new AnimatedSprite(Image.FromFile("../../res/debug.jpg"), new Vector2(200, 200), new Vector2(100, 100), 10, 10)) as AnimatedSprite;
             debug.animator.AddAnimation("debug_anim", new FrameAnimation(10.0f, true, 0, 100));

@@ -9,12 +9,14 @@ namespace TankzClient.Game
         private Button startButton;
         private InputField inputField;
         private ProgressBar progressBar;
+        private Button[] testButtons = new Button[3];
 
         private void StartButton_OnClickCallback()
         {
             NetworkManager.Instance.SendRequest("join;" + inputField.Text);
         }
-        public MainMenuScene()
+
+        public override void Load()
         {
             tank = CreateEntity(new Tank()) as Tank;
             inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
@@ -23,6 +25,12 @@ namespace TankzClient.Game
 
             progressBar = CreateEntity(new ProgressBar(new Rectangle(170, 100, 64, 8), Color.LightGreen, Color.DarkGreen)) as ProgressBar;
             progressBar.SetProgress(0.4f);
+
+            UIFactory uiFactory = new UIFactory();
+            for (int i = 0; i < 3; i++)
+            {
+                testButtons[i] = uiFactory.Create(new UICreateArgs("button", new Vector2(200, 200 + i * 50))) as Button;
+            }
         }
 
         public override void Render(Graphics context)

@@ -40,11 +40,13 @@ namespace TankzClient.Framework
             if (scenes.ContainsKey(sceneType))
             {
                 Scene sceneToLoad = scenes[sceneType];
+                sceneToLoad.Load();
                 CurrentScene = sceneToLoad;
             }
             else
             {
                 CurrentScene = AddScene<TScene>();
+                CurrentScene.Load();
             }
         }
     }

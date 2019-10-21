@@ -17,6 +17,9 @@ namespace TankzClient.Framework
 
 
         protected HashSet<UIElement> userInterfaceElements = new HashSet<UIElement>();
+
+        public abstract void Load();
+
         /// <summary>
         /// Update all objects in the scene
         /// </summary>
