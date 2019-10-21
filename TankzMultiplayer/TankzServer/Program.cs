@@ -78,21 +78,21 @@ namespace TankzServer
             Array.Copy(buffer, recBuf, received);
             string text = Encoding.ASCII.GetString(recBuf);
             Console.WriteLine("Received Text: " + text);
+            string[] command = text.Split(';');
 
-            if (text.ToLower() == "meeting") // Client requested time
+            if (command[0].ToLower() == "test") // Client requested time
             {
                 foreach (Socket socket in clientSockets)
                 {
                     //current = socket;
-                    string message = "meeting";
+                    string message = "test";
                     byte[] data = Encoding.ASCII.GetBytes(message);
                     socket.Send(data);
                     //socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
-                    Console.WriteLine("Meeting invite sent to " + socket.RemoteEndPoint);
+                    Console.WriteLine("Test message sent to " + socket.RemoteEndPoint);
                 }
-
             }
-            else if (text.ToLower() == "exit") // Client wants to exit gracefully
+            else if (command[0].ToLower() == "exit") // Client wants to exit gracefully
             {
                 // Always Shutdown before closing
                 Console.WriteLine(current.RemoteEndPoint + " disconnected");
@@ -100,6 +100,18 @@ namespace TankzServer
                 current.Close();
                 clientSockets.Remove(current);
                 return;
+            }
+            else if (command[0].ToLower() == "join")
+            {
+                foreach (Socket socket in clientSockets)
+                {
+                    //current = socket;
+                    string message = "join;"+command[1];
+                    byte[] data = Encoding.ASCII.GetBytes(message);
+                    socket.Send(data);
+                    //socket.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
+                    Console.WriteLine("Join message sent to " + socket.RemoteEndPoint);
+                }
             }
             else
             {

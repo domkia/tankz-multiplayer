@@ -11,7 +11,7 @@ namespace TankzClient.Game
 
         private void StartButton_OnClickCallback()
         {
-            System.Console.WriteLine("Clicked");
+            NetworkManager.Instance.SendRequest("join;" + inputField.Text);
         }
         public MainMenuScene()
         {
