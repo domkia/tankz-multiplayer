@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace TankzClient.Framework
@@ -7,36 +8,35 @@ namespace TankzClient.Framework
     {
         public Vector2 localPosition { get; private set; }
 
-        private Vector2 _position = new Vector2();
+        private Vector2 worldPosition = new Vector2();
         public Vector2 position
         {
             get
             {
                 if (local.parent != null)
-                    _position = GetParentWorldPos() + this.localPosition;
-                return _position;
+                {
+                    worldPosition = GetParentWorldPos() + this.localPosition;
+                }
+                return worldPosition;
             }
             private set
             {
-                _position = value;
+                worldPosition = value;
             }
         }
+
         public float angle { get; private set; }            
         public Vector2 size { get; private set; }
 
-        private bool needsUpdating = false;
         private Matrix orientationMatrix;
         public Matrix OrientationMatrix
         {
             get
             {
-                if (needsUpdating)
-                {
-                    Vector2 pos = position;
-                    orientationMatrix.Reset();
-                    orientationMatrix.RotateAt(angle, new Point((int)pos.x, (int)pos.y));
-                    needsUpdating = false;
-                }
+                orientationMatrix.Reset();
+                orientationMatrix.Translate(position.x, position.y);
+                orientationMatrix.Rotate(angle);
+                orientationMatrix.Translate(-position.x, -position.y);
                 return orientationMatrix;
             }
         }
@@ -69,7 +69,10 @@ namespace TankzClient.Framework
         public void SetPosition(Vector2 newPosition)
         {
             if (local.parent != null)
+            {
                 this.localPosition = newPosition;
+                this.worldPosition = position;
+            }
             else
                 this.position = newPosition;
         }
@@ -84,13 +87,11 @@ namespace TankzClient.Framework
         public void SetAngle(float newAngle)
         {
             this.angle = newAngle;
-            needsUpdating = true;
         }
 
         public void Rotate(float deltaAngle)
         {
             this.angle += deltaAngle;
-            needsUpdating = true;
         }
 
         public void SetSize(Vector2 newSize) => this.size = newSize;
@@ -105,17 +106,23 @@ namespace TankzClient.Framework
             Vector2 newPosition = new Vector2();
             Entity parent = local.parent;
             if (parent == null)
-                return _position;
+                return worldPosition;
             else
             {
                 while (true)
                 {
-                    newPosition += parent.transform.localPosition;
                     if (parent.parent == null)
+                    {
+                        newPosition += parent.transform.position;
                         break;
+                    }
+                    else
+                    {
+                        newPosition += parent.transform.localPosition;
+                    }
                     parent = parent.parent;
                 }
-                return newPosition + parent.transform.position;
+                return newPosition;
             }
         }
     }

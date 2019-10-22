@@ -28,7 +28,7 @@ namespace TankzClient.Game
             : base(sprite, position, size)
         {
             // Set tank phase
-            currentPhase = new TankAiming(this);
+            currentPhase = new TankMovement(this);
         }
 
         public override void Render(Graphics context)

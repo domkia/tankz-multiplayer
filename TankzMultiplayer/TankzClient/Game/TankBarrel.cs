@@ -5,7 +5,7 @@ namespace TankzClient.Game
 {
     class TankBarrel : Sprite
     {
-        public const float startAngle = -90;
+        public const float startAngle = -45;
         public float angle = startAngle;
 
         private Tank tank;

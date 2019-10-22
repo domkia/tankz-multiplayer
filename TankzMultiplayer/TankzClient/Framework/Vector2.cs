@@ -6,7 +6,16 @@ namespace TankzClient.Framework
         public float x;
         public float y;
 
-        public float Magnitude { get { return (float)System.Math.Sqrt(x * x + y * y); } }
+        public float Magnitude
+        {
+            get
+            {
+                float mag = (float)System.Math.Sqrt(x * x + y * y);
+                if (mag == 0f)
+                    return float.Epsilon;
+                return mag;
+            }
+        }
 
         public Vector2(float x, float y)
         {
