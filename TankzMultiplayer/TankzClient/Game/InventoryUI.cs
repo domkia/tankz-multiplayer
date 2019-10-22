@@ -14,7 +14,7 @@ namespace TankzClient.Game
         public bool IsOpen => isOpen;
         public InventoryUI(Rectangle rect) : base(rect)
         {
-
+            
         }
         public override void Click(Point mousePos)
         {

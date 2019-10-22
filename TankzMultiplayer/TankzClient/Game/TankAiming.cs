@@ -51,6 +51,11 @@ namespace TankzClient.Game
                 rotDir = 0;
                 isKeyDown = false;
             }
+            
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
+            {
+                tank.SetPhase(new TankMovement(tank));
+            }
 
             RotateBarrel(deltaTime);
         }

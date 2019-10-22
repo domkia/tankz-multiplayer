@@ -12,6 +12,7 @@ namespace TankzClient.Game
     class Tank : Sprite
     {
         private TankBarrel _barrel = null;
+        private int fuel = 100;
         public TankBarrel barrel
         {
             get
@@ -23,6 +24,16 @@ namespace TankzClient.Game
         }
 
         private TankPhase currentPhase = null;
+
+        public void SetPhase(TankPhase phase)
+        {
+            currentPhase = phase;
+        }
+
+        public void Shoot()
+        {
+            currentPhase = new TankIdle(this);
+        }
 
         public Tank(Image sprite, Vector2 position, Vector2 size) 
             : base(sprite, position, size)
@@ -39,8 +50,22 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
+            if (currentPhase.GetType() != new TankIdle(this).GetType())
+            {
+                if (Input.IsKeyDown(System.Windows.Forms.Keys.Enter))
+                {
+                    Shoot();
+                }
+                if (Input.IsKeyDown(System.Windows.Forms.Keys.W))
+                {
+                    currentPhase = new TankWeaponSelection(this);
+                }
+            }
+            
             if (currentPhase != null)
                 currentPhase.Update(deltaTime);
+            
+            
             base.Update(deltaTime);
         }
     }

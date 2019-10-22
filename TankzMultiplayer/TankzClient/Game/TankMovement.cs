@@ -44,6 +44,12 @@ namespace TankzClient.Game
             }
             else
                 movDir = 0;
+
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
+            {
+                tank.SetPhase(new TankAiming(tank));
+            }
+
             MoveTank(deltaTime);
         }
     }
