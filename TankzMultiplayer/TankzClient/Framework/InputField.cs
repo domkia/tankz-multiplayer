@@ -54,6 +54,7 @@ namespace TankzClient.Framework
         private float timer = 0.0f;
         public override void Update(float deltaTime)
         {
+            base.Update(deltaTime);
             if (!IsFocused)
                 return;
             GetKeyboardInput();

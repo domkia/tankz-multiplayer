@@ -15,9 +15,6 @@ namespace TankzClient.Framework
         // The number parameter defines - Sorting Layer.
         protected SortedDictionary<int, HashSet<IRenderable>> renderLayers = new SortedDictionary<int, HashSet<IRenderable>>();
 
-
-        protected HashSet<UIElement> userInterfaceElements = new HashSet<UIElement>();
-
         public abstract void Load();
 
         /// <summary>
@@ -28,14 +25,8 @@ namespace TankzClient.Framework
         {
             foreach (Entity entity in entities)
             {
-                entity.Update(deltaTime);
-            }
-            foreach(UIElement element in userInterfaceElements)
-            {
-                if (Input.MouseButtonDown)
-                {
-                    element.Click(Input.MousePosition);
-                }
+                if(entity.IsActive)
+                    entity.Update(deltaTime);
             }
         }
 
@@ -81,13 +72,6 @@ namespace TankzClient.Framework
                 {
                     CreateEntity(child);
                 }
-            }
-
-            // TODO: Possible double update bug
-            UIElement element = newEntity as UIElement;
-            if(element != null)
-            {
-                userInterfaceElements.Add(element);
             }
 
             // Check whether entity needs rendering

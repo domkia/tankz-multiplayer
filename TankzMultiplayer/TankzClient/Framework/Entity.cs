@@ -8,6 +8,8 @@ namespace TankzClient.Framework
     /// </summary>
     public abstract class Entity
     {
+        public bool IsActive { get; private set; }
+
         public Entity parent { get; internal set; }
         public List<Entity> children { get; internal set; }
 
@@ -18,6 +20,7 @@ namespace TankzClient.Framework
         /// </summary>
         protected Entity(Entity parent = null)
         {
+            IsActive = true;
             transform = new Transform(this);
             children = new List<Entity>();
             if (parent != null)
@@ -71,5 +74,20 @@ namespace TankzClient.Framework
         /// </summary>
         /// <param name="deltaTime">Time since last frame</param>
         public virtual void Update(float deltaTime) { }
+
+        /// <summary>
+        /// Activate or deactivate this entity
+        /// </summary>
+        /// <param name="active"></param>
+        public void SetActive(bool active) => IsActive = active;
+
+        /// <summary>
+        /// Destroy this entity from the current scene
+        /// </summary>
+        /// <returns>Whether deletion was successful</returns>
+        public bool Destroy()
+        {
+            return SceneManager.Instance.CurrentScene.DestroyEntity(this);
+        }
     }
 }

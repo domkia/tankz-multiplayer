@@ -41,5 +41,13 @@ namespace TankzClient.Framework
             return rect.Contains(mousePos);
         }
         public abstract void Click(Point mousePos);
+
+        public override void Update(float deltaTime)
+        {
+            if (Input.MouseButtonDown)
+            {
+                Click(Input.MousePosition);
+            }
+        }
     }
 }
