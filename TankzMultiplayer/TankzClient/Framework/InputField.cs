@@ -9,11 +9,12 @@ namespace TankzClient.Framework
         public bool IsFocused { get; private set; }
         public StringBuilder Text { get; set; }
 
-        const int textMargin = 5;
+        const int textMargin = 2;
         private Rectangle textRect;
         private float blinkSpeed = 0.25f;
         private bool cursorVisible;
         private int cursorOffsetX = 0;
+        private Font font;
 
         public InputField(int x, int y, int width, int height)
             : base(new Rectangle(x, y, width, height))
@@ -24,6 +25,7 @@ namespace TankzClient.Framework
                 Rect.Y + textMargin,
                 Rect.Width - textMargin * 2,
                 Rect.Height - textMargin * 2);
+            font = new Font(FontFamily.GenericMonospace, 8f, FontStyle.Bold);
         }
 
         public override void Click(Point mousePos)
@@ -46,7 +48,7 @@ namespace TankzClient.Framework
             else
                 context.FillRectangle(Brushes.Gray, base.Rect);
             if (Text.Length > 0)
-                context.DrawString(Text.ToString(), SystemFonts.DefaultFont, Brushes.White, textRect);
+                context.DrawString(Text.ToString(), font, Brushes.White, textRect);
         }
 
         private float timer = 0.0f;
@@ -87,7 +89,7 @@ namespace TankzClient.Framework
                 }
             }
             //TODO: find character length
-            cursorOffsetX = Text.Length * 8;
+            cursorOffsetX = Text.Length * 7;
         }
     }
 }

@@ -17,6 +17,8 @@ namespace TankzClient.Game
 
         public override void Load()
         {
+            InventoryUI inventoryUI = new InventoryUI(new Rectangle(100,100,300,300));
+            CreateEntity(inventoryUI);
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
                 .SetTurret(1)

@@ -50,7 +50,7 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
-            if (currentPhase.GetType() != new TankIdle(this).GetType())
+            if (currentPhase.GetType() != typeof (TankIdle))
             {
                 if (Input.IsKeyDown(System.Windows.Forms.Keys.Enter))
                 {

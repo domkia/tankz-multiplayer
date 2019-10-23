@@ -10,6 +10,10 @@ namespace TankzClient.Game
 {
     class InventoryUI : UIElement
     {
+        public override void Render(Graphics context)
+        {
+            context.DrawRectangle(Pens.Gray, rect);
+        }
         private bool isOpen = false;
         public bool IsOpen => isOpen;
         public InventoryUI(Rectangle rect) : base(rect)
@@ -18,7 +22,7 @@ namespace TankzClient.Game
         }
         public override void Click(Point mousePos)
         {
-            throw new NotImplementedException();
+            //nieko nera
         }
 
         public void OpenPanel()
