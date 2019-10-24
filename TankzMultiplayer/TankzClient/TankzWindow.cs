@@ -27,7 +27,7 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<GameplayScene>();
+            SceneManager.Instance.LoadScene<TerrainScene>();
             NetworkManager.Instance.ConnectToServer();
             
             // Begin counting frames
