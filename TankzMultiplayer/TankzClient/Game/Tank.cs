@@ -50,23 +50,16 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
-            if (currentPhase.GetType() != typeof (TankIdle))
+            if(currentPhase.GetType() != typeof(TankIdle))
             {
-                if (Input.IsKeyDown(System.Windows.Forms.Keys.Enter))
+                if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
                 {
                     Shoot();
                 }
-                if (Input.IsKeyDown(System.Windows.Forms.Keys.W))
-                {
-                    currentPhase = new TankWeaponSelection(this);
-                }
             }
-            
+
             if (currentPhase != null)
                 currentPhase.Update(deltaTime);
-            
-            
-            base.Update(deltaTime);
         }
     }
 }

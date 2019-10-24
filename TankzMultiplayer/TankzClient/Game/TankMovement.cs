@@ -45,7 +45,7 @@ namespace TankzClient.Game
             else
                 movDir = 0;
 
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.X))
             {
                 tank.SetPhase(new TankAiming(tank));
             }

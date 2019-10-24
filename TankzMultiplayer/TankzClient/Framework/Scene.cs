@@ -23,10 +23,10 @@ namespace TankzClient.Framework
         /// <param name="deltaTime">Time since last frame</param>
         public virtual void Update(float deltaTime)
         {
-            foreach (Entity entity in entities)
+            for(int i = 0; i < entities.Count; i++)
             {
-                if(entity.IsActive)
-                    entity.Update(deltaTime);
+                if(entities[i].IsActive)
+                    entities[i].Update(deltaTime);
             }
         }
 

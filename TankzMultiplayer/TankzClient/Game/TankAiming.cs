@@ -52,9 +52,13 @@ namespace TankzClient.Game
                 isKeyDown = false;
             }
             
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Z))
             {
                 tank.SetPhase(new TankMovement(tank));
+            }
+            else if (Input.IsKeyDown(System.Windows.Forms.Keys.W))
+            {
+                tank.SetPhase(new TankWeaponSelection(tank));
             }
 
             RotateBarrel(deltaTime);
