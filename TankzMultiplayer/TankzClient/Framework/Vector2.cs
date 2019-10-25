@@ -27,6 +27,7 @@ namespace TankzClient.Framework
         public static Vector2 down => new Vector2(0.0f, -1.0f);
         public static Vector2 right => new Vector2(1.0f, 0.0f);
         public static Vector2 left => new Vector2(-1.0f, 0.0f);
+        public static Vector2 one => new Vector2(1f, 1f);
 
         public void Normalize()
         {

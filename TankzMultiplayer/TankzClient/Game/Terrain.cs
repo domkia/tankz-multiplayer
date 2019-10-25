@@ -15,17 +15,17 @@ namespace TankzClient.Game
         public Matrix OrientationMatrix => new Matrix();
 
         private const string terrainPath = "../../res/terrain_bitmap.bmp";
-        private const string craterPath = "../../res/crater.bmp";
+        private const string craterPath = "../../res/crater_2.bmp";
         private Bitmap terrainPixels;
         private Bitmap crater;
-        
-        private Color topColor = Color.YellowGreen;
-        private Color bottomColor = Color.DarkGreen;
-        private Color grassColor = Color.SeaGreen;
-        private Color scorchColor = Color.Brown;
 
-        const int lerpTopOffset = 100;
-        const int lerpBottomOffset = 100;
+        private Color topColor = Color.FromArgb(43, 193, 107);
+        private Color bottomColor = Color.FromArgb(38, 172, 96);
+        private Color grassColor = Color.FromArgb(46, 204, 113);
+        private Color scorchColor = Color.SandyBrown;
+
+        const int lerpTopOffset = 200;
+        const int lerpBottomOffset = 0;
         const int grassWidth = 16;
         private Size craterSize = new Size(128, 128);
 
@@ -75,9 +75,9 @@ namespace TankzClient.Game
                                     if (s[0 - source.Stride * k] > 0x0)
                                         grassRatio++;
                                 }
-
-                                bool noise = random.NextDouble() > (grassRatio / (double)grassWidth);
-                                if (noise)
+                                //
+                                //bool noise = random.NextDouble() > (grassRatio / (double)grassWidth);
+                                if (grassRatio >= 0)
                                 {
                                     // Grass color
                                     d[0] = grassColor.B;
@@ -200,8 +200,13 @@ namespace TankzClient.Game
 
         public void Render(Graphics context)
         {
+            // Draw sky
+            //LinearGradientBrush gradient = new LinearGradientBrush(new Rectangle(0, 0, screenWidth, screenHeight / 2), Color.Black, Color.Transparent, LinearGradientMode.Vertical);
+            //context.FillRectangle(Brushes.Blue, new Rectangle(0, 0, screenWidth, screenHeight));
+            //context.FillRectangle(gradient, new Rectangle(0, 0, screenWidth, screenHeight / 2));
+
+            // Draw terrain
             context.DrawImage(terrainPixels, 0, 0);
-            //context.DrawImage(crater, 0, 0);
         }
 
         public override void Update(float deltaTime)
