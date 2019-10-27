@@ -108,6 +108,12 @@ namespace TankzClient.Framework
                     renderLayers[layer].Remove(renderable);
             }
 
+            // Don't forget to remove this entity from parent
+            if (entity.parent != null)
+            {
+                entity.parent.children.Remove(entity);
+            }
+
             // Remove entity from the list
             if (entities.Contains(entity))
             {

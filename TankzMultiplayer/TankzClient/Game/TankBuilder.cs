@@ -13,7 +13,7 @@ namespace TankzClient.Game
         const int TURRET_COUNT = 3;
         const int TRACKS_COUNT = 3;
 
-        private Tank tank = null;
+        private Tank tank = new Tank(null, new Vector2(0f, 0f), new Vector2(64f, 48f));
 
         public Tank Build()
         {
@@ -31,10 +31,10 @@ namespace TankzClient.Game
                 throw new IndexOutOfRangeException();
 
             string path = string.Format($"{spritesPath}chassis_{colorId}_{id}.png");
-            tank = new Tank(
-                Image.FromFile(path), 
-                new Vector2(0f, 0f), 
-                new Vector2(64f, 48f));
+            TankChassis chassis = new TankChassis(Image.FromFile(path),
+                    tank.transform.position,
+                    new Vector2(64f, 48f));
+            chassis.SetParent(tank);
             return this;
         }
 
