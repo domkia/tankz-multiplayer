@@ -32,7 +32,10 @@ namespace TankzClient.Framework
         /// </summary>
         public void AddAnimation(string name, IAnimationData animation)
         {
-            //TODO: check for the same name
+            if (animations.ContainsKey(name))
+            {
+                throw new Exception("The animation with this name already exists");
+            }
             FrameAnimation frameAnimation = animation as FrameAnimation;
             animations.Add(name, frameAnimation);
             if (animations.Count == 1)

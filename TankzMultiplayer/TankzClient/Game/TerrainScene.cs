@@ -7,15 +7,19 @@ namespace TankzClient.Game
     {
         private Terrain terrain;
 
+        private Image background;
+
         public override void Load()
         {
             terrain = new Terrain();
             CreateEntity(terrain);
+
+            background = Image.FromFile("../../res/background/background_0.png");
         }
 
         public override void Render(Graphics context)
         {
-            context.Clear(Color.SkyBlue);
+            context.DrawImage(background, 0, 0, 800, 600);
             base.Render(context);
         }
     }

@@ -27,21 +27,13 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<TerrainScene>();
-            NetworkManager.Instance.ConnectToServer();
+            SceneManager.Instance.LoadScene<MainMenuScene>();
+            //NetworkManager.Instance.ConnectToServer();
             
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
-            Thread networkThread = new Thread(NetworkLoop);
             updateThread.IsBackground = true;
             updateThread.Start();
-            networkThread.IsBackground = true;
-            networkThread.Start();
-        }
-        private void NetworkLoop()
-        {
-            // Checks for response
-            NetworkManager.Instance.ReceiveResponse();
         }
 
         /// <summary>
@@ -67,10 +59,9 @@ namespace TankzClient
                 Update(frameTime);
                 Input.Reset();
 
-
                 // Wait for the next frame
-                // while (timer.ElapsedMilliseconds - startTime < frameMs) ; //padaryti sleep
-                Thread.Sleep(33);
+                long frameDuration = (timer.ElapsedMilliseconds - startTime);
+                Thread.Sleep((int)frameMs - (int)frameDuration);
             }
         }
 
@@ -85,6 +76,8 @@ namespace TankzClient
 
             // Request window redraw
             Invalidate();
+
+            timer += deltaTime;
         }
 
         /// <summary>
@@ -99,7 +92,11 @@ namespace TankzClient
             SceneManager.Instance.CurrentScene.Render(context);
 
             base.OnPaint(e);
+
+            e.Graphics.DrawString(timer.ToString(), SystemFonts.DefaultFont, Brushes.White, 0, 0);
         }
+
+        private float timer = 0f;
 
         /// <summary>
         /// Mouse input
@@ -107,8 +104,6 @@ namespace TankzClient
         /// <param name="e"></param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            //NetworkManager.Instance.SendRequest(e.Location.ToString());
-            //NetworkManager.Instance.SendRequest("meeting");
             Input.HandleMouseClick(e);
         }
 

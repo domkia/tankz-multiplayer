@@ -19,13 +19,20 @@ namespace TankzClient.Game
         {
             InventoryUI inventoryUI = new InventoryUI(new Rectangle(100,100,300,300));
             CreateEntity(inventoryUI);
-            Tank usaTank = new TankBuilder()
+
+            Tank usaTank =  
+                new TankBuilder()
                 .SetChassis(1, 1)
                 .SetTurret(1)
                 .SetTracks(0)
                 .Build();
             CreateEntity(usaTank);
             usaTank.transform.SetPosition(new Vector2(500, 100));
+
+            // Apply customiztion
+            usaTank.ApplyCamouflage(0);
+            usaTank.ApplySideskirt(0);
+            usaTank.ApplyAccessory(1);
 
             Tank nazziTank = new TankBuilder()
                 .SetChassis(3, 0)
@@ -34,6 +41,8 @@ namespace TankzClient.Game
                 .Build();
             CreateEntity(nazziTank);
             nazziTank.transform.SetPosition(new Vector2(500, 200));
+            nazziTank.ApplyCamouflage(4);
+            nazziTank.ApplyAccessory(2);
 
             Tank jpTank = new TankBuilder()
                 .SetChassis(0, 2)
@@ -42,6 +51,8 @@ namespace TankzClient.Game
                 .Build();
             CreateEntity(jpTank);
             jpTank.transform.SetPosition(new Vector2(500, 300));
+            jpTank.ApplyCamouflage(5);
+            jpTank.ApplySideskirt(1);
 
             inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
             startButton = CreateEntity(new Button(100, 100, 50, 50, null, "test")) as Button;

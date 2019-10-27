@@ -11,8 +11,9 @@ namespace TankzClient.Game
 {
     class Tank : Sprite
     {
-        private TankBarrel _barrel = null;
         private int fuel = 100;
+
+        private TankBarrel _barrel = null;
         public TankBarrel barrel
         {
             get
@@ -24,6 +25,39 @@ namespace TankzClient.Game
         }
 
         private TankPhase currentPhase = null;
+
+        public void ApplyCamouflage(int camo)
+        {
+            TankChassis chassis = FindChild<TankDecorator>();
+            if (chassis == null)
+                chassis = FindChild<TankChassis>();
+            TankCamoDecorator camoChassis = new TankCamoDecorator(camo, chassis);
+            camoChassis.SetParent(this);
+            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
+            SceneManager.Instance.CurrentScene.CreateEntity(camoChassis);
+        }
+
+        public void ApplyAccessory(int accessory)
+        {
+            TankChassis chassis = FindChild<TankDecorator>();
+            if (chassis == null)
+                chassis = FindChild<TankChassis>();
+            TankAccessoriesDecorator accessoryChassis = new TankAccessoriesDecorator(accessory, chassis);
+            accessoryChassis.SetParent(this);
+            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
+            SceneManager.Instance.CurrentScene.CreateEntity(accessoryChassis);
+        }
+
+        public void ApplySideskirt(int sideskirt)
+        {
+            TankChassis chassis = FindChild<TankDecorator>();
+            if (chassis == null)
+                chassis = FindChild<TankChassis>();
+            TankSideskirtDecorator sideskirtChassis = new TankSideskirtDecorator(sideskirt, chassis);
+            sideskirtChassis.SetParent(this);
+            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
+            SceneManager.Instance.CurrentScene.CreateEntity(sideskirtChassis);
+        }
 
         public void SetPhase(TankPhase phase)
         {

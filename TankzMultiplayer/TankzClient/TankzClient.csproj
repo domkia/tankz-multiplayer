@@ -50,13 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\AnimatedParticleEmitter.cs" />
     <Compile Include="Framework\AnimatedSprite.cs" />
     <Compile Include="Framework\Button.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
+    <Compile Include="Framework\Particle.cs" />
+    <Compile Include="Framework\ParticleEmitMode.cs" />
+    <Compile Include="Framework\ParticleEmitter.cs" />
+    <Compile Include="Framework\ParticleProperties.cs" />
+    <Compile Include="Framework\Utils.cs" />
     <Compile Include="Game\GameplayScene.cs" />
     <Compile Include="Game\Grenade.cs" />
     <Compile Include="Game\ITankBuilder.cs" />
     <Compile Include="Game\LobbyScene.cs" />
+    <Compile Include="Game\ParticleFactory.cs" />
+    <Compile Include="Game\ParticlesScene.cs" />
     <Compile Include="Game\ProjectileFactory.cs" />
     <Compile Include="Framework\SpriteAnimator.cs" />
     <Compile Include="Framework\Transform.cs" />
@@ -81,9 +89,14 @@
     <Compile Include="Game\TankAiming.cs" />
     <Compile Include="Game\TankBarrel.cs" />
     <Compile Include="Game\TankBuilder.cs" />
+    <Compile Include="Game\TankCamoDecorator.cs" />
+    <Compile Include="Game\TankChassis.cs" />
+    <Compile Include="Game\TankDecorator.cs" />
     <Compile Include="Game\TankIdle.cs" />
     <Compile Include="Game\TankMovement.cs" />
     <Compile Include="Game\TankPhase.cs" />
+    <Compile Include="Game\TankAccessoriesDecorator.cs" />
+    <Compile Include="Game\TankSideskirtDecorator.cs" />
     <Compile Include="Game\TankWeaponSelection.cs" />
     <Compile Include="Game\Terrain.cs" />
     <Compile Include="Game\TerrainScene.cs" />

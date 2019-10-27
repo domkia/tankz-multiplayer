@@ -6,7 +6,7 @@ namespace TankzClient.Framework
     public class Sprite : Entity, IRenderable
     {
         public Image image { get; protected set; }
-        public int SortingLayer => 0;
+        public virtual int SortingLayer => 0;
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
         public Sprite(Image image, Vector2 position, Vector2 size)
