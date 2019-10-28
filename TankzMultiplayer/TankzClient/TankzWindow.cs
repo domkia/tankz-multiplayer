@@ -28,8 +28,12 @@ namespace TankzClient
 
             // Load starting scene
             SceneManager.Instance.LoadScene<MainMenuScene>();
-            //NetworkManager.Instance.ConnectToServer();
-            
+
+            NetworkManager.Instance.start();
+            Thread networkThread = new Thread(NetworkManager.Instance.connect);
+            networkThread.IsBackground = true;
+            networkThread.Start();
+
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
             updateThread.IsBackground = true;

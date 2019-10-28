@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Net.Sockets;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR.Client;
 using System.Text;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TankzClient.Framework
 {
     public class NetworkManager
     {
-        static string serverIP = "localhost";
-        static int port = 420;
-        private readonly Socket ClientSocket = new Socket
-           (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
+        private string[] Players;
+        private static HubConnection _connection;
         #region Singleton
 
         private static NetworkManager instance = null;
@@ -26,76 +27,88 @@ namespace TankzClient.Framework
             }
         }
         #endregion
-
-        public void ConnectToServer()
+        /// <summary>
+        /// Gets localy saved player list
+        /// </summary>
+        /// <returns> Player list</returns>
+        public string[] GetPlayerList()
         {
-            int attempts = 0;
-
-            while (!ClientSocket.Connected)
+            if(Players == null)
             {
+                return new string[] { };
+            }
+            return Players;
+        }
+        /// <summary>
+        /// Asks server for players
+        /// </summary>
+        public void GetPlayer()
+        { 
+        _connection.InvokeAsync("GetPlayers");
+        }
+        /// <summary>
+        /// Ask server for connected users
+        /// </summary>
+        public void GetConnected()
+        {
+            _connection.InvokeAsync("GetConnected");
+        }
+        /// <summary>
+        /// Connection to server start
+        /// </summary>
+        public void start()
+        {
+            _connection = new HubConnectionBuilder()
+                .WithUrl("https://localhost:44311/TestHub")
+                .Build();
+
+            _connection.Closed += async (error) =>
+            {
+                await Task.Delay(new Random().Next(0, 5) * 1000);
+                await _connection.StartAsync();
+            };
+        }
+        /// <summary>
+        /// Async method with listeners
+        /// </summary>
+        public async void connect()
+        {
+                _connection.On<string>("Connected",
+                                       (connectionid) =>
+                                       {
+                                           //Debug stuff
+                                           Console.WriteLine(connectionid);
+                                       });
+                _connection.On<string>("Disconnected",
+                                       (value) =>
+                                       {
+                                           //Debug stuff
+                                           Console.WriteLine("Player " + value + " disconnected");
+                                       });
+                //Gets connected player list
+                _connection.On<string>("Players",
+                                       (value) =>
+                                       {
+                                           var objects = JsonConvert.DeserializeObject<List<String>>(value);
+                                           Players = objects.Select(obj => JsonConvert.SerializeObject(obj)).ToArray();
+                                       });
+                _connection.On<string>("ReceiveMessage",
+                                       (value) =>
+                                       {
+                                           //Debug, not used anymore
+                                           Console.WriteLine("Received " + value);
+                                       });
+            
                 try
                 {
-                    attempts++;
-                    ClientSocket.Connect(serverIP, port);
+                    await _connection.StartAsync();
+                    Console.WriteLine("connection started");
                 }
-                catch (SocketException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message + Environment.NewLine + "Connection attempt " + attempts);
+                    Console.WriteLine(ex.Message);
                 }
-            }
-
-            Console.WriteLine("connected");
-        }
-
-        public void SendRequest(string text)
-        {
-            string request = text;
-            SendString(request);
-
-            if (request.ToLower() == "exit")
-            {
-                Disconnect();
-            }
-        }
-
-        public void ReceiveResponse()
-        {
-            var buffer = new byte[2048];
-            try
-            {
-                if (buffer.ToString().Length == 2048) return;
-                int received = ClientSocket.Receive(buffer, SocketFlags.None);
-                if (received == 0) return;
-                var data = new byte[received];
-                Array.Copy(buffer, data, received);
-                string text = Encoding.ASCII.GetString(data);
-                Console.WriteLine(text);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
-            }
-        }
-
-        private void SendString(string text)
-        {
-            try
-            {
-                byte[] buffer = Encoding.ASCII.GetBytes(text);
-                ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-        public void Disconnect()
-        {
-            ClientSocket.Shutdown(SocketShutdown.Both);
-            ClientSocket.Close();
-            Environment.Exit(0);
+            
         }
     }
 }

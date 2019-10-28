@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 using TankzClient.Framework;
 
 namespace TankzClient.Game
@@ -12,7 +13,7 @@ namespace TankzClient.Game
 
         private void StartButton_OnClickCallback()
         {
-            NetworkManager.Instance.SendRequest("join;" + inputField.Text);
+            SceneManager.Instance.LoadScene<IngobbyScene>();
         }
 
         public override void Load()
@@ -20,7 +21,7 @@ namespace TankzClient.Game
             InventoryUI inventoryUI = new InventoryUI(new Rectangle(100,100,300,300));
             CreateEntity(inventoryUI);
 
-            Tank usaTank =  
+            Tank usaTank =
                 new TankBuilder()
                 .SetChassis(1, 1)
                 .SetTurret(1)

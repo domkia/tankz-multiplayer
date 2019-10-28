@@ -13,7 +13,7 @@ namespace TankzClient.Game
 
         public override void Load()
         {
-            
+            NetworkManager.Instance.GetPlayer();
         }
 
         public override void Render(Graphics context)

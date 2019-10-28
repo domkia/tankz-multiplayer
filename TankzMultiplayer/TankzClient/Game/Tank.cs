@@ -78,7 +78,7 @@ namespace TankzClient.Game
 
         public override void Render(Graphics context)
         {
-            base.Render(context);
+            //base.Render(context);
             context.DrawString(string.Format($"Tank Phase: {currentPhase.GetType().Name}"), SystemFonts.MenuFont, Brushes.LightGreen, new Point(0, 50));
         }
 
