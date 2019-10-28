@@ -13,6 +13,7 @@ namespace TankzClient.Game
 
         private void StartButton_OnClickCallback()
         {
+            NetworkManager.Instance.SetName(inputField.Text.ToString());
             SceneManager.Instance.LoadScene<IngobbyScene>();
         }
 
@@ -56,7 +57,7 @@ namespace TankzClient.Game
             jpTank.ApplySideskirt(1);
 
             inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
-            startButton = CreateEntity(new Button(100, 100, 50, 50, null, "test")) as Button;
+            startButton = CreateEntity(new Button(150, 20, 50, 50, null, "Join Lobby")) as Button;
             startButton.OnClickCallback += StartButton_OnClickCallback;
 
             progressBar = CreateEntity(new ProgressBar(new Rectangle(170, 100, 64, 8), Color.LightGreen, Color.DarkGreen)) as ProgressBar;

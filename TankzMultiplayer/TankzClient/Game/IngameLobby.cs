@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TankzClient.Framework;
+using TankzClient.Models;
 
 namespace TankzClient.Game
 {
     class IngobbyScene : Scene
     {
-        string[] Players;
+        Player[] Players;
         public override void Load()
         {
             
@@ -27,7 +28,7 @@ namespace TankzClient.Game
             context.DrawString("GAME LOBBY", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(100, 10));
             for(int i = 0; i< Players.Length;i++)
             {
-                context.DrawString(((i+1) + " " +Players[i]), new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(0, 30 + i * 20));
+                context.DrawString(((i+1) + " " + Players[i].Name), new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(0, 30 + i * 20));
             }
         }
     }

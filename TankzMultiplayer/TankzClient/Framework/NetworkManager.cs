@@ -5,12 +5,13 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using TankzClient.Models;
 
 namespace TankzClient.Framework
 {
     public class NetworkManager
     {
-        private string[] Players;
+        private Player[] Players;
         private static HubConnection _connection;
         #region Singleton
 
@@ -31,13 +32,18 @@ namespace TankzClient.Framework
         /// Gets localy saved player list
         /// </summary>
         /// <returns> Player list</returns>
-        public string[] GetPlayerList()
+        public Player[] GetPlayerList()
         {
             if(Players == null)
             {
-                return new string[] { };
+                return new Player[] { };
             }
             return Players;
+        }
+
+        public void SetName(string name)
+        {
+            _connection.InvokeAsync("SetName", name);
         }
         /// <summary>
         /// Asks server for players
@@ -89,8 +95,8 @@ namespace TankzClient.Framework
                 _connection.On<string>("Players",
                                        (value) =>
                                        {
-                                           var objects = JsonConvert.DeserializeObject<List<String>>(value);
-                                           Players = objects.Select(obj => JsonConvert.SerializeObject(obj)).ToArray();
+                                           Console.WriteLine(value);
+                                           Players = JsonConvert.DeserializeObject<Player[]>(value);
                                        });
                 _connection.On<string>("ReceiveMessage",
                                        (value) =>
