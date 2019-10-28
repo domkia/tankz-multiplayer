@@ -11,5 +11,6 @@ namespace TankzClient.Models
         public string ConnectionId { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
+        public bool ReadyState { get; set; }
     }
 }

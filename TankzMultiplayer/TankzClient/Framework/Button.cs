@@ -6,7 +6,7 @@ namespace TankzClient.Framework
 { 
     public class Button: UIElement
     {
-        public readonly string Text;
+        public string Text;
         public readonly Image Image;
 
         private Brush brush = Brushes.Gray;
@@ -58,6 +58,11 @@ namespace TankzClient.Framework
         public void SetTextColor(Color color)
         {
             this.textBrush = new SolidBrush(color);
+        }
+
+        public void setText (string text)
+        {
+            this.Text = text;
         }
 
     }

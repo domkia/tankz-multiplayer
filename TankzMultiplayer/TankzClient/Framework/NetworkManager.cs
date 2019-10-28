@@ -28,6 +28,10 @@ namespace TankzClient.Framework
             }
         }
         #endregion
+        public void ChangeReadyState()
+        {
+            _connection.InvokeAsync("ChangeReadyState");
+        }
         /// <summary>
         /// Gets localy saved player list
         /// </summary>
@@ -41,6 +45,10 @@ namespace TankzClient.Framework
             return Players;
         }
 
+        /// <summary>
+        /// Sends set name method request for server
+        /// </summary>
+        /// <param name="name">wanted name</param>
         public void SetName(string name)
         {
             _connection.InvokeAsync("SetName", name);
