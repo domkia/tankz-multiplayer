@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using TankzClient.Models;
+using TankzClient.Game;
 
 namespace TankzClient.Framework
 {
@@ -106,7 +107,13 @@ namespace TankzClient.Framework
                                            Console.WriteLine(value);
                                            Players = JsonConvert.DeserializeObject<Player[]>(value);
                                        });
-                _connection.On<string>("ReceiveMessage",
+            _connection.On<string>("GameStart",
+                                       (value) =>
+                                       {
+                                           Console.WriteLine("Game Starting");
+                                           SceneManager.Instance.LoadScene<GameplayScene>();
+                                       });
+            _connection.On<string>("ReceiveMessage",
                                        (value) =>
                                        {
                                            //Debug, not used anymore
