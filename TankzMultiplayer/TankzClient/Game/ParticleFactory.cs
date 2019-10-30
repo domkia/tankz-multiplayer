@@ -54,7 +54,7 @@ namespace TankzClient.Game
                     });
                     break;
                 default:
-                    break;
+                    return null;
             }
             return SceneManager.Instance.CurrentScene.CreateEntity(particleEmitter);
         }
