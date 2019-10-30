@@ -29,6 +29,10 @@ namespace TankzClient.Framework
             this.props = props;
             this.useGravity = useGravity;
         }
+        public Sprite getSprite()
+        {
+            return sprite;
+        }
 
         public void Emit()
         {
