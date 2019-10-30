@@ -35,7 +35,7 @@ namespace TankzClient.Framework
             else if (progress > 1.0f)
             {
                 Progress = 1.0f;
-            }
+            }else
             Progress = progress;
         }
 
