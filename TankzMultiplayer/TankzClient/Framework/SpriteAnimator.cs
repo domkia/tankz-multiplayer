@@ -59,6 +59,10 @@ namespace TankzClient.Framework
             else
                 throw new Exception("No such animation exists");
         }
+        public bool IsAnimationInList(string name)
+        {
+            return animations.ContainsKey(name);
+        }
 
         public bool IsAnimationPlaying(string name)
         {
