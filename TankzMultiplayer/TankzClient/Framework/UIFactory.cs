@@ -34,6 +34,8 @@ namespace TankzClient.Framework
                         Color.LightGreen, 
                         Color.DarkGreen);
                     break;
+                default:
+                    return null;
             }
             return SceneManager.Instance.CurrentScene.CreateEntity(element);
         }

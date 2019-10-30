@@ -59,7 +59,7 @@ namespace TankzClient.Framework
         /// </summary>
         public void GetPlayer()
         { 
-        _connection.InvokeAsync("GetPlayers");
+            _connection.InvokeAsync("GetPlayers");
         }
         /// <summary>
         /// Ask server for connected users
@@ -74,7 +74,7 @@ namespace TankzClient.Framework
         public void start()
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:44311/TestHub")
+                .WithUrl("https://tankzsignalrserver.azurewebsites.net//TestHub")
                 .Build();
 
             _connection.Closed += async (error) =>
@@ -107,13 +107,13 @@ namespace TankzClient.Framework
                                            Console.WriteLine(value);
                                            Players = JsonConvert.DeserializeObject<Player[]>(value);
                                        });
-            _connection.On<string>("GameStart",
+                _connection.On<string>("GameStart",
                                        (value) =>
                                        {
                                            Console.WriteLine("Game Starting");
                                            SceneManager.Instance.LoadScene<GameplayScene>();
                                        });
-            _connection.On<string>("ReceiveMessage",
+                 _connection.On<string>("ReceiveMessage",
                                        (value) =>
                                        {
                                            //Debug, not used anymore
