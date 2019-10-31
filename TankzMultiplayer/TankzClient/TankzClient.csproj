@@ -157,6 +157,7 @@
     <Compile Include="Framework\Utils.cs" />
     <Compile Include="Game\Cannonball.cs" />
     <Compile Include="Game\GameplayScene.cs" />
+    <Compile Include="Game\GameplayUI.cs" />
     <Compile Include="Game\Grenade.cs" />
     <Compile Include="Game\IngameLobby.cs" />
     <Compile Include="Game\ITankBuilder.cs" />
