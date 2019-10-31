@@ -82,6 +82,9 @@ namespace TankzClient.Framework
             if (currentAnimation == null)
                 throw new Exception("Current animation is null");
 
+            // Increment timer
+            timer += deltaTime;
+
             // Update animation timer
             if (timer >= currentAnimation.duration)
             {
@@ -101,9 +104,6 @@ namespace TankzClient.Framework
             // Set frame based on timer
             int currFrame = currentAnimation.GetFrame(timer);
             animatedSprite.SetFrame(currFrame);
-
-            // Increment timer
-            timer += deltaTime;
         }
     }
 }

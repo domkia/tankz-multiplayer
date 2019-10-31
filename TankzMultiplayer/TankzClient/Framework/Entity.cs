@@ -42,10 +42,9 @@ namespace TankzClient.Framework
 
             if (parent != null)
             {
+                Vector2 relativeOffset = transform.position - parent.transform.GetParentWorldPos();
                 this.parent = parent;
-
-                //TODO: test if this works (by setting parent after the creation of both entities)
-                transform.SetPosition(transform.position - parent.transform.GetParentWorldPos());
+                transform.SetPosition(relativeOffset);
                 parent.children.Add(this);
             }
             else

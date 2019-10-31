@@ -27,7 +27,7 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<MainMenuScene>();
+            SceneManager.Instance.LoadScene<LoginScene>();
 
             NetworkManager.Instance.start();
             Thread networkThread = new Thread(NetworkManager.Instance.connect);

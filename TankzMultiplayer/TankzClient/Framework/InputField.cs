@@ -15,6 +15,8 @@ namespace TankzClient.Framework
         private bool cursorVisible;
         private int cursorOffsetX = 0;
         private Font font;
+        private Brush background;
+        private Pen foreground;
 
         public InputField(int x, int y, int width, int height)
             : base(new Rectangle(x, y, width, height))
@@ -26,6 +28,8 @@ namespace TankzClient.Framework
                 Rect.Width - textMargin * 2,
                 Rect.Height - textMargin * 2);
             font = new Font(FontFamily.GenericMonospace, 8f, FontStyle.Bold);
+            background = new SolidBrush(tintColor);
+            foreground = new Pen(Color.White);
         }
 
         public override void Click(Point mousePos)
@@ -36,17 +40,22 @@ namespace TankzClient.Framework
                 IsFocused = false;
         }
 
+        public void SetBackgroundColor(Color color)
+        {
+            background = new SolidBrush(color);
+        }
+
         public override void Render(Graphics context)
         {
             if (IsFocused)
             {
-                context.FillRectangle(Brushes.DimGray, base.Rect);
-                context.DrawRectangle(Pens.White, base.Rect);
+                context.FillRectangle(background, base.Rect);
+                context.DrawRectangle(foreground, base.Rect);
                 if (cursorVisible)
-                    context.DrawLine(Pens.White, textRect.X + cursorOffsetX, textRect.Y, textRect.X + cursorOffsetX, textRect.Y + textRect.Height);
+                    context.DrawLine(foreground, textRect.X + cursorOffsetX, textRect.Y, textRect.X + cursorOffsetX, textRect.Y + textRect.Height);
             }
             else
-                context.FillRectangle(Brushes.Gray, base.Rect);
+                context.FillRectangle(background, base.Rect);
             if (Text.Length > 0)
                 context.DrawString(Text.ToString(), font, Brushes.White, textRect);
         }

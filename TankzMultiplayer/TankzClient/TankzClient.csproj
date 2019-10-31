@@ -155,11 +155,13 @@
     <Compile Include="Framework\ParticleEmitter.cs" />
     <Compile Include="Framework\ParticleProperties.cs" />
     <Compile Include="Framework\Utils.cs" />
+    <Compile Include="Game\Cannonball.cs" />
     <Compile Include="Game\GameplayScene.cs" />
     <Compile Include="Game\Grenade.cs" />
     <Compile Include="Game\IngameLobby.cs" />
     <Compile Include="Game\ITankBuilder.cs" />
     <Compile Include="Game\LobbyScene.cs" />
+    <Compile Include="Game\LoginScene.cs" />
     <Compile Include="Game\ParticleFactory.cs" />
     <Compile Include="Game\ParticlesScene.cs" />
     <Compile Include="Game\ProjectileFactory.cs" />
