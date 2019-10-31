@@ -74,11 +74,12 @@ namespace TankzClient.Framework
         public void start()
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://tankzsignalrserver.azurewebsites.net//TestHub")
+                //.WithUrl("https://localhost:44311/TestHub")
+                .WithUrl("https://tankzsignalrserver.azurewebsites.net/TestHub")
                 .Build();
 
             _connection.Closed += async (error) =>
-            {
+            {   
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };

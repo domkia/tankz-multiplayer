@@ -16,18 +16,34 @@ namespace TankzSignalRServer.Controllers
         private readonly TankzContext _context;
         private readonly IHubContext<TestHub> _hubContext;
 
-        public PlayersController(TankzContext context, IHubContext<TestHub> hubcontex)
+        public PlayersController(TankzContext context)
         {
             _context = context;
-            _hubContext = hubcontex;
+            _hubContext = Startup.mMyHubContext;
         }
 
-        public Task AddPlayer(Player player)
+        public void AddPlayer(Player player)
         {
             _context.Players.AddAsync(player);
-            return  _hubContext.Clients.All.SendAsync("AddedPlayer");
+            _context.SaveChangesAsync();
             
         }
+        public void RemovePlayer(string ConnId)
+        {
+            Player player = GetPlayerById(ConnId);
+            _context.Players.Remove(player);
+            _context.SaveChangesAsync();
+
+        }
+        public Player GetPlayerById(string ConnId)
+        {
+            return _context.Players.FirstOrDefault(c => c.ConnectionId == ConnId);
+        }
+        public List<Player> GetPlayerList()
+        {
+            return _context.Players.ToList();
+        }
+
 
         //public async Task<IActionResult> GetPlayer([FromRoute] int id)
         //{
