@@ -22,6 +22,7 @@ namespace TankzClient.Game
             
             NetworkManager.Instance.GetConnected();
             inputField = CreateEntity(new InputField(20, 520, 120, 20)) as InputField;
+            inputField.SetBackgroundColor(Color.Brown);
             nameChangeButton = CreateEntity(new Button(150, 520, 80, 20, null, "Change Name")) as Button;
             nameChangeButton.OnClickCallback += nameChangeButton_OnClickCallback;
             readyCheckButton = CreateEntity(new Button(500, 520, 80, 20, null, "X ready")) as Button;
