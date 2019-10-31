@@ -44,14 +44,12 @@ namespace TankzClient.Game
             pen.StartCap = LineCap.ArrowAnchor;
         }
 
-        public int SortingLayer => 20;
+        public int SortingLayer => 9;
 
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
         public void Render(Graphics context)
         {
-            context.Clear(Color.Bisque);
-
             context.FillRectangle(Brushes.Brown, 160, 479, 624, 80); //bottom rect
             context.DrawRectangle(borderPen, 160, 479, 624, 80); //bottom rect
 

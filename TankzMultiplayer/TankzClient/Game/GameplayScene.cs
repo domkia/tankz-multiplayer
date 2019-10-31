@@ -25,8 +25,6 @@ namespace TankzClient.Game
             CreateEntity(usaTank);
             usaTank.transform.SetPosition(new Vector2(500, 100));
 
-            
-
         }
         public override void Render(Graphics context)
         {
