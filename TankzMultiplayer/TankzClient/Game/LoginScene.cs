@@ -12,11 +12,19 @@ namespace TankzClient.Game
     {
         private Button loginButton;
         private InputField inputField;
+        bool nameError = false;
 
         private void LoginButton_OnClickCallback()
         {
-            NetworkManager.Instance.SetName(inputField.Text.ToString());
-            SceneManager.Instance.LoadScene<IngobbyScene>();
+            if (inputField.Text.ToString().Length != 0)
+            {
+                NetworkManager.Instance.SetName(inputField.Text.ToString());
+                SceneManager.Instance.LoadScene<IngobbyScene>();
+            }
+            else
+            {
+                nameError = true;
+            }
         }
         public override void Load()
         {
@@ -33,7 +41,10 @@ namespace TankzClient.Game
             context.Clear(Color.Bisque);
             base.Render(context);
             context.DrawString("USERNAME:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 10));
-            
+            if (nameError)
+            {
+                context.DrawString("Username can't be empty", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 30));
+            }
         }
     }
 }
