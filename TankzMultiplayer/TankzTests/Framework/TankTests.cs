@@ -14,7 +14,7 @@ namespace TankzTests.Framework
     [TestClass]
     public class TankTests
     {
-
+        [Ignore]
         [TestMethod]
         public void ApplyCamouflageIsCreatedObjectNotEqual()
         {
