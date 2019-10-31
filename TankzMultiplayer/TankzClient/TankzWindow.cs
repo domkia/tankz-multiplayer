@@ -65,7 +65,8 @@ namespace TankzClient
 
                 // Wait for the next frame
                 long frameDuration = (timer.ElapsedMilliseconds - startTime);
-                Thread.Sleep((int)frameMs - (int)frameDuration);
+                //Thread.Sleep((int)frameMs - (int)frameDuration);
+                Thread.Sleep(33);
             }
         }
 

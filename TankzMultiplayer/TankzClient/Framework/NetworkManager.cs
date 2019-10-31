@@ -14,6 +14,7 @@ namespace TankzClient.Framework
     {
         private Player[] Players;
         private static HubConnection _connection;
+        public event EventHandler DataGained;
         #region Singleton
 
         private static NetworkManager instance = null;
@@ -52,6 +53,7 @@ namespace TankzClient.Framework
         /// <param name="name">wanted name</param>
         public void SetName(string name)
         {
+            Console.WriteLine("SetName");
             _connection.InvokeAsync("SetName", name);
         }
         /// <summary>
@@ -84,6 +86,10 @@ namespace TankzClient.Framework
                 await _connection.StartAsync();
             };
         }
+        protected virtual void OnPlayersGot(EventArgs e)
+        {
+            DataGained?.Invoke(this, e);
+        }
         /// <summary>
         /// Async method with listeners
         /// </summary>
@@ -107,6 +113,7 @@ namespace TankzClient.Framework
                                        {
                                            Console.WriteLine(value);
                                            Players = JsonConvert.DeserializeObject<Player[]>(value);
+                                           OnPlayersGot(EventArgs.Empty);
                                        });
                 _connection.On<string>("GameStart",
                                        (value) =>

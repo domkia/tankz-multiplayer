@@ -157,6 +157,7 @@
     <Compile Include="Framework\ParticleEmitter.cs" />
     <Compile Include="Framework\ParticleProperties.cs" />
     <Compile Include="Framework\Utils.cs" />
+    <Compile Include="Game\Background.cs" />
     <Compile Include="Game\Cannonball.cs" />
     <Compile Include="Game\GameplayScene.cs" />
     <Compile Include="Game\GameplayUI.cs" />
@@ -202,10 +203,11 @@
     <Compile Include="Game\TankSideskirtDecorator.cs" />
     <Compile Include="Game\TankWeaponSelection.cs" />
     <Compile Include="Game\Terrain.cs" />
-    <Compile Include="Game\TerrainScene.cs" />
     <Compile Include="Game\TestScene.cs" />
     <Compile Include="Game\MainMenuScene.cs" />
     <Compile Include="Models\Player.cs" />
+    <Compile Include="Models\Tank.cs" />
+    <Compile Include="Models\TankState.cs" />
     <Compile Include="TankzWindow.cs">
       <SubType>Form</SubType>
     </Compile>

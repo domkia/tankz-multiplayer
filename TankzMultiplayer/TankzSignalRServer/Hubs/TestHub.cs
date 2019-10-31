@@ -80,8 +80,8 @@ namespace TankzSignalRServer.Hubs
         public override Task OnConnectedAsync()
         {
             Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = null, TankState = null};
-            _context.Players.AddAsync(player);
-            _context.SaveChangesAsync();
+            _context.Players.Add(player);
+            _context.SaveChanges();
             ConnectedPeople();
             Clients.Caller.SendAsync("Connected", Context.ConnectionId);
             return base.OnConnectedAsync();
