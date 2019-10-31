@@ -8,10 +8,10 @@ namespace TankzClient.Game
     {
         const string spritesPath = "../../res/tanks/";
 
-        const int CHASSIS_COUNT = 3;
+        const int CHASSIS_COUNT = 4;
         const int COLOR_COUNT = 4;
         const int TURRET_COUNT = 3;
-        const int TRACKS_COUNT = 3;
+        const int TRACKS_COUNT = 4;
 
         private Tank tank = new Tank(null, new Vector2(0f, 0f), new Vector2(64f, 48f));
 
