@@ -3,7 +3,7 @@
     /// <summary>
     /// Default particle properties
     /// </summary>
-    public class ParticleProperties
+    public class ParticleProperties : ICloneable<ParticleProperties>
     {
         public Range startSize;
         public Range startLifetime;
@@ -27,6 +27,19 @@
             this.sizeGrow = sizeGrow;
             this.speedDamping = speedDaming;
             this.startOffset = startOffset;
+        }
+
+        public ParticleProperties Clone()
+        {
+            ParticleProperties properties = new ParticleProperties(
+                startSize, startLifetime,
+                startSpeed,
+                startAngle,
+                sizeGrow,
+                speedDamping,
+                spawnRate,
+                startOffset);
+            return properties;
         }
     }
 

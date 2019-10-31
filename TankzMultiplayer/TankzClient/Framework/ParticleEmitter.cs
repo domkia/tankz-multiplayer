@@ -7,13 +7,13 @@ namespace TankzClient.Framework
     /// <summary>
     /// Base particle emitter renders sprites
     /// </summary>
-    public class ParticleEmitter : Entity, IRenderable 
+    public class ParticleEmitter : Entity, IRenderable, ICloneable<ParticleEmitter>
     {
         protected readonly float gravityMultiplier = 1.5f;
         protected Particle[] particles;
         protected int particleCount;
         protected ParticleEmitMode mode;
-        protected Sprite sprite;
+        protected Sprite sprite; //galbut reikia irgi klonuoti
         protected ParticleProperties props;
         protected bool useGravity;
 
@@ -154,6 +154,18 @@ namespace TankzClient.Framework
             sprite.transform.SetPosition(particle.position);
             sprite.transform.SetSize(Vector2.one * particle.size);
             sprite.Render(context);
+        }
+
+        public ParticleEmitter Clone()
+        {
+            ParticleEmitter emitter = new ParticleEmitter(
+                particleCount,
+                sprite, 
+                props.Clone(),
+                useGravity,
+                mode
+                );
+            return emitter;
         }
     }
 }

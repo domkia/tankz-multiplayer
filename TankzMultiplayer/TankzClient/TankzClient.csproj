@@ -150,6 +150,8 @@
     <Compile Include="Framework\AnimatedSprite.cs" />
     <Compile Include="Framework\Button.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
+    <Compile Include="Framework\ICloneable.cs" />
+    <Compile Include="Framework\ovveride.cs" />
     <Compile Include="Framework\Particle.cs" />
     <Compile Include="Framework\ParticleEmitMode.cs" />
     <Compile Include="Framework\ParticleEmitter.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="Game\ITankBuilder.cs" />
     <Compile Include="Game\LobbyScene.cs" />
     <Compile Include="Game\LoginScene.cs" />
+    <Compile Include="Game\nesvarbu a bus.cs" />
     <Compile Include="Game\ParticleFactory.cs" />
     <Compile Include="Game\ParticlesScene.cs" />
     <Compile Include="Game\ProjectileFactory.cs" />

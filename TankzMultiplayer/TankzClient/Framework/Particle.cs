@@ -3,7 +3,7 @@
     /// <summary>
     /// Base particle struct
     /// </summary>
-    public class Particle
+    public class Particle : ICloneable<Particle>
     {
         public Vector2 position;
         public Vector2 direction;
@@ -29,6 +29,15 @@
             this.startSpeed = startSpeed;
             this.speed = startSpeed;
             this.timer = 0f;
+        }
+
+        public Particle Clone()
+        {
+            Particle particle = new Particle(
+                startSize, 
+                startSpeed
+                );
+            return particle;
         }
     }
 }
