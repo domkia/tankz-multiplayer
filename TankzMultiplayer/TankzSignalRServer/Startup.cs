@@ -20,6 +20,7 @@ namespace TankzSignalRServer
 {
     public class Startup
     {
+        public static IHubContext<TestHub> mMyHubContext;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,13 +48,13 @@ namespace TankzSignalRServer
             {
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseMvc();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<TestHub>("/testhub");
             }
+            
                 );
         }
     }

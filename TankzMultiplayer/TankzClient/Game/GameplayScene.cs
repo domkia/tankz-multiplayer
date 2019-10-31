@@ -12,11 +12,16 @@ namespace TankzClient.Game
     class GameplayScene : Scene
     {
         GameplayUI gameplayUI;
+        Background background;
+        Terrain terrain;
         
         public override void Load()
         {
             gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
+            background = CreateEntity(new Background()) as Background;
+            terrain = CreateEntity(new Terrain()) as Terrain;
 
+            /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
                 .SetTurret(1)
@@ -24,8 +29,9 @@ namespace TankzClient.Game
                 .Build();
             CreateEntity(usaTank);
             usaTank.transform.SetPosition(new Vector2(500, 100));
-
+            */
         }
+
         public override void Render(Graphics context)
         {
             base.Render(context);
