@@ -17,9 +17,10 @@ namespace TankzClient.Game
         
         public override void Load()
         {
-            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
+            
             background = CreateEntity(new Background()) as Background;
             terrain = CreateEntity(new Terrain()) as Terrain;
+            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
 
             /*
             Tank usaTank = new TankBuilder()
