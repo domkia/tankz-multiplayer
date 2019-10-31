@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
+using TankzClient.Models;
 
 namespace TankzClient.Game
 {
@@ -14,14 +15,27 @@ namespace TankzClient.Game
         GameplayUI gameplayUI;
         Background background;
         Terrain terrain;
+        Player[] players;
         
         public override void Load()
         {
-            
+            players = NetworkManager.Instance.GetPlayerList();
+            foreach (Player player in players)
+            {
+                Tank newTank = new TankBuilder()
+                     .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
+                     .SetTurret(player.Tank.Chasis_id)
+                     .SetTracks(player.Tank.Trucks_id)
+                     .Build();
+                CreateEntity(newTank);
+                newTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+            }
+            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             background = CreateEntity(new Background()) as Background;
             terrain = CreateEntity(new Terrain()) as Terrain;
-            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
-
+            
+            
+            
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -35,6 +49,7 @@ namespace TankzClient.Game
 
         public override void Render(Graphics context)
         {
+
             base.Render(context);
         }
 

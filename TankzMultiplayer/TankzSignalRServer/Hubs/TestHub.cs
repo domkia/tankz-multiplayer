@@ -80,8 +80,9 @@ namespace TankzSignalRServer.Hubs
         //Add connection to list and calls for connectedPeople method
         public override Task OnConnectedAsync()
         {
+            Random rand = new Random();
             Tank tank = new Tank { Color_id = 0, Chasis_id = 0, Trucks_id = 0, Turret_id = 0 };
-            TankState state = new TankState { Health = 100, Fuel = 100, Pos_X = 0, Pos_Y = 0 };
+            TankState state = new TankState { Health = 100, Fuel = 100, Pos_X = rand.Next(100,500), Pos_Y = rand.Next(300,400) };
             Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             _context.Players.Add(player);
             _context.SaveChanges();
