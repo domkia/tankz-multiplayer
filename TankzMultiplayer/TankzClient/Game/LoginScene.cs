@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TankzClient.Framework;
 
@@ -15,19 +16,32 @@ namespace TankzClient.Game
         bool nameError = false;
         bool waiting = false;
 
+        
         private void LoginButton_OnClickCallback()
         {
+
             if (inputField.Text.ToString().Length != 0)
             {
-                NetworkManager.Instance.SetName(inputField.Text.ToString());
-                NetworkManager.Instance.DataGained += Instance_DataGained;
                 waiting = true;
+                NetworkManager.Instance.start();
+                Thread networkThread = new Thread(NetworkManager.Instance.connect);
+                networkThread.IsBackground = true;
+                networkThread.Start();
+                NetworkManager.Instance.ConnectedToServer += Instance_ConnectedToServer;
             }
             else
             {
                 nameError = true;
             }
         }
+
+        private void Instance_ConnectedToServer(object sender, EventArgs e)
+        {
+            NetworkManager.Instance.SetName(inputField.Text.ToString());
+            NetworkManager.Instance.DataGained += Instance_DataGained;
+            NetworkManager.Instance.ConnectedToServer -= Instance_ConnectedToServer;
+        }
+
         private void Instance_DataGained(object sender, System.EventArgs e)
         {
             SceneManager.Instance.LoadScene<IngobbyScene>();

@@ -15,6 +15,7 @@ namespace TankzClient.Framework
         private Player[] Players;
         private static HubConnection _connection;
         public event EventHandler DataGained;
+        public event EventHandler ConnectedToServer;
         #region Singleton
 
         private static NetworkManager instance = null;
@@ -88,7 +89,12 @@ namespace TankzClient.Framework
         }
         protected virtual void OnPlayersGot(EventArgs e)
         {
+            Console.WriteLine("connection started");
             DataGained?.Invoke(this, e);
+        }
+        protected virtual void OnPlayerConnected(EventArgs e)
+        {
+            ConnectedToServer?.Invoke(this, e);
         }
         /// <summary>
         /// Async method with listeners
@@ -131,7 +137,7 @@ namespace TankzClient.Framework
                 try
                 {
                     await _connection.StartAsync();
-                    Console.WriteLine("connection started");
+                    OnPlayerConnected(EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {

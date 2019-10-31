@@ -13,7 +13,6 @@ namespace TankzClient.Game
 
         private void StartButton_OnClickCallback()
         {
-            NetworkManager.Instance.SetName(inputField.Text.ToString());
             SceneManager.Instance.LoadScene<IngobbyScene>();
         }
 
