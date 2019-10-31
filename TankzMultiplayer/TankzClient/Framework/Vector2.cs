@@ -10,10 +10,7 @@ namespace TankzClient.Framework
         {
             get
             {
-                float mag = (float)System.Math.Sqrt(x * x + y * y);
-                if (mag == 0f)
-                    return float.Epsilon;
-                return mag;
+                return (float)System.Math.Sqrt(x * x + y * y);
             }
         }
 
@@ -32,6 +29,10 @@ namespace TankzClient.Framework
         public void Normalize()
         {
             float magnitude = Magnitude;
+            if (magnitude == 0f)
+            {
+                throw new System.Exception("Vector magnitude is 0");
+            }
             x /= magnitude;
             y /= magnitude;
         }
@@ -60,6 +61,10 @@ namespace TankzClient.Framework
 
         public static Vector2 operator /(Vector2 a, float factor)
         {
+            if (factor == 0f)
+            {
+                throw new System.Exception("Division by 0 not allowed");
+            }
             a.x /= factor;
             a.y /= factor;
             return a;
@@ -101,6 +106,10 @@ namespace TankzClient.Framework
             float dot = Dot(a, b);
             float am = a.Magnitude;
             float bm = b.Magnitude;
+            if (am == 0f || bm == 0f)
+            {
+                throw new System.Exception("Magnitude of the vector must be greater than 0");
+            }
             double radians = System.Math.Acos(dot / (am * bm));
             return (float)(radians / System.Math.PI) * 180.0f;
         }

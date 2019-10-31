@@ -117,12 +117,9 @@ namespace TankzClient.Framework
             // Remove entity from the list
             if (entities.Contains(entity))
             {
-                if (entity.children.Count > 0)
+                while(entity.children.Count > 0)
                 {
-                    foreach (Entity child in entity.children)
-                    {
-                        DestroyEntity(child);
-                    }
+                    DestroyEntity(entity.children[0]);
                 }
                 return entities.Remove(entity);
             }

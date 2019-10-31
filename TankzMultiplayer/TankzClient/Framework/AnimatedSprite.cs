@@ -11,8 +11,8 @@ namespace TankzClient.Framework
         public int vertSpan { get; private set; }
         public IAnimator animator { get; protected set; }
 
-        private Vector2 frameSize;
-        private Vector2 frameOffset;
+        protected Vector2 frameSize;
+        protected Vector2 frameOffset;
 
         public AnimatedSprite(Image image, Vector2 position, Vector2 size, int horSpan, int vertSpan) 
             : base(image, position, size)
