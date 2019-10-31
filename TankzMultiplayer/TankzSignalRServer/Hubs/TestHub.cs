@@ -7,6 +7,7 @@ using TankzSignalRServer.Data;
 using TankzSignalRServer.Models;
 using Newtonsoft.Json;
 using TankzSignalRServer.Controllers;
+using Microsoft.EntityFrameworkCore;
 
 namespace TankzSignalRServer.Hubs
 {
@@ -67,7 +68,7 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("GetConnected")]
         public Task ConnectedPeople()
         {
-            string json = JsonConvert.SerializeObject(_context.Players.ToList());
+            string json = JsonConvert.SerializeObject(_context.Players.Include(p => p.Tank).Include(s => s.TankState).ToList());
             return Clients.All.SendAsync("Players", json);  
         }
         public override int GetHashCode()
@@ -79,7 +80,9 @@ namespace TankzSignalRServer.Hubs
         //Add connection to list and calls for connectedPeople method
         public override Task OnConnectedAsync()
         {
-            Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = null, TankState = null};
+            Tank tank = new Tank { Color_id = 0, Chasis_id = 0, Trucks_id = 0, Turret_id = 0 };
+            TankState state = new TankState { Health = 100, Fuel = 100, Pos_X = 0, Pos_Y = 0 };
+            Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             _context.Players.Add(player);
             _context.SaveChanges();
             ConnectedPeople();
