@@ -12,5 +12,7 @@ namespace TankzSignalRServer.Models
         public string Name { get; set; }
         public string Icon { get; set; }
         public bool ReadyState { get; set; }
+        public Tank Tank { get; set; }
+        public TankState TankState { get; set; }
     }
 }

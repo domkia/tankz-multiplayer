@@ -47,28 +47,28 @@ namespace TankzSignalRServer.Hubs
         /// <param name="name">Name</param>
         /// <returns>Gražina pakeistą žaidėjų sąrašą</returns>
         [HubMethodName("SetName")]
-        public async Task SetName(string name)
+        public Task SetName(string name)
         {
             Player player = _context.Players.SingleOrDefault(p => p.ConnectionId == Context.ConnectionId);
             player.Name = name;
             _context.SaveChanges();
-            await ConnectedPeople();
+            return ConnectedPeople();
         }
 
         //Testing method (not used in game)
         [HubMethodName("SendMessage")]
-        public async Task Message()
+        public Task Message()
         {
             List<Player> players = _context.Players.ToList();
             string json = JsonConvert.SerializeObject(players);
-            await Clients.All.SendAsync("ReceiveMessage", json);
+            return Clients.All.SendAsync("ReceiveMessage", json);
         }
         //Gets connected people and returns to all clients that are listening
         [HubMethodName("GetConnected")]
-        public async Task ConnectedPeople()
+        public Task ConnectedPeople()
         {
-            string json = JsonConvert.SerializeObject(_context.Players.ToList<Player>());
-            await Clients.All.SendAsync("Players", json);  
+            string json = JsonConvert.SerializeObject(_context.Players.ToList());
+            return Clients.All.SendAsync("Players", json);  
         }
         public override int GetHashCode()
         {
@@ -79,7 +79,7 @@ namespace TankzSignalRServer.Hubs
         //Add connection to list and calls for connectedPeople method
         public override Task OnConnectedAsync()
         {
-            Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false};
+            Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = null, TankState = null};
             _context.Players.AddAsync(player);
             _context.SaveChangesAsync();
             ConnectedPeople();

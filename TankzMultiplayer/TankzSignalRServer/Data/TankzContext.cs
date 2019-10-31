@@ -11,7 +11,6 @@ namespace TankzSignalRServer.Data
 
         public DbSet<Player> Players { get; set; }
         public DbSet<Match> Matches { get; set; }
-        public DbSet<MatchPlayer> MatchPlayers { get; set; }
         public DbSet<Tank> Tanks { get; set; }
         public DbSet<TankState> TankStates { get; set; }
         public DbSet<Turn> Turns { get; set; }
@@ -21,7 +20,6 @@ namespace TankzSignalRServer.Data
         {
             modelBuilder.Entity<Player>().ToTable("Player");
             modelBuilder.Entity<Match>().ToTable("Match");
-            modelBuilder.Entity<MatchPlayer>().ToTable("MatchPlayer");
             modelBuilder.Entity<Tank>().ToTable("Tank");
             modelBuilder.Entity<TankState>().ToTable("TankState");
             modelBuilder.Entity<Turn>().ToTable("Turn");

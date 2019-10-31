@@ -9,6 +9,7 @@ namespace TankzSignalRServer.Models
     {
         public int ID { get; set; }
         public DateTime start_datetime { get; set; }
+        public ICollection<Player> Players { get; set; }
 
     }
 }
