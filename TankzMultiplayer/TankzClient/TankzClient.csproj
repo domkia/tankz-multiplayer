@@ -152,7 +152,6 @@
     <Compile Include="Framework\Button.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
     <Compile Include="Framework\ICloneable.cs" />
-    <Compile Include="Framework\ovveride.cs" />
     <Compile Include="Framework\Particle.cs" />
     <Compile Include="Framework\ParticleEmitMode.cs" />
     <Compile Include="Framework\ParticleEmitter.cs" />
@@ -190,6 +189,7 @@
     <Compile Include="Framework\SceneManager.cs" />
     <Compile Include="Game\InventoryUI.cs" />
     <Compile Include="Game\Projectile.cs" />
+    <Compile Include="Game\SuicideScene.cs" />
     <Compile Include="Game\Tank.cs" />
     <Compile Include="Game\TankAiming.cs" />
     <Compile Include="Game\TankBarrel.cs" />

@@ -12,6 +12,7 @@ namespace TankzClient.Game
     class LoginScene : Scene
     {
         private Button loginButton;
+        private Button suicideButton;
         private InputField inputField;
         bool nameError = false;
         bool waiting = false;
@@ -35,6 +36,12 @@ namespace TankzClient.Game
             }
         }
 
+        private void SuicideButton_OnClickCallback()
+        {
+
+            SceneManager.Instance.LoadScene<SuicideScene>();
+        }
+
         private void Instance_ConnectedToServer(object sender, EventArgs e)
         {
             NetworkManager.Instance.SetName(inputField.Text.ToString());
@@ -55,6 +62,9 @@ namespace TankzClient.Game
             loginButton.OnClickCallback += LoginButton_OnClickCallback;
             loginButton.SetTextColor(Color.White);
             loginButton.SetColor(Color.Brown);
+
+            suicideButton = CreateEntity(new Button(10, 10, 50, 50, null, "Suicide Scene")) as Button;
+            suicideButton.OnClickCallback += SuicideButton_OnClickCallback;
         }
 
         public override void Render(Graphics context)
