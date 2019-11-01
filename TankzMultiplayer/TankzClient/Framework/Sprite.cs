@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace TankzClient.Framework
 {
-    public class Sprite : Entity, IRenderable
+    public class Sprite : Entity, IRenderable, ICloneable<Sprite>
     {
         public Image image { get; protected set; }
         public virtual int SortingLayer => 0;
@@ -20,6 +20,15 @@ namespace TankzClient.Framework
         {
             Rectangle rect = transform.Rect;
             context.DrawImage(image, rect.X, rect.Y, rect.Size.Width, rect.Size.Height);
+        }
+
+        public Sprite Clone()
+        {
+            Sprite sprite = new Sprite(
+                image,
+                this.transform.position,
+                this.transform.size);
+            return sprite;
         }
     }
 }
