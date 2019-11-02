@@ -30,12 +30,10 @@ namespace TankzClient.Game
                 CreateEntity(newTank);
                 newTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
             }
-            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
-            background = CreateEntity(new Background()) as Background;
+            
+            //background = CreateEntity(new Background()) as Background;
             terrain = CreateEntity(new Terrain()) as Terrain;
-            
-            
-            
+            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)

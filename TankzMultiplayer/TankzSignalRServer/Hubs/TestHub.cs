@@ -14,6 +14,8 @@ namespace TankzSignalRServer.Hubs
     public class TestHub : Hub
     {
         private readonly TankzContext _context;
+        private static List<Player> currentPlayers;
+        private static int currentTurn;
         //PlayersController pct;
         public TestHub(TankzContext context)
         {
@@ -40,7 +42,18 @@ namespace TankzSignalRServer.Hubs
         }
         public Task gameStart()
         {
-            return Clients.All.SendAsync("GameStart","");
+            Clients.All.SendAsync("GameStart","");
+            currentTurn = 0;
+            string name = currentPlayers[currentTurn].Name;
+            return Clients.All.SendAsync("Turn", name);
+        }
+        public Task Turn()
+        {
+            if (currentTurn + 1 >= currentPlayers.Count)
+                currentTurn = 0;
+            else
+                currentTurn++;
+            return Clients.All.SendAsync("Turn", currentPlayers[currentTurn].Name);
         }
         /// <summary>
         /// Set name for player when joining from lobby
@@ -68,7 +81,8 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("GetConnected")]
         public Task ConnectedPeople()
         {
-            string json = JsonConvert.SerializeObject(_context.Players.Include(p => p.Tank).Include(s => s.TankState).ToList());
+            currentPlayers = _context.Players.Include(p => p.Tank).Include(s => s.TankState).ToList();
+            string json = JsonConvert.SerializeObject(currentPlayers);
             return Clients.All.SendAsync("Players", json);  
         }
         public override int GetHashCode()
@@ -86,19 +100,24 @@ namespace TankzSignalRServer.Hubs
             Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             _context.Players.Add(player);
             _context.SaveChanges();
-            ConnectedPeople();
             Clients.Caller.SendAsync("Connected", Context.ConnectionId);
+            ConnectedPeople();
             return base.OnConnectedAsync();
         }
 
         //On disconnected task
-        //Removes player form list and calls for connectedPeople method
+        //Removes player and related elements from database and calls for connectedPeople method
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            _context.Players.Remove(GetPlayerById(Context.ConnectionId));
+            Player player = GetPlayerById(Context.ConnectionId);
+            _context.Players.Remove(player);
+            _context.SaveChanges();
+            _context.Tanks.Remove(player.Tank);
+            _context.SaveChanges();
+            _context.TankStates.Remove(player.TankState);            
             _context.SaveChanges();
             ConnectedPeople();
-            Clients.Caller.SendAsync("Disconnected", Context.ConnectionId);
+            Clients.All.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
         public Player GetPlayerById(string ConnId)

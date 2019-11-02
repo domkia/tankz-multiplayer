@@ -16,6 +16,7 @@ namespace TankzClient.Framework
         private static HubConnection _connection;
         public event EventHandler DataGained;
         public event EventHandler ConnectedToServer;
+        private string currentTurn = "";
         #region Singleton
 
         private static NetworkManager instance = null;
@@ -34,6 +35,11 @@ namespace TankzClient.Framework
         public void ChangeReadyState()
         {
             _connection.InvokeAsync("ChangeReadyState");
+        }
+
+        public void EndTurn(float power, float angle)
+        {
+            _connection.InvokeAsync("EndTurn");
         }
         /// <summary>
         /// Gets localy saved player list
@@ -54,7 +60,6 @@ namespace TankzClient.Framework
         /// <param name="name">wanted name</param>
         public void SetName(string name)
         {
-            Console.WriteLine("SetName");
             _connection.InvokeAsync("SetName", name);
         }
         /// <summary>
@@ -89,51 +94,62 @@ namespace TankzClient.Framework
         }
         protected virtual void OnPlayersGot(EventArgs e)
         {
-            Console.WriteLine("connection started");
             DataGained?.Invoke(this, e);
         }
         protected virtual void OnPlayerConnected(EventArgs e)
         {
             ConnectedToServer?.Invoke(this, e);
         }
+        public string getCurrentPlayer()
+        {
+            return currentTurn;
+        }
         /// <summary>
         /// Async method with listeners
         /// </summary>
         public async void connect()
         {
-                _connection.On<string>("Connected",
-                                       (connectionid) =>
-                                       {
-                                           //Debug stuff
-                                           Console.WriteLine(connectionid);
-                                       });
-                _connection.On<string>("Disconnected",
-                                       (value) =>
-                                       {
-                                           //Debug stuff
-                                           Console.WriteLine("Player " + value + " disconnected");
-                                       });
-                //Gets connected player list
-                _connection.On<string>("Players",
-                                       (value) =>
-                                       {
-                                           Console.WriteLine(value);
-                                           Players = JsonConvert.DeserializeObject<Player[]>(value);
-                                           OnPlayersGot(EventArgs.Empty);
-                                       });
-                _connection.On<string>("GameStart",
-                                       (value) =>
-                                       {
-                                           Console.WriteLine("Game Starting");
-                                           SceneManager.Instance.LoadScene<GameplayScene>();
-                                       });
-                 _connection.On<string>("ReceiveMessage",
-                                       (value) =>
-                                       {
-                                           //Debug, not used anymore
-                                           Console.WriteLine("Received " + value);
-                                       });
-            
+            _connection.On<string>("Connected",
+                (connectionid) =>
+                {
+                    Console.WriteLine(connectionid);
+                });
+            _connection.On<string>("Disconnected",
+                (value) =>
+                {
+                    Console.WriteLine("Player " + value + " disconnected");
+                });
+            //Gets connected player list
+            _connection.On<string>("Players",
+                (value) =>
+                {
+                    Console.WriteLine(value);
+                    Players = JsonConvert.DeserializeObject<Player[]>(value);
+                    OnPlayersGot(EventArgs.Empty);
+                });
+            _connection.On<string>("GameStart",
+                (value) =>
+                {
+                    Console.WriteLine("Game Starting");
+                    SceneManager.Instance.LoadScene<GameplayScene>();
+                });
+            _connection.On<string>("ReceiveMessage",
+                (value) =>
+                {
+                    //Debug, not used anymore
+                    Console.WriteLine("Received " + value);
+                });
+            _connection.On<string>("Turn",
+                (value) =>
+                {
+                    currentTurn = value;
+                    Console.WriteLine("Turn: " + value);
+                });
+            //_connection.On<string>("Turn",
+            //    (value) =>
+            //    {
+            //        Console.WriteLine(value + " Turn");
+            //    });
                 try
                 {
                     await _connection.StartAsync();

@@ -36,6 +36,7 @@ namespace TankzClient.Framework
         /// <param name="context">Graphics context</param>
         public virtual void Render(Graphics context)
         {
+            context.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             foreach (int layer in renderLayers.Keys)
             {
                 foreach (IRenderable renderable in renderLayers[layer])

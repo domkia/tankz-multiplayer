@@ -70,7 +70,7 @@ namespace TankzClient.Game
 
             context.FillRectangle(Brushes.Brown, 240, 2, 300, 45); //turn
             context.DrawRectangle(borderPen, 240, 2, 300, 45); //turn
-            context.DrawString("TURN: " + "PLAYER1", font, Brushes.Bisque, new Point(255, 10));
+            context.DrawString("TURN: " + NetworkManager.Instance.getCurrentPlayer(), font, Brushes.Bisque, new Point(255, 10));
 
             context.FillRectangle(Brushes.Brown, 2, 2, 155, 70); // wind
             context.DrawRectangle(borderPen, 2, 2, 155, 70); // wind
