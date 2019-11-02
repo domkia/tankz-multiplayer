@@ -55,6 +55,10 @@ namespace TankzClient.Game
 
         public void Render(Graphics context)
         {
+            context.FillRectangle(Brushes.Green, 0, 360, 790, 250); //grass
+
+
+
             context.FillRectangle(Brushes.Brown, 160, 479, 624, 80); //bottom rect
             context.DrawRectangle(borderPen, 160, 479, 624, 80); //bottom rect
 
@@ -92,6 +96,8 @@ namespace TankzClient.Game
             context.FillRectangle(Brushes.Brown, 2, 2, 155, 70); // wind
             context.DrawRectangle(borderPen, 2, 2, 155, 70); // wind
             context.DrawString("WIND: " + "100", font, Brushes.Bisque, new Point(15, 10));
+
+            
         }
 
         private void Btn_OnClickCallback()

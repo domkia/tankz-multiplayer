@@ -36,10 +36,12 @@ namespace TankzClient.Game
             }
             
             //background = CreateEntity(new Background()) as Background;
-            terrain = CreateEntity(new Terrain()) as Terrain;
+
+            //terrain = CreateEntity(new Terrain()) as Terrain;
+
             gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             grenade = new ProjectileFactory().Create("grenade") as Grenade;
-            grenade.transform.SetPosition(new Vector2(10f, 400f));
+            grenade.transform.SetPosition(new Vector2(300f, 400f));
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -76,7 +78,7 @@ namespace TankzClient.Game
                 
                 double lastX = grenade.transform.position.x;
                 double lastY = grenade.transform.position.y;
-                grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(15 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
+                grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
                 Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
             }
         }
