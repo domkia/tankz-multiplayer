@@ -37,10 +37,10 @@ namespace TankzClient.Framework
             _connection.InvokeAsync("ChangeReadyState");
         }
 
-        public void EndTurn()
+        public void EndTurn(float angle, float power)
         {
 
-            _connection.InvokeAsync("EndTurn");
+            _connection.InvokeAsync("EndTurn", angle, power);
         }
         /// <summary>
         /// Gets localy saved player list

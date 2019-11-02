@@ -41,7 +41,7 @@ namespace TankzClient.Game
 
             gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             grenade = new ProjectileFactory().Create("grenade") as Grenade;
-            grenade.transform.SetPosition(new Vector2(300f, 400f));
+            grenade.transform.SetPosition(new Vector2(300f, 300f));
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -76,10 +76,13 @@ namespace TankzClient.Game
                     startPositionY = grenade.transform.position.y;
                 }
                 
-                double lastX = grenade.transform.position.x;
-                double lastY = grenade.transform.position.y;
-                grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
-                Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
+                float lastX = grenade.transform.position.x;
+                float lastY = grenade.transform.position.y;
+                if (lastY <= 300f)
+                {
+                    grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
+                    //Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
+                }
             }
         }
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)

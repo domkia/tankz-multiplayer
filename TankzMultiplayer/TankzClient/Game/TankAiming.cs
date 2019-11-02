@@ -60,6 +60,13 @@ namespace TankzClient.Game
             {
                 tank.SetPhase(new TankWeaponSelection(tank));
             }
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Enter))
+            {
+                float angle = -tank.barrel.angle;
+                Console.WriteLine("Tank angle:" + angle);
+                float power = 10f;
+                NetworkManager.Instance.EndTurn(angle, power);
+            }
 
             RotateBarrel(deltaTime);
         }

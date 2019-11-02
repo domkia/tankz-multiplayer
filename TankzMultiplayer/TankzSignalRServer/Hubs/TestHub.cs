@@ -8,6 +8,7 @@ using TankzSignalRServer.Models;
 using Newtonsoft.Json;
 using TankzSignalRServer.Controllers;
 using Microsoft.EntityFrameworkCore;
+using TankzSignalRServer.Utilites;
 
 namespace TankzSignalRServer.Hubs
 {
@@ -47,14 +48,37 @@ namespace TankzSignalRServer.Hubs
             string conn = currentPlayers[currentTurn].ConnectionId;
             return Clients.All.SendAsync("Turn", conn);
         }
+        private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
+        {
+            float x = currentPos.x;
+            float y = currentPos.y;
+            x = (float)(x + speed * time * Math.Cos(angle));
+            y = (float)(y - (speed * time * Math.Sin(angle)) - (0.5f * gravity * Math.Pow(time, 2)));
+            return new Vector2(x, y);
+        }
         [HubMethodName("EndTurn")]
-        public Task Turn()
+        public Task Turn(float angle, float power)
         {
             if (currentTurn + 1 >= currentPlayers.Count)
                 currentTurn = 0;
             else
                 currentTurn++;
-            return Clients.All.SendAsync("Turn", currentPlayers[currentTurn].ConnectionId);
+            Clients.All.SendAsync("Turn", currentPlayers[currentTurn].ConnectionId);
+            return Shoot(power, angle);
+        }
+        public Task Shoot(float power, float angle)
+        {
+            Vector2 startPos = new Vector2(currentPlayers[currentTurn].TankState.Pos_X, currentPlayers[currentTurn].TankState.Pos_Y);
+            Vector2 newPos = new Vector2(0f, 0f);
+            float time = 0;
+            float angleDeg = (float)(angle * (Math.PI / 180.0));
+            while (newPos.y <= 300f)
+            {
+                newPos = calculatePos(power, -9.8f, angleDeg, startPos, time);
+                time++;
+                Clients.All.SendAsync("ReceiveMessage", newPos.x + " " +newPos.y);
+            }
+            return Clients.All.SendAsync("ReceiveMessage", "Done shooting");
         }
         /// <summary>
         /// Set name for player when joining from lobby
