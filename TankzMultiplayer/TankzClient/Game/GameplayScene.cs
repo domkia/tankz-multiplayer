@@ -16,6 +16,7 @@ namespace TankzClient.Game
         Background background;
         Terrain terrain;
         Player[] players;
+        Grenade grenade;
         
         public override void Load()
         {
@@ -34,6 +35,8 @@ namespace TankzClient.Game
             //background = CreateEntity(new Background()) as Background;
             terrain = CreateEntity(new Terrain()) as Terrain;
             gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
+            grenade = new ProjectileFactory().Create("grenade") as Grenade;
+            grenade.transform.SetPosition(new Vector2(10f, 400f));
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -54,6 +57,19 @@ namespace TankzClient.Game
         public override void Update(float deltaTime)
         {
             base.Update(deltaTime);
+            if (grenade != null)
+            {
+                grenade.transform.SetPosition(calculatePos(1.0f, -9.8f, 15, grenade.transform.position, deltaTime));
+                Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
+            }
+        }
+        private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
+        {
+            float x = currentPos.x;
+            float y = currentPos.y;
+            x = (float)(x + speed * time * Math.Cos(angle));
+            y = (float)(y + speed * time * Math.Sin(angle) - (0.5f * gravity * Math.Pow(time, 2)));
+            return new Vector2(x, y);
         }
     }
 }
