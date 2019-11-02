@@ -19,9 +19,14 @@ namespace TankzClient.Game
         private Font font;
         private Pen pen;
         private Pen borderPen;
+        private Button btn;
 
         public GameplayUI()
         {
+            btn = new Button(350, 350, 100, 30, null, "End turn");
+            btn.SetActive(false);
+            btn.SetParent(this);
+            btn.OnClickCallback += Btn_OnClickCallback;
             healthBar = new ProgressBar(new Rectangle(10, 411, 140, 14), Color.LightGreen, Color.DarkGreen);
             healthBar.SetParent(this);
             healthBar.SetProgress(1f);
@@ -70,11 +75,29 @@ namespace TankzClient.Game
 
             context.FillRectangle(Brushes.Brown, 240, 2, 300, 45); //turn
             context.DrawRectangle(borderPen, 240, 2, 300, 45); //turn
-            context.DrawString("TURN: " + NetworkManager.Instance.getCurrentPlayer(), font, Brushes.Bisque, new Point(255, 10));
+            string player = NetworkManager.Instance.getCurrentPlayer();
+            string playerName = "";
+            if(player == "YOU")
+            {
+                playerName = "YOU";
+                btn.SetActive(true);
+            }
+            else
+            {
+                playerName = NetworkManager.Instance.GetPlayerList().Where(c => c.ConnectionId == player).Select(b => b.Name).FirstOrDefault();
+                btn.SetActive(false);
+            }
+            context.DrawString("TURN: " + playerName, font, Brushes.Bisque, new Point(255, 10));
 
             context.FillRectangle(Brushes.Brown, 2, 2, 155, 70); // wind
             context.DrawRectangle(borderPen, 2, 2, 155, 70); // wind
             context.DrawString("WIND: " + "100", font, Brushes.Bisque, new Point(15, 10));
         }
-    }
+
+        private void Btn_OnClickCallback()
+        {
+            btn.SetActive(false);
+            NetworkManager.Instance.EndTurn();
+        }
+        }
 }

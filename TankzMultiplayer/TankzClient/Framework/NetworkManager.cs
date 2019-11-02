@@ -37,8 +37,9 @@ namespace TankzClient.Framework
             _connection.InvokeAsync("ChangeReadyState");
         }
 
-        public void EndTurn(float power, float angle)
+        public void EndTurn()
         {
+
             _connection.InvokeAsync("EndTurn");
         }
         /// <summary>
@@ -142,14 +143,14 @@ namespace TankzClient.Framework
             _connection.On<string>("Turn",
                 (value) =>
                 {
+                    if(value == _connection.ConnectionId)
+                    {
+                        currentTurn = "YOU";
+                    }
+                    else
                     currentTurn = value;
                     Console.WriteLine("Turn: " + value);
                 });
-            //_connection.On<string>("Turn",
-            //    (value) =>
-            //    {
-            //        Console.WriteLine(value + " Turn");
-            //    });
                 try
                 {
                     await _connection.StartAsync();

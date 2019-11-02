@@ -44,16 +44,17 @@ namespace TankzSignalRServer.Hubs
         {
             Clients.All.SendAsync("GameStart","");
             currentTurn = 0;
-            string name = currentPlayers[currentTurn].Name;
-            return Clients.All.SendAsync("Turn", name);
+            string conn = currentPlayers[currentTurn].ConnectionId;
+            return Clients.All.SendAsync("Turn", conn);
         }
+        [HubMethodName("EndTurn")]
         public Task Turn()
         {
             if (currentTurn + 1 >= currentPlayers.Count)
                 currentTurn = 0;
             else
                 currentTurn++;
-            return Clients.All.SendAsync("Turn", currentPlayers[currentTurn].Name);
+            return Clients.All.SendAsync("Turn", currentPlayers[currentTurn].ConnectionId);
         }
         /// <summary>
         /// Set name for player when joining from lobby
