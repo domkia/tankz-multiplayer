@@ -17,7 +17,10 @@ namespace TankzClient.Game
         Terrain terrain;
         Player[] players;
         Grenade grenade;
-        
+        float startPositionX = -10;
+        float startPositionY = -10;
+        float currentTime = 0;
+
         public override void Load()
         {
             players = NetworkManager.Instance.GetPlayerList();
@@ -56,10 +59,24 @@ namespace TankzClient.Game
 
         public override void Update(float deltaTime)
         {
+
             base.Update(deltaTime);
+
+            currentTime += deltaTime;
             if (grenade != null)
             {
-                grenade.transform.SetPosition(calculatePos(1.0f, -9.8f, 15, grenade.transform.position, deltaTime));
+                if (startPositionX == -10)
+                {
+                    startPositionX = grenade.transform.position.x;
+                }
+                if (startPositionY == -10)
+                {
+                    startPositionY = grenade.transform.position.y;
+                }
+                
+                double lastX = grenade.transform.position.x;
+                double lastY = grenade.transform.position.y;
+                grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(15 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
                 Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
             }
         }
@@ -68,7 +85,7 @@ namespace TankzClient.Game
             float x = currentPos.x;
             float y = currentPos.y;
             x = (float)(x + speed * time * Math.Cos(angle));
-            y = (float)(y + speed * time * Math.Sin(angle) - (0.5f * gravity * Math.Pow(time, 2)));
+            y = (float)(y - (speed * time * Math.Sin(angle)) - (0.5f * gravity * Math.Pow(time, 2)));
             return new Vector2(x, y);
         }
     }
