@@ -17,6 +17,8 @@ namespace TankzClient.Game
         Terrain terrain;
         Player[] players;
         Grenade grenade;
+        Crate crate;
+        Tank tank;
         float startPositionX = -10;
         float startPositionY = -10;
         float currentTime = 0;
@@ -33,8 +35,10 @@ namespace TankzClient.Game
                      .Build();
                 CreateEntity(newTank);
                 newTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                tank = newTank;
             }
             
+
             //background = CreateEntity(new Background()) as Background;
 
             //terrain = CreateEntity(new Terrain()) as Terrain;
@@ -42,6 +46,10 @@ namespace TankzClient.Game
             gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             grenade = new ProjectileFactory().Create("grenade") as Grenade;
             grenade.transform.SetPosition(new Vector2(300f, 300f));
+
+            crate = CreateEntity(new Crate(Image.FromFile("../../res/crates/crate_0.png"), new Vector2(200f, 200f), grenade, new Vector2(50f, 50f))) as Crate;
+            crate.transform.SetPosition(new Vector2(200f, 300f));
+            crate.transform.SetSize(new Vector2(50f, 50f));
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -83,6 +91,11 @@ namespace TankzClient.Game
                     grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
                     //Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
                 }
+            }
+
+            if (Math.Abs(crate.transform.position.x - tank.transform.position.x) <= (crate.transform.size.x) && Math.Abs(crate.transform.position.y - tank.transform.position.y) <= (crate.transform.size.y))
+            {
+                crate.Destroy();
             }
         }
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
