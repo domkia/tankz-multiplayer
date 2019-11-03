@@ -25,7 +25,7 @@ namespace TankzSignalRServer.Data
             modelBuilder.Entity<Tank>().ToTable("Tank");
             modelBuilder.Entity<TankState>().ToTable("TankState");
             modelBuilder.Entity<Turn>().ToTable("Turn");
-            modelBuilder.Entity<Weapon>().ToTable("Weapon.cs");
+            modelBuilder.Entity<Weapon>().ToTable("Weapon");
             modelBuilder.Entity<Crate>().ToTable("Crate");
         }
     }
