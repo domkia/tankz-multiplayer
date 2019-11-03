@@ -16,6 +16,7 @@ namespace TankzClient.Framework
         private static HubConnection _connection;
         public event EventHandler DataGained;
         public event EventHandler ConnectedToServer;
+        public event EventHandler PlayerChanged;
         private string currentTurn = "";
         #region Singleton
 
@@ -39,7 +40,6 @@ namespace TankzClient.Framework
 
         public void EndTurn(float angle, float power)
         {
-
             _connection.InvokeAsync("EndTurn", angle, power);
         }
         /// <summary>
@@ -92,6 +92,10 @@ namespace TankzClient.Framework
                 await Task.Delay(new Random().Next(0, 5) * 1000);
                 await _connection.StartAsync();
             };
+        }
+        protected virtual void OnPlayerChanged(EventArgs e)
+        {
+            PlayerChanged?.Invoke(this, e);
         }
         protected virtual void OnPlayersGot(EventArgs e)
         {
@@ -153,6 +157,7 @@ namespace TankzClient.Framework
                     }
                     else
                     currentTurn = value;
+                    OnPlayerChanged(EventArgs.Empty);
                 });
                 try
                 {

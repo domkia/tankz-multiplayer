@@ -22,6 +22,7 @@ namespace TankzClient.Game
         float startPositionX = -10;
         float startPositionY = -10;
         float currentTime = 0;
+        private Dictionary<string, Tank> tankDict = new Dictionary<string, Tank>();
 
         public override void Load()
         {
@@ -37,7 +38,7 @@ namespace TankzClient.Game
                          .Build() as PlayerTank;
                     CreateEntity(tank);
                     tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
-                    Console.WriteLine("Turn is for " +NetworkManager.Instance.getCurrentPlayer());
+                    tankDict.Add(player.ConnectionId, tank);
                     if(NetworkManager.Instance.getCurrentPlayer() == "YOU")
                     tank.StartTurn();
                 }
@@ -51,6 +52,7 @@ namespace TankzClient.Game
                         .Build();
                     CreateEntity(NPCTank);
                     NPCTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    tankDict.Add(player.ConnectionId, NPCTank);
                 }
             }
             
@@ -88,7 +90,10 @@ namespace TankzClient.Game
         {
 
             base.Update(deltaTime);
-
+            if (tankDict.Count != 0)
+            {
+                NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
+            }
             currentTime += deltaTime;
             if (grenade != null)
             {
@@ -115,6 +120,23 @@ namespace TankzClient.Game
             //    crate.Destroy();
             //}
         }
+
+        private void Instance_PlayerChanged(object sender, EventArgs e)
+        {
+            if (NetworkManager.Instance.getCurrentPlayer() == "YOU")
+            {
+                PlayerTank tank = tankDict[NetworkManager.Instance.myConnId()] as PlayerTank;
+                tank.StartTurn();
+                Console.WriteLine("My turn start");
+            }
+            else
+            {
+                Console.WriteLine("other's turn");
+            }
+            NetworkManager.Instance.PlayerChanged -= Instance_PlayerChanged;
+
+        }
+
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
         {
             float x = currentPos.x;
