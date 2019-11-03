@@ -16,6 +16,8 @@ namespace TankzSignalRServer.Data
         public DbSet<Turn> Turns { get; set; }
         public DbSet<Weapon> Weapons { get; set; }
 
+        public DbSet<Crate> Crates { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Player>().ToTable("Player");
@@ -24,6 +26,7 @@ namespace TankzSignalRServer.Data
             modelBuilder.Entity<TankState>().ToTable("TankState");
             modelBuilder.Entity<Turn>().ToTable("Turn");
             modelBuilder.Entity<Weapon>().ToTable("Weapon.cs");
+            modelBuilder.Entity<Crate>().ToTable("Crate");
         }
     }
 }

@@ -17,6 +17,7 @@ namespace TankzSignalRServer.Hubs
         private readonly TankzContext _context;
         private static List<Player> currentPlayers;
         private static int currentTurn;
+        private static int turnsToNextCrate;
         //PlayersController pct;
         public TestHub(TankzContext context)
         {
@@ -43,9 +44,15 @@ namespace TankzSignalRServer.Hubs
         }
         public Task gameStart()
         {
+            Random rand = new Random();
             Clients.All.SendAsync("GameStart","");
             currentTurn = 0;
+            turnsToNextCrate = rand.Next(0, 4);
+            //Clients.All.SendAsync("ReceiveMessage", turnsToNextCrate);
             string conn = currentPlayers[currentTurn].ConnectionId;
+            Weapon weapon = new Weapon { ID = 0, Name = "Grenade", Explosion_Radius = 10, Radius = 2 };
+            _context.Weapons.Add(weapon);
+            _context.SaveChanges();
             return Clients.All.SendAsync("Turn", conn);
         }
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
@@ -63,7 +70,18 @@ namespace TankzSignalRServer.Hubs
                 currentTurn = 0;
             else
                 currentTurn++;
+
+            if (turnsToNextCrate <= 0)
+            {
+                Weapon weapon = new Weapon { ID = 0, Name = "grybas", Radius = 10, Explosion_Radius = 10 };
+                Crate crate = new Crate { ID = 0/*GetCrateCount()*/, Name = "Crate" /*+ GetCrateCount()*/, Weapon = weapon/*GetWeaponById(0)*/ };
+                _context.Crates.Add(crate);
+                _context.SaveChanges();
+                //Clients.All.SendAsync("ReceiveMessage", "created Crate: " + crate.Name + ", ID: " + crate.ID);
+            }
+            
             Clients.All.SendAsync("Turn", currentPlayers[currentTurn].ConnectionId);
+            turnsToNextCrate--;
             return Shoot(power, angle);
         }
         public Task Shoot(float power, float angle)
@@ -76,7 +94,7 @@ namespace TankzSignalRServer.Hubs
             {
                 newPos = calculatePos(power, -9.8f, angleDeg, startPos, time);
                 time++;
-                Clients.All.SendAsync("ReceiveMessage", newPos.x + " " +newPos.y);
+                Clients.All.SendAsync("ReceiveMessage", newPos.x + " " +newPos.y + " " + turnsToNextCrate);
             }
             return Clients.All.SendAsync("ReceiveMessage", "Done shooting");
         }
@@ -148,6 +166,16 @@ namespace TankzSignalRServer.Hubs
         public Player GetPlayerById(string ConnId)
         {
             return _context.Players.FirstOrDefault(c => c.ConnectionId == ConnId);
+        }
+
+        public Weapon GetWeaponById(int ID)
+        {
+            return _context.Weapons.FirstOrDefault(i => i.ID == ID);
+        }
+
+        public int GetCrateCount()
+        {
+            return _context.Crates.Count();
         }
 
         public override string ToString()
