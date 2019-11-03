@@ -153,7 +153,6 @@ namespace TankzClient.Framework
                     }
                     else
                     currentTurn = value;
-                    Console.WriteLine("Turn: " + value);
                 });
                 try
                 {

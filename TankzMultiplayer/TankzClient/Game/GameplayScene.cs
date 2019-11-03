@@ -37,6 +37,8 @@ namespace TankzClient.Game
                          .Build() as PlayerTank;
                     CreateEntity(tank);
                     tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    Console.WriteLine("Turn is for " +NetworkManager.Instance.getCurrentPlayer());
+                    if(NetworkManager.Instance.getCurrentPlayer() == "YOU")
                     tank.StartTurn();
                 }
                 else

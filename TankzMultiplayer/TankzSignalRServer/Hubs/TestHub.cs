@@ -45,7 +45,7 @@ namespace TankzSignalRServer.Hubs
         public Task gameStart()
         {
             Random rand = new Random();
-            Clients.All.SendAsync("GameStart","");
+            
             currentTurn = 0;
             turnsToNextCrate = rand.Next(1, 4);
             Clients.All.SendAsync("ReceiveMessage", "Turns until next crate spawn: " + turnsToNextCrate);
@@ -53,7 +53,8 @@ namespace TankzSignalRServer.Hubs
             //Weapon weapon = new Weapon { ID = 0, Name = "Grenade", Explosion_Radius = 10, Radius = 2 };
             //_context.Weapons.Add(weapon);
             //_context.SaveChanges();
-            return Clients.All.SendAsync("Turn", conn);
+            Clients.All.SendAsync("Turn", conn);
+            return Clients.All.SendAsync("GameStart", "");
         }
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
         {
@@ -127,7 +128,7 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("GetConnected")]
         public Task ConnectedPeople()
         {
-            currentPlayers = _context.Players.Include(p => p.Tank).Include(s => s.TankState).ToList();
+            currentPlayers = _context.Players.Include(p => p.Tank).Include(p => p.TankState).ToList();
             string json = JsonConvert.SerializeObject(currentPlayers);
             return Clients.All.SendAsync("Players", json);  
         }
@@ -142,7 +143,7 @@ namespace TankzSignalRServer.Hubs
         {
             Random rand = new Random();
             Tank tank = new Tank { Color_id = 0, Chasis_id = 0, Trucks_id = 0, Turret_id = 0 };
-            TankState state = new TankState { Health = 100, Fuel = 100, Pos_X = rand.Next(100,500), Pos_Y = 300/*rand.Next(300,400)*/ };
+            TankState state = new TankState { Health = 100, Fuel = 100, Pos_X = rand.Next(100,500), Pos_Y = 300/*rand.Next(300,400)*/ , Angle = 0f, Power = 0f};
             Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             _context.Players.Add(player);
             _context.SaveChanges();
