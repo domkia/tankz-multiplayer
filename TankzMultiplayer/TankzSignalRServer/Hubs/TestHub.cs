@@ -78,7 +78,7 @@ namespace TankzSignalRServer.Hubs
                 crate.Name = "Crate of " + crate.Weapon.Name;
                 _context.Crates.Add(crate);
                 _context.SaveChanges();
-                //Clients.All.SendAsync("ReceiveMessage", "created Crate: " + crate.Name + ", ID: " + crate.ID + ", Weapon name: " + GetWeaponById(1).Name + ", Position: (" + crate.PositionX + "," + crate.PositionY + ")");
+                Clients.All.SendAsync("ReceiveMessage", "created Crate: " + crate.Name + ", ID: " + crate.ID + ", Weapon name: " + GetWeaponById(1).Name + ", Position: (" + crate.PositionX + "," + crate.PositionY + ")");
                 turnsToNextCrate = rand.Next(1, 4);
                 Clients.All.SendAsync("ReceiveMessage", "Turns until next crate: " + turnsToNextCrate);
             }
