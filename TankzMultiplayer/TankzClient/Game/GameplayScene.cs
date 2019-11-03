@@ -28,15 +28,28 @@ namespace TankzClient.Game
             players = NetworkManager.Instance.GetPlayerList();
             foreach (Player player in players)
             {
-                PlayerTank newTank = new TankBuilder(true)
-                     .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
-                     .SetTurret(player.Tank.Chasis_id)
-                     .SetTracks(player.Tank.Trucks_id)
-                     .Build() as PlayerTank;
-                CreateEntity(newTank);
-                newTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
-                newTank.StartTurn();
-                tank = newTank;
+                if (player.ConnectionId == NetworkManager.Instance.myConnId())
+                {
+                    tank = new TankBuilder(true)
+                         .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
+                         .SetTurret(player.Tank.Chasis_id)
+                         .SetTracks(player.Tank.Trucks_id)
+                         .Build() as PlayerTank;
+                    CreateEntity(tank);
+                    tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    tank.StartTurn();
+                }
+                else
+                {
+
+                    Tank NPCTank = new TankBuilder(false)
+                        .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
+                        .SetTurret(player.Tank.Chasis_id)
+                        .SetTracks(player.Tank.Trucks_id)
+                        .Build();
+                    CreateEntity(NPCTank);
+                    NPCTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                }
             }
             
             

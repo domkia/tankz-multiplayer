@@ -105,6 +105,10 @@ namespace TankzClient.Framework
         {
             return currentTurn;
         }
+        public string myConnId()
+        {
+            return _connection.ConnectionId;
+        }
         /// <summary>
         /// Async method with listeners
         /// </summary>
