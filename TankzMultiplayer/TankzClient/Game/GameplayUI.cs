@@ -52,9 +52,7 @@ namespace TankzClient.Game
 
         public void Render(Graphics context)
         {
-            context.FillRectangle(Brushes.Green, 0, 360, 790, 250); //grass
-
-
+            context.FillRectangle(Brushes.Green, 0, 330, 790, 250); //grass
 
             context.FillRectangle(Brushes.Brown, 160, 479, 624, 80); //bottom rect
             context.DrawRectangle(borderPen, 160, 479, 624, 80); //bottom rect

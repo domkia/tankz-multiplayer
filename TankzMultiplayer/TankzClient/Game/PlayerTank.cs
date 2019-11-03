@@ -23,6 +23,7 @@ namespace TankzClient.Game
             commands = new Stack<ITankCommand>();
             SetPhase(new TankIdle(this));
         }
+        public override int SortingLayer => 10;
 
         public void StartTurn()
         {

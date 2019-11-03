@@ -18,7 +18,7 @@ namespace TankzClient.Game
         Player[] players;
         Grenade grenade;
         Crate crate;
-        Tank tank;
+        PlayerTank tank;
         float startPositionX = -10;
         float startPositionY = -10;
         float currentTime = 0;
@@ -28,15 +28,17 @@ namespace TankzClient.Game
             players = NetworkManager.Instance.GetPlayerList();
             foreach (Player player in players)
             {
-                Tank newTank = new TankBuilder(true)
+                PlayerTank newTank = new TankBuilder(true)
                      .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
                      .SetTurret(player.Tank.Chasis_id)
                      .SetTracks(player.Tank.Trucks_id)
-                     .Build();
+                     .Build() as PlayerTank;
                 CreateEntity(newTank);
                 newTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                newTank.StartTurn();
                 tank = newTank;
             }
+            
             
 
             //background = CreateEntity(new Background()) as Background;
@@ -93,10 +95,10 @@ namespace TankzClient.Game
                 }
             }
 
-            if (Math.Abs(crate.transform.position.x - tank.transform.position.x) <= (crate.transform.size.x) && Math.Abs(crate.transform.position.y - tank.transform.position.y) <= (crate.transform.size.y))
-            {
-                crate.Destroy();
-            }
+            //if (Math.Abs(crate.transform.position.x - tank.transform.position.x) <= (crate.transform.size.x) && Math.Abs(crate.transform.position.y - tank.transform.position.y) <= (crate.transform.size.y))
+            //{
+            //    crate.Destroy();
+            //}
         }
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)
         {
