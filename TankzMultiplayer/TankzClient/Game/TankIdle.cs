@@ -8,7 +8,7 @@ namespace TankzClient.Game
 {
     class TankIdle : TankPhase
     {
-        public TankIdle(Tank tank) : base(tank)
+        public TankIdle(PlayerTank tank) : base(tank)
         {
 
         }

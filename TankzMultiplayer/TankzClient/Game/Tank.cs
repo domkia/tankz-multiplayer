@@ -6,12 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
+using TankzClient.Models;
 
 namespace TankzClient.Game
 {
-    class Tank : Sprite
+    /// <summary>
+    /// Base tank class
+    /// </summary>
+    public class Tank : Sprite, ITank
     {
-        private int fuel = 100;
+        public int Fuel => state.Fuel;
+        public float Power => state.Power;
+        public float Angle => state.Angle;
+        public Vector2 Position => new Vector2(state.Pos_X, state.Pos_Y);
+
+        private TankState state;
 
         private TankBarrel _barrel = null;
         public TankBarrel barrel
@@ -24,76 +33,96 @@ namespace TankzClient.Game
             }
         }
 
-        private TankPhase currentPhase = null;
-
-        public void ApplyCamouflage(int camo)
+        internal Tank(Vector2 position, Vector2 size) 
+            : base(null, position, size)
         {
-            TankChassis chassis = FindChild<TankDecorator>();
-            if (chassis == null)
-                chassis = FindChild<TankChassis>();
-            TankCamoDecorator camoChassis = new TankCamoDecorator(camo, chassis);
-            camoChassis.SetParent(this);
-            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
-            SceneManager.Instance.CurrentScene.CreateEntity(camoChassis);
+            state = new TankState();
         }
 
-        public void ApplyAccessory(int accessory)
+        public void UpdateTankState(TankState updatedState)
         {
-            TankChassis chassis = FindChild<TankDecorator>();
-            if (chassis == null)
-                chassis = FindChild<TankChassis>();
-            TankAccessoriesDecorator accessoryChassis = new TankAccessoriesDecorator(accessory, chassis);
-            accessoryChassis.SetParent(this);
-            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
-            SceneManager.Instance.CurrentScene.CreateEntity(accessoryChassis);
-        }
-
-        public void ApplySideskirt(int sideskirt)
-        {
-            TankChassis chassis = FindChild<TankDecorator>();
-            if (chassis == null)
-                chassis = FindChild<TankChassis>();
-            TankSideskirtDecorator sideskirtChassis = new TankSideskirtDecorator(sideskirt, chassis);
-            sideskirtChassis.SetParent(this);
-            SceneManager.Instance.CurrentScene.DestroyEntity(chassis);
-            SceneManager.Instance.CurrentScene.CreateEntity(sideskirtChassis);
-        }
-
-        public void SetPhase(TankPhase phase)
-        {
-            currentPhase = phase;
+            this.state = updatedState;
+            transform.SetPosition(new Vector2(state.Pos_X, state.Pos_Y));
+            barrel.transform.SetAngle(state.Angle);
         }
 
         public void Shoot()
         {
-            currentPhase = new TankIdle(this);
+            float angle = Angle;
+            float power = Power;
+            NetworkManager.Instance.EndTurn(angle, power);
+
+            // Spawn shoot particle at the barrel tip point
+            Vector2 particleSpawnPoint = barrel.GetReleasePosition();
+            ParticleEmitter particle = new ParticleFactory().Create("explosion") as ParticleEmitter;
+            particle.transform.SetPosition(particleSpawnPoint);
+            particle.Emit();
         }
 
-        public Tank(Image sprite, Vector2 position, Vector2 size) 
-            : base(sprite, position, size)
+        public void Move(Vector2 offset)
         {
-            // Set tank phase
-            currentPhase = new TankMovement(this);
+            if (state.Fuel == 0)
+            {
+            //    return;
+            }
+
+            transform.SetPosition(transform.position + offset);
+            float distance = offset.Magnitude;
+            state.Fuel -= (int)distance;
+        }
+
+        public void SetAngle(float angle)
+        {
+            if (angle < 0.0f)
+            {
+                angle = 0.0f;
+            }
+            else if (angle > 180.0f)
+            {
+                angle = 180.0f;
+            }
+            barrel.transform.SetAngle(-angle);
+            state.Angle = angle;
+        }
+
+        public void SetPower(float power)
+        {
+            if (power < 0.0f)
+            {
+                power = 0.0f;
+            }
+            else if (power > 1.0f)
+            {
+                power = 1.0f;
+            }
+            state.Power = power;
+        }
+
+        public void SetFuel(int fuel)
+        {
+            if (fuel < 0)
+            {
+                fuel = 0;
+            }
+            else if (fuel > 100)
+            {
+                fuel = 100;
+            }
+            state.Fuel = fuel;
         }
 
         public override void Render(Graphics context)
         {
-            //base.Render(context);
-            context.DrawString(string.Format($"Tank Phase: {currentPhase.GetType().Name}"), SystemFonts.MenuFont, Brushes.LightGreen, new Point(0, 50));
-        }
-
-        public override void Update(float deltaTime)
-        {
-            if(currentPhase.GetType() != typeof(TankIdle))
-            {
-                if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
-                {
-                    Shoot();
-                }
-            }
-
-            if (currentPhase != null)
-                currentPhase.Update(deltaTime);
+            RectangleF rect = new RectangleF(transform.position.x, transform.position.y, 84, 128);
+            rect.X -= 24;
+            rect.Y += 36;
+            context.DrawString($"Health: {state.Health}", SystemFonts.CaptionFont, Brushes.Cyan, rect.Location);
+            rect.Y += 14;
+            context.DrawString($" Angle: {state.Angle}°", SystemFonts.CaptionFont, Brushes.Orange, rect.Location);
+            rect.Y += 14;
+            context.DrawString($" Power: {state.Power}", SystemFonts.CaptionFont, Brushes.LightPink, rect.Location);
+            rect.Y += 14;
+            context.DrawString($"  Fuel: {state.Fuel}", SystemFonts.CaptionFont, Brushes.LightGray, rect.Location);
         }
     }
 }

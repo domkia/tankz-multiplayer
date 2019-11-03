@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
+using System.Windows.Forms;
 
 namespace TankzClient.Game
 {
     class TankMovement : TankPhase
     {
-        float speed = 30;
+        public readonly float Speed = 50f;
+
         int movDir;
         Vector2 position;
 
-        public TankMovement(Tank tank) : base (tank)
+        public TankMovement(PlayerTank tank) : base (tank)
         {
             
         }
@@ -25,15 +27,14 @@ namespace TankzClient.Game
                 return;
             }
 
-            position = tank.transform.position;
-            //TODO: apribojimai 
-            tank.transform.SetPosition(position + new Vector2(movDir* deltaTime * speed, 0));
-
-
+            // Create a new tank move command
+            ITankCommand moveCommand = new TankMoveCommand(tank as ITank);
+            tank.AddCommand(moveCommand);
+            moveCommand.Execute(movDir * deltaTime * Speed);
         }
+
         public override void Update(float deltaTime)
         {
-
             if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
             {
                 movDir = -1;
@@ -43,9 +44,12 @@ namespace TankzClient.Game
                 movDir = 1;
             }
             else
+            {
                 movDir = 0;
+            }
 
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.X))
+            // Got to the next phase
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
             {
                 tank.SetPhase(new TankAiming(tank));
             }

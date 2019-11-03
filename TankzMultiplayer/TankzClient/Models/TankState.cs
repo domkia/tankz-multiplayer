@@ -12,5 +12,7 @@ namespace TankzClient.Models
         public float Pos_Y { get; set; }
         public int Health { get; set; }
         public int Fuel { get; set; }
+        public float Angle { get; set; }
+        public float Power { get; set; }
     }
 }

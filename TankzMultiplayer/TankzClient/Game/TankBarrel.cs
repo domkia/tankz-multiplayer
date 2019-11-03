@@ -1,19 +1,27 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using TankzClient.Framework;
 
 namespace TankzClient.Game
 {
-    class TankBarrel : Sprite
+    public class TankBarrel : Sprite
     {
-        public const float startAngle = -45;
-        public float angle = startAngle;
-
-        private Tank tank;
+        const float barrelLength = 30.0f;
 
         public TankBarrel(Tank tank, Image image, Vector2 position, Vector2 size) : base(image, position, size)
         {
-            this.tank = tank;
-            transform.SetAngle(startAngle);
+            float angle = -tank.Angle;
+            transform.SetAngle(angle);
+        }
+
+        public Vector2 GetReleasePosition()
+        {
+            ITank parentTank = parent as ITank;
+            float angle = -parentTank.Angle;
+            double rad = Utils.Deg2Rad(angle);
+            Vector2 aimDirection = new Vector2((float)Math.Cos(rad), (float)Math.Sin(rad));
+            Vector2 spawnPoint = transform.position + aimDirection * barrelLength;
+            return spawnPoint;
         }
 
         // TODO: remove this redundant code

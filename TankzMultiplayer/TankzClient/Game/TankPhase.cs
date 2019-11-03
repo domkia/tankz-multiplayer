@@ -3,15 +3,15 @@
     /// <summary>
     /// Strategy base class
     /// </summary>
-    abstract class TankPhase
+    public abstract class TankPhase
     {
-        protected Tank tank;
+        protected PlayerTank tank;
 
-        public TankPhase(Tank tank)
+        public TankPhase(PlayerTank tank)
         {
             this.tank = tank;   
         }
-        public abstract void Update(float deltaTime);
 
+        public abstract void Update(float deltaTime);
     }
 }

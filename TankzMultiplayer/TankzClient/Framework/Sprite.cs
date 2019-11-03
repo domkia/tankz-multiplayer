@@ -19,7 +19,8 @@ namespace TankzClient.Framework
         public virtual void Render(Graphics context)
         {
             Rectangle rect = transform.Rect;
-            context.DrawImage(image, rect.X, rect.Y, rect.Size.Width, rect.Size.Height);
+            if(image != null)
+                context.DrawImage(image, rect.X, rect.Y, rect.Size.Width, rect.Size.Height);
         }
 
         public Sprite Clone()

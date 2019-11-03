@@ -9,9 +9,12 @@ namespace TankzClient.Game
 {
     class TankAiming : TankPhase
     {
+        public readonly float RotationSpeed = 90.0f;
+
         int rotDir = 0;
         bool isKeyDown = false;
-        public TankAiming(Tank tank) : base (tank)
+
+        public TankAiming(PlayerTank tank) : base (tank)
         {
 
         }
@@ -23,14 +26,53 @@ namespace TankzClient.Game
                 return;
             }
 
-            tank.barrel.angle += rotDir * 5;
-            if (tank.barrel.angle < -180)
-                tank.barrel.angle = -180;
-            else if (tank.barrel.angle > 0)
-                tank.barrel.angle = 0;
-            Transform t = tank.barrel.transform;
-            t.SetAngle(tank.barrel.angle);
+            // Calculate new angle
+            float newAngle = tank.Angle;
+            newAngle += rotDir * RotationSpeed * deltaTime;
+            if (newAngle > 180)
+            {
+                newAngle = 180;
+            }
+            else if (newAngle < 0)
+            {
+                newAngle = 0;
+            }
+
+            if (tank.Angle != newAngle)
+            {
+                // Create new tank command
+                ITankCommand rotateCommand = new TankAimCommand(tank as ITank);
+                tank.AddCommand(rotateCommand);
+                rotateCommand.Execute(newAngle);
+            }
         }
+
+        private void AdjustPower(float deltaTime)
+        {
+            // Get input (up / down arrows)
+            float amount = 0f;
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.Up))
+            {
+                amount = deltaTime;
+            }
+            else if (Input.IsKeyDown(System.Windows.Forms.Keys.Down))
+            {
+                amount = -deltaTime;
+            }
+
+            // Adjust power
+            if (amount != 0f)
+            {
+                float power = tank.Power + amount;
+                power = Utils.Clamp(0.0f, 1.0f, power);
+
+                // Create new tank command
+                ITankCommand powerCommand = new TankPowerCommand(tank);
+                tank.AddCommand(powerCommand);
+                powerCommand.Execute(power);
+            }
+        }
+
         //TODO: Fix input to be smooth without spagetti
         public override void Update(float deltaTime)
         {
@@ -39,11 +81,11 @@ namespace TankzClient.Game
                 isKeyDown = true;
                 if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
                 {
-                    rotDir = -1;
+                    rotDir = 1;
                 }
                 else if (Input.IsKeyDown(System.Windows.Forms.Keys.Right))
                 {
-                    rotDir = 1;
+                    rotDir = -1;
                 }
             }
             else if (Input.IsKeyUp(System.Windows.Forms.Keys.Left) || Input.IsKeyUp(System.Windows.Forms.Keys.Right))
@@ -51,25 +93,19 @@ namespace TankzClient.Game
                 rotDir = 0;
                 isKeyDown = false;
             }
+
+            RotateBarrel(deltaTime);
+            AdjustPower(deltaTime);
             
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Z))
-            {
-                tank.SetPhase(new TankMovement(tank));
-            }
-            else if (Input.IsKeyDown(System.Windows.Forms.Keys.W))
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.W))
             {
                 tank.SetPhase(new TankWeaponSelection(tank));
             }
-            if (Input.IsKeyDown(System.Windows.Forms.Keys.Enter))
+            else if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
             {
-                float angle = -tank.barrel.angle;
-                Console.WriteLine("Tank angle:" + angle);
-                float power = 10f;
-                NetworkManager.Instance.EndTurn(angle, power);
+                tank.Shoot();
+                tank.SetPhase(new TankIdle(tank));
             }
-
-            RotateBarrel(deltaTime);
         }
-
     }
 }

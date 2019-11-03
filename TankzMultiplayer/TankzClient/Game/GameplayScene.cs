@@ -26,7 +26,7 @@ namespace TankzClient.Game
             players = NetworkManager.Instance.GetPlayerList();
             foreach (Player player in players)
             {
-                Tank newTank = new TankBuilder()
+                Tank newTank = new TankBuilder(true)
                      .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
                      .SetTurret(player.Tank.Chasis_id)
                      .SetTracks(player.Tank.Trucks_id)

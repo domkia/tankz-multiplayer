@@ -13,12 +13,39 @@ namespace TankzClient.Game
         const int TURRET_COUNT = 3;
         const int TRACKS_COUNT = 4;
 
-        private Tank tank = new Tank(null, new Vector2(0f, 0f), new Vector2(64f, 48f));
+        private Tank tank = null;
+
+        public TankBuilder(bool isPlayer)
+        {
+            if (isPlayer)
+            {
+                // Player controller tank
+                tank = new PlayerTank(new Vector2(0f, 0f), new Vector2(64f, 48f));
+            }
+            else
+            {
+                tank = new Tank(new Vector2(0f, 0f), new Vector2(64f, 48f));
+            }
+        }
 
         public Tank Build()
         {
             if (tank == null)
-                throw new Exception("Incomplete tank");
+            {
+                throw new Exception("Incomplete tank: No parts attached");
+            }
+            if (tank.FindChild<TankBarrel>() == null)
+            {
+                throw new Exception("Incomplete tank: Tank without a barrel is not a tank");
+            }
+            if (tank.FindChild<TankChassis>() == null)
+            {
+                throw new Exception("Incomplete tank: Tank has no chassis");
+            }
+            if (tank.children.Count == 2)
+            {
+                throw new Exception("Incomplete tank: You forgot to add tracks");
+            }
             return tank;
         }
 
@@ -29,6 +56,11 @@ namespace TankzClient.Game
 
             if (colorId < 0 || colorId >= COLOR_COUNT)
                 throw new IndexOutOfRangeException();
+
+            if (tank.FindChild<TankChassis>() != null)
+            {
+                throw new Exception("Tank already has a chassis");
+            }
 
             string path = string.Format($"{spritesPath}chassis_{colorId}_{id}.png");
             TankChassis chassis = new TankChassis(Image.FromFile(path),
@@ -57,6 +89,11 @@ namespace TankzClient.Game
         {
             if (id < 0 || id >= TURRET_COUNT)
                 throw new IndexOutOfRangeException();
+
+            if (tank.FindChild<TankBarrel>() != null)
+            {
+                throw new Exception("Tank already has a barrel");
+            }
 
             string path = string.Format($"{spritesPath}turret_{id}.png");
             TankBarrel turret = new TankBarrel(

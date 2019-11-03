@@ -22,7 +22,7 @@ namespace TankzClient.Game
             CreateEntity(inventoryUI);
 
             Tank usaTank =
-                new TankBuilder()
+                new TankBuilder(true)
                 .SetChassis(1, 1)
                 .SetTurret(1)
                 .SetTracks(0)
@@ -35,7 +35,7 @@ namespace TankzClient.Game
             usaTank.ApplySideskirt(0);
             usaTank.ApplyAccessory(1);
 
-            Tank nazziTank = new TankBuilder()
+            Tank nazziTank = new TankBuilder(true)
                 .SetChassis(3, 0)
                 .SetTurret(0)
                 .SetTracks(1)
@@ -45,7 +45,7 @@ namespace TankzClient.Game
             nazziTank.ApplyCamouflage(4);
             nazziTank.ApplyAccessory(2);
 
-            Tank jpTank = new TankBuilder()
+            Tank jpTank = new TankBuilder(true)
                 .SetChassis(0, 2)
                 .SetTurret(2)
                 .SetTracks(2)

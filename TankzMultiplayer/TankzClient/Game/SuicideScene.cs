@@ -16,7 +16,7 @@ namespace TankzClient.Game
         public override void Load()
         {
             Tank usaTank =
-                new TankBuilder()
+                new TankBuilder(true)
                 .SetChassis(1, 1)
                 .SetTurret(1)
                 .SetTracks(0)

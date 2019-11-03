@@ -11,7 +11,8 @@ namespace TankzClient.Game
     class TankWeaponSelection : TankPhase
     {
         private InventoryUI inventoryUI;
-        public TankWeaponSelection(Tank tank) : base(tank)
+
+        public TankWeaponSelection(PlayerTank tank) : base(tank)
         {
             inventoryUI = new InventoryUI(new Rectangle(250, 150, 285, 285));
             SceneManager.Instance.CurrentScene.CreateEntity(inventoryUI);
