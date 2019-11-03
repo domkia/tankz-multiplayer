@@ -17,6 +17,7 @@ namespace TankzClient.Game
         bool nameError = false;
         bool waiting = false;
 
+        private Image[] icons;
         
         private void LoginButton_OnClickCallback()
         {
@@ -65,6 +66,13 @@ namespace TankzClient.Game
 
             suicideButton = CreateEntity(new Button(10, 10, 50, 50, null, "Suicide Scene")) as Button;
             suicideButton.OnClickCallback += SuicideButton_OnClickCallback;
+
+            icons = new Image[]
+            {
+                HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36890057?s=460&v=4", new Size(32, 32)),
+                HttpImageDownloader.GetBitmapFromURL("https://avatars3.githubusercontent.com/u/36762328?s=460&v=4", new Size(32, 32)),
+                HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36892013?s=460&v=4", new Size(32, 32))
+            };
         }
 
         public override void Render(Graphics context)
@@ -76,9 +84,14 @@ namespace TankzClient.Game
             {
                 context.DrawString("Username can't be empty", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 30));
             }
-            if(waiting)
+            if (waiting)
             {
                 context.DrawString("Waiting for server...", new Font(FontFamily.GenericMonospace, 30f, FontStyle.Bold), Brushes.Black, new Point(400, 600));
+            }
+
+            for (int i = 0; i < icons.Length; i++)
+            {
+                context.DrawImage(icons[i], new Point(16, 100 + 36 * i));
             }
         }
     }
