@@ -26,6 +26,8 @@ namespace TankzClient.Framework
 
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
+        public bool IsVisible { get; set; }
+
         public virtual void Render(Graphics context)
         {
             context.DrawRectangle(Pens.Red, rect);

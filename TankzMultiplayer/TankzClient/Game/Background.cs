@@ -13,6 +13,8 @@ namespace TankzClient.Game
 
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
+        public bool IsVisible { get; set; }
+
         public Background()
         {
             background = Image.FromFile(backgroundPath);

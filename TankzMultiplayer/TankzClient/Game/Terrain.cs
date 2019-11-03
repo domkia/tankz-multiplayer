@@ -13,6 +13,7 @@ namespace TankzClient.Game
 
         public int SortingLayer => -1;
         public Matrix OrientationMatrix => new Matrix();
+        public bool IsVisible { get; set; }
 
         private const string terrainPath = "../../res/terrain_bitmap.bmp";
         private const string craterPath = "../../res/crater_2.bmp";

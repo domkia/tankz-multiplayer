@@ -136,6 +136,8 @@ namespace TankzClient.Framework
         public int SortingLayer => 10;
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
+        public bool IsVisible { get => sprite.IsVisible; set => sprite.IsVisible = value; }
+
         public void Render(Graphics context)
         {
             if (IsEmitting == false)

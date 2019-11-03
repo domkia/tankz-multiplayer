@@ -9,6 +9,7 @@ namespace TankzClient.Framework
     public interface IRenderable
     {
         int SortingLayer { get; }
+        bool IsVisible { get; set; }
         Matrix OrientationMatrix { get; }
         void Render(Graphics context);
     }

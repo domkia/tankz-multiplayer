@@ -6,9 +6,11 @@ namespace TankzClient.Game
 {
     public class TankScene : Scene
     {
+        private PlayerTank playerTank;
+
         public override void Load()
         {
-            PlayerTank playerTank = new TankBuilder(true)
+            playerTank = new TankBuilder(true)
                 .SetChassis(0, 0)
                 .SetTurret(0)
                 .SetTracks(0)
@@ -35,6 +37,15 @@ namespace TankzClient.Game
         {
             context.Clear(Color.SlateBlue);
             base.Render(context);
+        }
+
+        public override void Update(float deltaTime)
+        {
+            base.Update(deltaTime);
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.X))
+            {
+                playerTank.SetActive(!playerTank.IsActive);
+            }
         }
     }
 }

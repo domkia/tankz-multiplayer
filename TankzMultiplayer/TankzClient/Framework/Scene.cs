@@ -41,9 +41,12 @@ namespace TankzClient.Framework
             {
                 foreach (IRenderable renderable in renderLayers[layer])
                 {
-                    context.Transform = renderable.OrientationMatrix;
-                    renderable.Render(context);
-                    context.ResetTransform();
+                    if (renderable.IsVisible)
+                    {
+                        context.Transform = renderable.OrientationMatrix;
+                        renderable.Render(context);
+                        context.ResetTransform();
+                    }
                 }
             }
         }
@@ -80,6 +83,7 @@ namespace TankzClient.Framework
             IRenderable renderable = newEntity as IRenderable;
             if (renderable != null)
             {
+                renderable.IsVisible = true;
                 int layer = renderable.SortingLayer;
                 if (!renderLayers.ContainsKey(layer))
                 {

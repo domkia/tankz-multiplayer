@@ -78,7 +78,19 @@ namespace TankzClient.Framework
         /// Activate or deactivate this entity
         /// </summary>
         /// <param name="active"></param>
-        public void SetActive(bool active) => IsActive = active;
+        public void SetActive(bool active)
+        {
+            IsActive = active;
+            IRenderable renderable = this as IRenderable;
+            if (renderable != null)
+            {
+                renderable.IsVisible = active;
+            }
+            for (int i = 0; i < children.Count; i++)
+            {
+                children[i].SetActive(active);
+            }
+        }
 
         /// <summary>
         /// Destroy this entity from the current scene

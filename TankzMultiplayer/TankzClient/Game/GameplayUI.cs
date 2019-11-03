@@ -48,6 +48,8 @@ namespace TankzClient.Game
 
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
+        public bool IsVisible { get; set; }
+
         public void Render(Graphics context)
         {
             context.FillRectangle(Brushes.Green, 0, 360, 790, 250); //grass

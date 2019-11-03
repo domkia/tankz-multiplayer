@@ -8,6 +8,7 @@ namespace TankzClient.Framework
         public Image image { get; protected set; }
         public virtual int SortingLayer => 0;
         public Matrix OrientationMatrix => transform.OrientationMatrix;
+        public bool IsVisible { get; set; }
 
         public Sprite(Image image, Vector2 position, Vector2 size)
         {
