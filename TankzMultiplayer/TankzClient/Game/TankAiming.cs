@@ -40,6 +40,7 @@ namespace TankzClient.Game
 
             if (tank.Angle != newAngle)
             {
+                NetworkManager.Instance.SetAngle(newAngle);
                 // Create new tank command
                 ITankCommand rotateCommand = new TankAimCommand(tank as ITank);
                 tank.AddCommand(rotateCommand);

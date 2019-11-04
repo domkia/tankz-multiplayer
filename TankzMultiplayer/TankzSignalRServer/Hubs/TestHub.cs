@@ -120,6 +120,11 @@ namespace TankzSignalRServer.Hubs
         {
             return Clients.Others.SendAsync("PosChange", x, y, Context.ConnectionId);
         }
+        [HubMethodName("SetAngle")]
+        public Task SetTankPos(float angle)
+        {
+            return Clients.Others.SendAsync("AngleChange", angle, Context.ConnectionId);
+        }
 
         //Testing method (not used in game)
         [HubMethodName("SendMessage")]

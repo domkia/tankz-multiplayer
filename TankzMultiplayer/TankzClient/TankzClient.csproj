@@ -153,10 +153,12 @@
     <Compile Include="Framework\EntityFactory.cs" />
     <Compile Include="Framework\HttpImageDownloader.cs" />
     <Compile Include="Framework\ICloneable.cs" />
+    <Compile Include="Framework\MoveEventArgs.cs" />
     <Compile Include="Framework\Particle.cs" />
     <Compile Include="Framework\ParticleEmitMode.cs" />
     <Compile Include="Framework\ParticleEmitter.cs" />
     <Compile Include="Framework\ParticleProperties.cs" />
+    <Compile Include="Framework\RotateEventArgs.cs" />
     <Compile Include="Framework\Utils.cs" />
     <Compile Include="Game\Background.cs" />
     <Compile Include="Game\Cannonball.cs" />

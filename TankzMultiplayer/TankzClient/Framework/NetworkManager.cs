@@ -10,12 +10,6 @@ using TankzClient.Game;
 
 namespace TankzClient.Framework
 {
-    public class MoveEventArtgs : EventArgs
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public string ConnID { get; set; }
-    }
     public class NetworkManager
     {
         private Player[] Players;
@@ -24,6 +18,7 @@ namespace TankzClient.Framework
         public event EventHandler ConnectedToServer;
         public event EventHandler PlayerChanged;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
+        public event EventHandler<RotateEventArgs> BarrelRotate;
         private string currentTurn = "";
         #region Singleton
 
@@ -73,6 +68,10 @@ namespace TankzClient.Framework
         public void SetPos(Vector2 newpos)
         {
             _connection.InvokeAsync("SetPos", newpos.x, newpos.y);
+        }
+        public void SetAngle(float angle)
+        {
+            _connection.InvokeAsync("SetAngle", angle);
         }
         /// <summary>
         /// Asks server for players
@@ -180,6 +179,12 @@ namespace TankzClient.Framework
                     MoveEventArtgs args = new MoveEventArtgs { X = x, Y = y, ConnID = connID };
                     PlayerMoved(this, args);
                 });
+            _connection.On<float, string>("AngleChange",
+               (angle, connID) =>
+               {
+                   RotateEventArgs args = new RotateEventArgs {Angle = angle, ConnID = connID };
+                   BarrelRotate(this, args);
+               });
             _connection.On<string>("Crate",
                 (value) =>
                 {

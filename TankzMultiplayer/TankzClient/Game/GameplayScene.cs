@@ -95,6 +95,7 @@ namespace TankzClient.Game
             {
                 NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
                 NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
+                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
             }
             currentTime += deltaTime;
             if (grenade != null)
@@ -129,12 +130,22 @@ namespace TankzClient.Game
             //}
         }
 
+        private void Instance_BarrelRotate(object sender, RotateEventArgs e)
+        {
+            Tank movedTank = tankDict[e.ConnID];
+            movedTank.SetAngle(e.Angle);
+            Console.WriteLine(e.ConnID + " Rotated");
+            
+            NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
+        }
+
         private void Instance_PlayerMoved(object sender, MoveEventArtgs e)
         {
             Vector2 pos = new Vector2(e.X, e.Y);
             Tank movedTank = tankDict[e.ConnID];
             movedTank.transform.SetPosition(pos);
             Console.WriteLine("Moved");
+            NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
 
         }
 
