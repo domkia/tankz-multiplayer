@@ -77,6 +77,10 @@ namespace TankzClient.Framework
         {
             _connection.InvokeAsync("GetConnected");
         }
+        public void GetCrate()
+        {
+            _connection.InvokeAsync("GetCrate");
+        }
         /// <summary>
         /// Connection to server start
         /// </summary>
@@ -158,6 +162,19 @@ namespace TankzClient.Framework
                     else
                     currentTurn = value;
                     OnPlayerChanged(EventArgs.Empty);
+                });
+            _connection.On<string>("Crate",
+                (value) =>
+                {
+                    if (value == null)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
                 });
                 try
                 {

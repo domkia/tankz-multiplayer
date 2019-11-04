@@ -55,6 +55,7 @@ namespace TankzClient.Game
                     tankDict.Add(player.ConnectionId, NPCTank);
                 }
             }
+            NetworkManager.Instance.GetCrate();
             
             
 
