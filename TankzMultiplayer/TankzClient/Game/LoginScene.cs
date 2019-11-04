@@ -25,8 +25,8 @@ namespace TankzClient.Game
             if (inputField.Text.ToString().Length != 0)
             {
                 waiting = true;
-                NetworkManager.Instance.start();
-                Thread networkThread = new Thread(NetworkManager.Instance.connect);
+                NetworkManager.Instance.Start();
+                Thread networkThread = new Thread(NetworkManager.Instance.Connect);
                 networkThread.IsBackground = true;
                 networkThread.Start();
                 NetworkManager.Instance.ConnectedToServer += Instance_ConnectedToServer;

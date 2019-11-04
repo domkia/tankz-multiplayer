@@ -10,7 +10,7 @@ using TankzClient.Game;
 
 namespace TankzClient.Framework
 {
-    public class NetworkManager
+    public partial class NetworkManager
     {
         private Player[] Players;
         private static HubConnection _connection;
@@ -20,6 +20,7 @@ namespace TankzClient.Framework
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
         private string currentTurn = "";
+
         #region Singleton
 
         private static NetworkManager instance = null;
@@ -35,16 +36,7 @@ namespace TankzClient.Framework
             }
         }
         #endregion
-        public void ChangeReadyState()
-        {
-            _connection.InvokeAsync("ChangeReadyState");
-        }
 
-        public void EndTurn(float angle, float power)
-        {
-            Console.WriteLine("Ended turn");
-            _connection.InvokeAsync("EndTurn", angle, power);
-        }
         /// <summary>
         /// Gets localy saved player list
         /// </summary>
@@ -59,43 +51,9 @@ namespace TankzClient.Framework
         }
 
         /// <summary>
-        /// Sends set name method request for server
-        /// </summary>
-        /// <param name="name">wanted name</param>
-        public void SetName(string name)
-        {
-            _connection.InvokeAsync("SetName", name);
-        }
-        public void SetPos(Vector2 newpos)
-        {
-            _connection.InvokeAsync("SetPos", newpos.x, newpos.y);
-        }
-        public void SetAngle(float angle)
-        {
-            _connection.InvokeAsync("SetAngle", angle);
-        }
-        /// <summary>
-        /// Asks server for players
-        /// </summary>
-        public void GetPlayer()
-        { 
-            _connection.InvokeAsync("GetPlayers");
-        }
-        /// <summary>
-        /// Ask server for connected users
-        /// </summary>
-        public void GetConnected()
-        {
-            _connection.InvokeAsync("GetConnected");
-        }
-        public void GetCrate()
-        {
-            _connection.InvokeAsync("GetCrate");
-        }
-        /// <summary>
         /// Connection to server start
         /// </summary>
-        public void start()
+        public void Start()
         {
             _connection = new HubConnectionBuilder()
                 //.WithUrl("https://localhost:44311/TestHub")
@@ -131,86 +89,28 @@ namespace TankzClient.Framework
         /// <summary>
         /// Async method with listeners
         /// </summary>
-        public async void connect()
+        public async void Connect()
         {
-            _connection.On<string>("Connected",
-                (connectionid) =>
-                {
-                    Console.WriteLine(connectionid);
-                });
-            _connection.On<string>("Disconnected",
-                (value) =>
-                {
-                    Console.WriteLine("Player " + value + " disconnected");
-                });
-            //Gets connected player list
-            _connection.On<string>("Players",
-                (value) =>
-                {
-                    Console.WriteLine(value);
-                    Players = JsonConvert.DeserializeObject<Player[]>(value);
-                    OnPlayersGot(EventArgs.Empty);
-                });
-            _connection.On<string>("GameStart",
-                (value) =>
-                {
+            // Setup client callbacks
+            _connection.On<string>("Connected", Connected);
+            _connection.On<string>("Disconnected", Disconnected);
+            _connection.On<string>("Players", PlayerListReceived);
+            _connection.On<string>("GameStart", GameStarted);
+            _connection.On<string>("ReceiveMessage", MessageReceived);
+            _connection.On<string>("Turn", TurnStarted);
+            _connection.On<float, float, string>("PosChange", TankPosChanged);
+            _connection.On<float, string>("AngleChange", TankAngleChanged);
 
-                    Console.WriteLine("Game Starting");
-                    SceneManager.Instance.LoadScene<GameplayScene>();
-                    OnPlayerChanged(EventArgs.Empty);
-                });
-            _connection.On<string>("ReceiveMessage",
-                (value) =>
-                {
-                    //Debug, not used anymore
-                    Console.WriteLine("Received " + value);
-                });
-            _connection.On<string>("Turn",
-                (value) =>
-                {
-                    if(value == _connection.ConnectionId)
-                    {
-                        currentTurn = "YOU";
-                    }
-                    else
-                    currentTurn = value;
-                    OnPlayerChanged(EventArgs.Empty);
-                });
-            _connection.On<float, float, string>("PosChange",
-                (x, y, connID) =>
-                {
-                    MoveEventArtgs args = new MoveEventArtgs { X = x, Y = y, ConnID = connID };
-                    PlayerMoved(this, args);
-                });
-            _connection.On<float, string>("AngleChange",
-               (angle, connID) =>
-               {
-                   RotateEventArgs args = new RotateEventArgs {Angle = angle, ConnID = connID };
-                   BarrelRotate(this, args);
-               });
-            _connection.On<string>("Crate",
-                (value) =>
-                {
-                    if (value == null)
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
-
-                });
-                try
-                {
-                    await _connection.StartAsync();
-                    OnPlayerConnected(EventArgs.Empty);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            
+            // Connect to the server
+            try
+            {
+                await _connection.StartAsync();
+                OnPlayerConnected(EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
