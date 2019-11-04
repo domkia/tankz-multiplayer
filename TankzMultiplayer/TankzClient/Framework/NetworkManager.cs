@@ -88,6 +88,10 @@ namespace TankzClient.Framework
         {
             _connection.InvokeAsync("GetConnected");
         }
+        public void GetCrate()
+        {
+            _connection.InvokeAsync("GetCrate");
+        }
         /// <summary>
         /// Connection to server start
         /// </summary>
@@ -176,7 +180,20 @@ namespace TankzClient.Framework
                     MoveEventArtgs args = new MoveEventArtgs { X = x, Y = y, ConnID = connID };
                     PlayerMoved(this, args);
                 });
-            try
+            _connection.On<string>("Crate",
+                (value) =>
+                {
+                    if (value == null)
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+
+                });
+                try
                 {
                     await _connection.StartAsync();
                     OnPlayerConnected(EventArgs.Empty);

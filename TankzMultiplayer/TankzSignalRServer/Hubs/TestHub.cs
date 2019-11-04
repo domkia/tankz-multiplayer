@@ -137,6 +137,14 @@ namespace TankzSignalRServer.Hubs
             string json = JsonConvert.SerializeObject(currentPlayers);
             return Clients.All.SendAsync("Players", json);  
         }
+
+        //Gets crate if it was created
+        [HubMethodName("GetCrate")]
+        public Task Crate()
+        {
+            return Clients.All.SendAsync("Crate", "");
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
