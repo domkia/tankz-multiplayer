@@ -130,7 +130,7 @@ namespace TankzClient.Game
         {
             Tank movedTank = tankDict[e.ConnID];
             movedTank.SetAngle(e.Angle);
-            Console.WriteLine(e.ConnID + " Rotated");   
+            Console.WriteLine(e.ConnID + " Rotated");
         }
 
         private void Instance_PlayerMoved(object sender, MoveEventArtgs e)
@@ -143,21 +143,21 @@ namespace TankzClient.Game
 
         private void Instance_PlayerChanged(object sender, EventArgs e)
         {
+            NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
+            NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
             if (NetworkManager.Instance.getCurrentPlayer() == "YOU")
             {
                 PlayerTank tank = tankDict[NetworkManager.Instance.myConnId()] as PlayerTank;
-                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
-                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
                 tank.StartTurn();
                 Console.WriteLine("My turn start");
             }
             else
             {
-                NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
-                NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
-
-                Console.WriteLine("other's turn");
+                Console.WriteLine("turn start");
+                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
+                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
             }
+            
             //NetworkManager.Instance.PlayerChanged -= Instance_PlayerChanged;
 
         }

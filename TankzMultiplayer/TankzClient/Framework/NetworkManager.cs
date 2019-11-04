@@ -42,6 +42,7 @@ namespace TankzClient.Framework
 
         public void EndTurn(float angle, float power)
         {
+            Console.WriteLine("Ended turn");
             _connection.InvokeAsync("EndTurn", angle, power);
         }
         /// <summary>
@@ -153,8 +154,10 @@ namespace TankzClient.Framework
             _connection.On<string>("GameStart",
                 (value) =>
                 {
+
                     Console.WriteLine("Game Starting");
                     SceneManager.Instance.LoadScene<GameplayScene>();
+                    OnPlayerChanged(EventArgs.Empty);
                 });
             _connection.On<string>("ReceiveMessage",
                 (value) =>
