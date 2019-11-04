@@ -21,10 +21,10 @@ namespace TankzSignalRServer.Hubs
         //PlayersController pct;
         public TestHub(TankzContext context)
         {
-           _context = context;
+            _context = context;
             //pct = new PlayersController(context);
         }
-        
+
         public override bool Equals(object obj)
         {
             return base.Equals(obj);
@@ -45,7 +45,7 @@ namespace TankzSignalRServer.Hubs
         public Task gameStart()
         {
             Random rand = new Random();
-            
+
             currentTurn = 0;
             turnsToNextCrate = rand.Next(1, 4);
             Clients.All.SendAsync("ReceiveMessage", "Turns until next crate spawn: " + turnsToNextCrate);
@@ -83,7 +83,7 @@ namespace TankzSignalRServer.Hubs
                 turnsToNextCrate = rand.Next(1, 4);
                 Clients.All.SendAsync("ReceiveMessage", "Turns until next crate: " + turnsToNextCrate);
             }
-            
+
             Clients.All.SendAsync("Turn", currentPlayers[currentTurn].ConnectionId);
             turnsToNextCrate--;
             return Shoot(power, angle);
@@ -98,7 +98,7 @@ namespace TankzSignalRServer.Hubs
             {
                 newPos = calculatePos(power, -9.8f, angleDeg, startPos, time);
                 time++;
-                Clients.All.SendAsync("ReceiveMessage", newPos.x + " " +newPos.y);
+                Clients.All.SendAsync("ReceiveMessage", newPos.x + " " + newPos.y);
             }
             return Clients.All.SendAsync("ReceiveMessage", "Done shooting");
         }
@@ -114,6 +114,11 @@ namespace TankzSignalRServer.Hubs
             player.Name = name;
             _context.SaveChanges();
             return ConnectedPeople();
+        }
+        [HubMethodName("SetPos")]
+        public Task SetTankPos(float x, float y)
+        {
+            return Clients.Others.SendAsync("PosChange", x, y, Context.ConnectionId);
         }
 
         //Testing method (not used in game)

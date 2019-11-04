@@ -65,7 +65,8 @@ namespace TankzClient.Game
             {
             //    return;
             }
-
+            Vector2 pos = transform.position + offset;
+            NetworkManager.Instance.SetPos(pos);
             transform.SetPosition(transform.position + offset);
             float distance = offset.Magnitude;
             state.Fuel -= (int)distance;

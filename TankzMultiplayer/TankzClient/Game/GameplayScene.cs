@@ -93,6 +93,7 @@ namespace TankzClient.Game
             if (tankDict.Count != 0)
             {
                 NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
+                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
             }
             currentTime += deltaTime;
             if (grenade != null)
@@ -119,6 +120,15 @@ namespace TankzClient.Game
             //{
             //    crate.Destroy();
             //}
+        }
+
+        private void Instance_PlayerMoved(object sender, MoveEventArtgs e)
+        {
+            Vector2 pos = new Vector2(e.X, e.Y);
+            Tank movedTank = tankDict[e.ConnID];
+            movedTank.transform.SetPosition(pos);
+            Console.WriteLine("Moved");
+
         }
 
         private void Instance_PlayerChanged(object sender, EventArgs e)

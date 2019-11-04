@@ -10,6 +10,12 @@ using TankzClient.Game;
 
 namespace TankzClient.Framework
 {
+    public class MoveEventArtgs : EventArgs
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public string ConnID { get; set; }
+    }
     public class NetworkManager
     {
         private Player[] Players;
@@ -17,6 +23,7 @@ namespace TankzClient.Framework
         public event EventHandler DataGained;
         public event EventHandler ConnectedToServer;
         public event EventHandler PlayerChanged;
+        public event EventHandler<MoveEventArtgs> PlayerMoved;
         private string currentTurn = "";
         #region Singleton
 
@@ -62,6 +69,10 @@ namespace TankzClient.Framework
         public void SetName(string name)
         {
             _connection.InvokeAsync("SetName", name);
+        }
+        public void SetPos(Vector2 newpos)
+        {
+            _connection.InvokeAsync("SetPos", newpos.x, newpos.y);
         }
         /// <summary>
         /// Asks server for players
@@ -159,7 +170,13 @@ namespace TankzClient.Framework
                     currentTurn = value;
                     OnPlayerChanged(EventArgs.Empty);
                 });
-                try
+            _connection.On<float, float, string>("PosChange",
+                (x, y, connID) =>
+                {
+                    MoveEventArtgs args = new MoveEventArtgs { X = x, Y = y, ConnID = connID };
+                    PlayerMoved(this, args);
+                });
+            try
                 {
                     await _connection.StartAsync();
                     OnPlayerConnected(EventArgs.Empty);
