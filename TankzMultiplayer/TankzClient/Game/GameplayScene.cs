@@ -22,7 +22,7 @@ namespace TankzClient.Game
         float startPositionX = -10;
         float startPositionY = -10;
         float currentTime = 0;
-        private Dictionary<string, Tank> tankDict = new Dictionary<string, Tank>();
+        public static Dictionary<string, Tank> tankDict = new Dictionary<string, Tank>();
 
         public override void Load()
         {
@@ -114,6 +114,12 @@ namespace TankzClient.Game
                 {
                     grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
                     //Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
+                }
+                else
+                {
+                    grenade.Destroy();
+                    grenade = null;
+                    Console.WriteLine("boom");
                 }
             }
 

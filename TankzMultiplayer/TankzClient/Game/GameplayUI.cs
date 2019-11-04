@@ -58,15 +58,16 @@ namespace TankzClient.Game
             context.DrawRectangle(borderPen, 160, 479, 624, 80); //bottom rect
 
             context.DrawString("FUEL", font, Brushes.Bisque, new Point(250, 485));
-            context.DrawString("90", font, Brushes.Bisque, new Point(260, 520));
-
             context.DrawString("POWER", font, Brushes.Bisque, new Point(350, 485));
-            context.DrawString("80", font, Brushes.Bisque, new Point(370, 520));
-
             context.DrawString("ANGLE", font, Brushes.Bisque, new Point(450, 485));
-            context.DrawString("-18°", font, Brushes.Bisque, new Point(460, 520));
 
-
+            if (GameplayScene.tankDict[NetworkManager.Instance.myConnId()] != null)
+            {
+                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Fuel.ToString(), font, Brushes.Bisque, new Point(260, 520));
+                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Power.ToString(), font, Brushes.Bisque, new Point(370, 520));
+                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Angle.ToString() + "°", font, Brushes.Bisque, new Point(460, 520));
+            }
+            
             context.FillRectangle(Brushes.Chocolate, 644, 421, 138, 138); //bottom right rect
             context.DrawRectangle(borderPen, 644, 421, 138, 138); //bottom right rect border
             context.FillRectangle(Brushes.Chocolate, 1, 400, 160, 160); //bottom left rect
