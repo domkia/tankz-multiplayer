@@ -8,15 +8,20 @@ namespace TankzClient.Framework
     /// </summary>
     partial class NetworkManager
     {
+        public void JoinLobby(string name, string url = "")
+        {
+            _connection.InvokeAsync("JoinLobby", name, url);
+        }
+
         public void ChangeReadyState()
         {
             _connection.InvokeAsync("ChangeReadyState");
         }
 
-        public void EndTurn(float angle, float power)
+        public void Shoot(float angle, float power)
         {
-            Console.WriteLine("Ended turn");
-            _connection.InvokeAsync("EndTurn", angle, power);
+            Console.WriteLine("Tank Shoot");
+            _connection.InvokeAsync("Shoot", angle, power);
         }
 
         /// <summary>
@@ -47,7 +52,7 @@ namespace TankzClient.Framework
         /// <summary>
         /// Asks server for players
         /// </summary>
-        public void GetPlayer()
+        public void GetConnectedPlayerList()
         {
             _connection.InvokeAsync("GetPlayers");
         }

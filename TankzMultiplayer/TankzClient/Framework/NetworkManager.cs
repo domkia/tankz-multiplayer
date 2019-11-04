@@ -12,13 +12,19 @@ namespace TankzClient.Framework
 {
     public partial class NetworkManager
     {
-        private Player[] Players;
+        public List<Player> Players { get; private set; }
+        public Player Me => Players.FirstOrDefault(p => p.ConnectionId == _connection.ConnectionId);
+        public bool IsMyTurn => currentTurn == _connection.ConnectionId;
+
         private static HubConnection _connection;
-        public event EventHandler DataGained;
+
+        // Events
+        public event Action<List<Player>> OnTankConfigsReceived;
         public event EventHandler ConnectedToServer;
-        public event EventHandler PlayerChanged;
+        public event EventHandler OnTurnStarted;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
+
         private string currentTurn = "";
 
         #region Singleton
@@ -38,19 +44,6 @@ namespace TankzClient.Framework
         #endregion
 
         /// <summary>
-        /// Gets localy saved player list
-        /// </summary>
-        /// <returns> Player list</returns>
-        public Player[] GetPlayerList()
-        {
-            if(Players == null)
-            {
-                return new Player[] { };
-            }
-            return Players;
-        }
-
-        /// <summary>
         /// Connection to server start
         /// </summary>
         public void Start()
@@ -66,22 +59,12 @@ namespace TankzClient.Framework
                 await _connection.StartAsync();
             };
         }
+
         protected virtual void OnPlayerChanged(EventArgs e)
         {
-            PlayerChanged?.Invoke(this, e);
+            OnTurnStarted?.Invoke(this, e);
         }
-        protected virtual void OnPlayersGot(EventArgs e)
-        {
-            DataGained?.Invoke(this, e);
-        }
-        protected virtual void OnPlayerConnected(EventArgs e)
-        {
-            ConnectedToServer?.Invoke(this, e);
-        }
-        public string getCurrentPlayer()
-        {
-            return currentTurn;
-        }
+
         public string myConnId()
         {
             return _connection.ConnectionId;
@@ -100,17 +83,28 @@ namespace TankzClient.Framework
             _connection.On<string>("Turn", TurnStarted);
             _connection.On<float, float, string>("PosChange", TankPosChanged);
             _connection.On<float, string>("AngleChange", TankAngleChanged);
+            _connection.On<string>("PlayerJoinedLobby", PlayerJoinedLobby);
+            _connection.On<string, bool>("PlayerReadyStateChanged", PlayerReadyStateChanged);
 
             // Connect to the server
             try
             {
                 await _connection.StartAsync();
-                OnPlayerConnected(EventArgs.Empty);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private Player GetPlayerById(string playerId)
+        {
+            Player player = Players.FirstOrDefault(p => p.ConnectionId == playerId);
+            if (player == null)
+            {
+                throw new Exception($"Player with id:{playerId} does not exist");
+            }
+            return player;
         }
     }
 }

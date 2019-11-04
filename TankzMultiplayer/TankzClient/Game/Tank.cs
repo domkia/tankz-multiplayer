@@ -21,6 +21,7 @@ namespace TankzClient.Game
         public Vector2 Position => new Vector2(state.Pos_X, state.Pos_Y);
 
         private TankState state;
+        public TankState State => state;
 
         private TankBarrel _barrel = null;
         public TankBarrel barrel
@@ -50,7 +51,7 @@ namespace TankzClient.Game
         {
             float angle = Angle;
             float power = Power;
-            NetworkManager.Instance.EndTurn(angle, power);
+            NetworkManager.Instance.Shoot(angle, power);
 
             // Spawn shoot particle at the barrel tip point
             Vector2 particleSpawnPoint = barrel.GetReleasePosition();

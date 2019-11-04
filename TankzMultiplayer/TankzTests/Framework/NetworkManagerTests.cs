@@ -34,7 +34,7 @@ namespace TankzClient.Framework.Tests
         public void SetNameTest()
         {
             NetworkManager.Instance.SetName("Rokas");
-            NetworkManager.Instance.GetPlayer();
+            NetworkManager.Instance.GetConnectedPlayerList();
             Player[] player = NetworkManager.Instance.GetPlayerList();
             Assert.AreEqual(player[0].Name, "Rokas", "Vardai nesutampa");
         }

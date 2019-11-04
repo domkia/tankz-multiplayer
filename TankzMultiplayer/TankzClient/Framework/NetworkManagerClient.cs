@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TankzClient.Game;
 using TankzClient.Models;
@@ -32,19 +33,21 @@ namespace TankzClient.Framework
             Console.WriteLine(playerList);
             Console.ResetColor();
 
-            Players = JsonConvert.DeserializeObject<Player[]>(playerList);
-            OnPlayersGot(EventArgs.Empty);
+            Players = JsonConvert.DeserializeObject<List<Player>>(playerList);
 
             return Task.CompletedTask;
         }
 
-        private Task GameStarted(string value)
+        private Task GameStarted(string playersTanksObject)
         {
             Console.WriteLine("Game Starting");
+
+            // Load gameplay scene
             SceneManager.Instance.LoadScene<GameplayScene>();
 
-            //TODO: ???
-            OnPlayerChanged(EventArgs.Empty);
+            // Tell to instantiate tanks
+            List<Player> playersTanks = JsonConvert.DeserializeObject<List<Player>>(playersTanksObject);
+            OnTankConfigsReceived?.Invoke(playersTanks);
 
             return Task.CompletedTask;
         }
@@ -61,17 +64,8 @@ namespace TankzClient.Framework
 
         private Task TurnStarted(string playerId)
         {
-            if (playerId == _connection.ConnectionId)
-            {
-                currentTurn = "YOU";
-            }
-            else
-            {
-                currentTurn = playerId;
-            }
-
-            //TODO: ???
-            OnPlayerChanged(EventArgs.Empty);
+            currentTurn = playerId;
+            OnTurnStarted?.Invoke(null, EventArgs.Empty);
 
             return Task.CompletedTask;
         }
@@ -89,6 +83,25 @@ namespace TankzClient.Framework
             RotateEventArgs args = new RotateEventArgs { Angle = angle, ConnID = playerId };
             BarrelRotate(this, args);
 
+            return Task.CompletedTask;
+        }
+
+        private Task PlayerJoinedLobby(string playerObject)
+        {
+            Player player = JsonConvert.DeserializeObject<Player>(playerObject);
+            Players.Add(player);
+
+            if (player == Me)
+            {
+                SceneManager.Instance.LoadScene<IngobbyScene>();
+            }
+            return Task.CompletedTask;
+        }
+
+        private Task PlayerReadyStateChanged(string playerId, bool state)
+        {
+            Player player = GetPlayerById(playerId);
+            player.ReadyState = state;
             return Task.CompletedTask;
         }
     }

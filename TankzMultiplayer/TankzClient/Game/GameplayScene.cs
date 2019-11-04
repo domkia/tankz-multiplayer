@@ -22,42 +22,19 @@ namespace TankzClient.Game
         float startPositionX = -10;
         float startPositionY = -10;
         float currentTime = 0;
-        public static Dictionary<string, Tank> tankDict = new Dictionary<string, Tank>();
+
+        public static Dictionary<string, Game.Tank> tankDict = new Dictionary<string, Game.Tank>();
 
         public override void Load()
         {
-            players = NetworkManager.Instance.GetPlayerList();
-            foreach (Player player in players)
-            {
-                if (player.ConnectionId == NetworkManager.Instance.myConnId())
-                {
-                    tank = new TankBuilder(true)
-                         .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
-                         .SetTurret(player.Tank.Chasis_id)
-                         .SetTracks(player.Tank.Trucks_id)
-                         .Build() as PlayerTank;
-                    CreateEntity(tank);
-                    tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
-                    tankDict.Add(player.ConnectionId, tank);
-                    if(NetworkManager.Instance.getCurrentPlayer() == "YOU")
-                    tank.StartTurn();
-                }
-                else
-                {
-
-                    Tank NPCTank = new TankBuilder(false)
-                        .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
-                        .SetTurret(player.Tank.Chasis_id)
-                        .SetTracks(player.Tank.Trucks_id)
-                        .Build();
-                    CreateEntity(NPCTank);
-                    NPCTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
-                    tankDict.Add(player.ConnectionId, NPCTank);
-                }
-            }
+            NetworkManager.Instance.OnTankConfigsReceived += SpawnTanks;
+            //players = NetworkManager.Instance.GetPlayerList();
+            /*
+            
+            */
             //NetworkManager.Instance.GetCrate();
 
-            NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
+            //NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
 
 
             //background = CreateEntity(new Background()) as Background;
@@ -80,6 +57,40 @@ namespace TankzClient.Game
             CreateEntity(usaTank);
             usaTank.transform.SetPosition(new Vector2(500, 100));
             */
+        }
+
+        private void SpawnTanks(List<Player> playersAndTanks)
+        {
+            foreach (Player player in playersAndTanks)
+            {
+                if (player.ConnectionId == NetworkManager.Instance.myConnId())
+                {
+                    tank = new TankBuilder(true)
+                         .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
+                         .SetTurret(player.Tank.Chasis_id)
+                         .SetTracks(player.Tank.Trucks_id)
+                         .Build() as PlayerTank;
+                    CreateEntity(tank);
+                    tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    tankDict.Add(player.ConnectionId, tank);
+                }
+                else
+                {
+                    Tank NPCTank = new TankBuilder(false)
+                        .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
+                        .SetTurret(player.Tank.Chasis_id)
+                        .SetTracks(player.Tank.Trucks_id)
+                        .Build();
+                    CreateEntity(NPCTank);
+                    NPCTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    tankDict.Add(player.ConnectionId, NPCTank);
+                }
+            }
+            NetworkManager.Instance.OnTankConfigsReceived -= SpawnTanks;
+
+            NetworkManager.Instance.OnTurnStarted += Instance_PlayerChanged;
+            NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
+            NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
         }
 
         public override void Render(Graphics context)
@@ -137,15 +148,19 @@ namespace TankzClient.Game
         {
             Vector2 pos = new Vector2(e.X, e.Y);
             Tank movedTank = tankDict[e.ConnID];
-            movedTank.transform.SetPosition(pos);
+
+            // Update tank state
+            TankState state = movedTank.State;
+            state.Pos_X = e.X;
+            state.Pos_Y = e.Y;
+            movedTank.UpdateTankState(state);
+
             Console.WriteLine("Moved");
         }
 
         private void Instance_PlayerChanged(object sender, EventArgs e)
         {
-            NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
-            NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
-            if (NetworkManager.Instance.getCurrentPlayer() == "YOU")
+            if (NetworkManager.Instance.IsMyTurn)
             {
                 PlayerTank tank = tankDict[NetworkManager.Instance.myConnId()] as PlayerTank;
                 tank.StartTurn();
@@ -153,13 +168,8 @@ namespace TankzClient.Game
             }
             else
             {
-                Console.WriteLine("turn start");
-                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
-                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
+                Console.WriteLine("other player started the turn");
             }
-            
-            //NetworkManager.Instance.PlayerChanged -= Instance_PlayerChanged;
-
         }
 
         private Vector2 calculatePos(float speed, float gravity, float angle, Vector2 currentPos, float time)

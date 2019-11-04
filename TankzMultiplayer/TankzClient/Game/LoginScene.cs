@@ -18,18 +18,26 @@ namespace TankzClient.Game
         bool waiting = false;
 
         private Image[] icons;
-        
+
+        private bool joining = false;
+
         private void LoginButton_OnClickCallback()
         {
-
+            if (joining == true)
+                return;
             if (inputField.Text.ToString().Length != 0)
             {
                 waiting = true;
                 NetworkManager.Instance.Start();
+
+                //TODO: move this out of here
                 Thread networkThread = new Thread(NetworkManager.Instance.Connect);
                 networkThread.IsBackground = true;
                 networkThread.Start();
-                NetworkManager.Instance.ConnectedToServer += Instance_ConnectedToServer;
+
+                string name = inputField.Text.ToString();
+                joining = true;
+                NetworkManager.Instance.JoinLobby(name);
             }
             else
             {
@@ -45,15 +53,15 @@ namespace TankzClient.Game
 
         private void Instance_ConnectedToServer(object sender, EventArgs e)
         {
-            NetworkManager.Instance.SetName(inputField.Text.ToString());
-            NetworkManager.Instance.DataGained += Instance_DataGained;
-            NetworkManager.Instance.ConnectedToServer -= Instance_ConnectedToServer;
+            //NetworkManager.Instance.SetName(inputField.Text.ToString());
+            //NetworkManager.Instance.DataGained += Instance_DataGained;
+            //NetworkManager.Instance.ConnectedToServer -= Instance_ConnectedToServer;
         }
 
         private void Instance_DataGained(object sender, System.EventArgs e)
         {
-            SceneManager.Instance.LoadScene<IngobbyScene>();
-            NetworkManager.Instance.DataGained -= Instance_DataGained;
+            //SceneManager.Instance.LoadScene<IngobbyScene>();
+            //NetworkManager.Instance.DataGained -= Instance_DataGained;
         }
         public override void Load()
         {
@@ -79,16 +87,22 @@ namespace TankzClient.Game
         {
             context.Clear(Color.Bisque);
             base.Render(context);
-            context.DrawString("USERNAME:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 10));
-            if (nameError)
+            if (!joining)
             {
-                context.DrawString("Username can't be empty", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 30));
+                context.DrawString("USERNAME:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 10));
+                if (nameError)
+                {
+                    context.DrawString("Username can't be empty", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 30));
+                }
+                if (waiting)
+                {
+                    context.DrawString("Waiting for server...", new Font(FontFamily.GenericMonospace, 30f, FontStyle.Bold), Brushes.Black, new Point(400, 600));
+                }
             }
-            if (waiting)
+            else
             {
-                context.DrawString("Waiting for server...", new Font(FontFamily.GenericMonospace, 30f, FontStyle.Bold), Brushes.Black, new Point(400, 600));
+                context.DrawString("Joining... Please wait", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 10));
             }
-
             for (int i = 0; i < icons.Length; i++)
             {
                 context.DrawImage(icons[i], new Point(16, 100 + 36 * i));
