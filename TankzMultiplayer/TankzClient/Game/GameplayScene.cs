@@ -55,9 +55,10 @@ namespace TankzClient.Game
                     tankDict.Add(player.ConnectionId, NPCTank);
                 }
             }
-            NetworkManager.Instance.GetCrate();
-            
-            
+            //NetworkManager.Instance.GetCrate();
+
+            NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
+
 
             //background = CreateEntity(new Background()) as Background;
 
@@ -91,12 +92,7 @@ namespace TankzClient.Game
         {
 
             base.Update(deltaTime);
-            if (tankDict.Count != 0)
-            {
-                NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
-                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
-                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
-            }
+            
             currentTime += deltaTime;
             if (grenade != null)
             {
@@ -134,9 +130,7 @@ namespace TankzClient.Game
         {
             Tank movedTank = tankDict[e.ConnID];
             movedTank.SetAngle(e.Angle);
-            Console.WriteLine(e.ConnID + " Rotated");
-            
-            NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
+            Console.WriteLine(e.ConnID + " Rotated");   
         }
 
         private void Instance_PlayerMoved(object sender, MoveEventArtgs e)
@@ -145,8 +139,6 @@ namespace TankzClient.Game
             Tank movedTank = tankDict[e.ConnID];
             movedTank.transform.SetPosition(pos);
             Console.WriteLine("Moved");
-            NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
-
         }
 
         private void Instance_PlayerChanged(object sender, EventArgs e)
@@ -154,14 +146,19 @@ namespace TankzClient.Game
             if (NetworkManager.Instance.getCurrentPlayer() == "YOU")
             {
                 PlayerTank tank = tankDict[NetworkManager.Instance.myConnId()] as PlayerTank;
+                NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
+                NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
                 tank.StartTurn();
                 Console.WriteLine("My turn start");
             }
             else
             {
+                NetworkManager.Instance.PlayerMoved -= Instance_PlayerMoved;
+                NetworkManager.Instance.BarrelRotate -= Instance_BarrelRotate;
+
                 Console.WriteLine("other's turn");
             }
-            NetworkManager.Instance.PlayerChanged -= Instance_PlayerChanged;
+            //NetworkManager.Instance.PlayerChanged -= Instance_PlayerChanged;
 
         }
 
