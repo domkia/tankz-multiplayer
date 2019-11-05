@@ -103,11 +103,16 @@ namespace TankzClient.Framework
         private Task PlayerJoinedLobby(string playerObject)
         {
             Player player = JsonConvert.DeserializeObject<Player>(playerObject);
-            Players.Add(player);
+            Console.WriteLine(player.ConnectionId + " " + Me.ConnectionId);
+            LobbyPlayers.Add(player);
 
             if (player.ConnectionId == Me.ConnectionId)
             {
                 SceneManager.Instance.LoadScene<IngobbyScene>();
+            }
+            else
+            {
+                Console.WriteLine("bbc");
             }
             return Task.CompletedTask;
         }

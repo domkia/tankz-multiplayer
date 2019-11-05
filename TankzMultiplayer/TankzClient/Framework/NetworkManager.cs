@@ -13,6 +13,7 @@ namespace TankzClient.Framework
     public partial class NetworkManager
     {
         public List<Player> Players { get; private set; }
+        public List<Player> LobbyPlayers = new List<Player>();
         public Player Me => Players.FirstOrDefault(p => p.ConnectionId == _connection.ConnectionId);
         public bool IsMyTurn => CurrentTurn == _connection.ConnectionId;
         private bool connected = false;

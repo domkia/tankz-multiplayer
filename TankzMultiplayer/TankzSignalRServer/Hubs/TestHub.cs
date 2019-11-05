@@ -46,7 +46,7 @@ namespace TankzSignalRServer.Hubs
             // Toggle player ready state
             player.ReadyState = !player.ReadyState;
             _context.SaveChanges();
-            Clients.All.SendAsync("PlayerReadyStateChanged", player.ConnectionId, player.ReadyState);
+            Clients.Group("Lobby").SendAsync("PlayerReadyStateChanged", player.ConnectionId, player.ReadyState);
 
             // Check whether all players are ready
             // If so, start the game
@@ -85,7 +85,7 @@ namespace TankzSignalRServer.Hubs
 
             // Tell who starts the turn
             Player startsFirst = SelectRandomPlayerToStart();
-            return Clients.All.SendAsync("Turn", startsFirst.ConnectionId);
+            return Clients.Group("Lobby").SendAsync("Turn", startsFirst.ConnectionId);
         }
 
         private Player SelectRandomPlayerToStart()
@@ -121,17 +121,19 @@ namespace TankzSignalRServer.Hubs
                 TankState = GetRandomTankState(),
                 Tank = new Tank()
             };
-
-            // Notify caller about players already in the lobby
-            ConnectedPeople().Wait();
-            
+            Groups.AddToGroupAsync(clientId, "Lobby").Wait();
             // Insert newly created player into database
             _context.Players.Add(newPlayer);
             _context.SaveChanges();
+            // Notify caller about players already in the lobby
+            ConnectedPeople().Wait();
+            
+            
 
             // Notify all clients about new player
             string json = JsonConvert.SerializeObject(newPlayer);
-            return Clients.All.SendAsync("PlayerJoinedLobby", json);
+            
+            return Clients.Group("Lobby").SendAsync("PlayerJoinedLobby", json);
         }
 
         private Task EndTurn()
@@ -154,7 +156,7 @@ namespace TankzSignalRServer.Hubs
 
             // Advance to the next turn
             Player currentPlayer = _context.Players.Skip(currentTurn).First();
-            Clients.All.SendAsync("Turn", currentPlayer.ConnectionId);
+            Clients.Group("Lobby").SendAsync("Turn", currentPlayer.ConnectionId);
 
             //turnsToNextCrate--;
             return Task.CompletedTask;
@@ -173,7 +175,7 @@ namespace TankzSignalRServer.Hubs
             //    time++;
             //    Clients.All.SendAsync("ReceiveMessage", newPos.x + " " + newPos.y);
             //}
-            Clients.All.SendAsync("ReceiveMessage", "Done shooting").Wait();
+            Clients.Group("Lobby").SendAsync("ReceiveMessage", "Done shooting").Wait();
             return EndTurn();
         }
 
@@ -193,12 +195,12 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("SetPos")]
         public Task SetTankPos(float x, float y)
         {
-            return Clients.Others.SendAsync("PosChange", x, y, Context.ConnectionId);
+            return Clients.GroupExcept("lobby", Context.ConnectionId).SendAsync("PosChange", x, y, Context.ConnectionId);
         }
         [HubMethodName("SetAngle")]
         public Task SetTankPos(float angle)
         {
-            return Clients.Others.SendAsync("AngleChange", angle, Context.ConnectionId);
+            return Clients.GroupExcept("Lobby", Context.ConnectionId).SendAsync("AngleChange", angle, Context.ConnectionId);
         }
 
         //Testing method (not used in game)
@@ -207,7 +209,7 @@ namespace TankzSignalRServer.Hubs
         {
             List<Player> players = _context.Players.ToList();
             string json = JsonConvert.SerializeObject(players);
-            return Clients.All.SendAsync("ReceiveMessage", json);
+            return Clients.Group("Lobby").SendAsync("ReceiveMessage", json);
         }
 
         //Gets connected people and returns to all clients that are listening
@@ -216,9 +218,8 @@ namespace TankzSignalRServer.Hubs
         {
             List<Player> connectedPlayers = _context.Players.ToList();
             string json = JsonConvert.SerializeObject(connectedPlayers);
-            return Clients.All.SendAsync("Players", json);  
+            return Clients.Group("Lobby").SendAsync("Players", json);  
         }
-
         //Gets crate if it was created
         [HubMethodName("GetCrate")]
         public Task Crate()
@@ -230,18 +231,18 @@ namespace TankzSignalRServer.Hubs
         {
             if(name == "" || password == "")
             {
-                return Clients.All.SendAsync("RegisterError", "Fields can't be empty");
+                return Clients.Caller.SendAsync("RegisterError", "Fields can't be empty");
             }
             User user = new User { Username = name, Password = password };
             if (_context.Users.Where(c => c.Username == name).Count() == 0)
             {
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                return Clients.All.SendAsync("Registered", "Successful registration");
+                return Clients.Caller.SendAsync("Registered", "Successful registration");
             }
             else
             {
-                return Clients.All.SendAsync("RegisterError", "User already exists");
+                return Clients.Caller.SendAsync("RegisterError", "User already exists");
             }
             
         }
@@ -275,7 +276,7 @@ namespace TankzSignalRServer.Hubs
             //_context.Tanks.Remove(player.Tank);
             //_context.TankStates.Remove(player.TankState);            
             _context.SaveChanges();
-
+            Groups.RemoveFromGroupAsync(Context.ConnectionId, "Lobby");
             Clients.All.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
