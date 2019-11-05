@@ -103,6 +103,7 @@ namespace TankzClient.Framework
             Player player = Players.FirstOrDefault(p => p.ConnectionId == playerId);
             if (player == null)
             {
+                //return null;
                 throw new Exception($"Player with id:{playerId} does not exist");
             }
             return player;

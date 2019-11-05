@@ -85,8 +85,10 @@ namespace TankzClient.Game
             {
                 playerName = NetworkManager.Instance.CurrentPlayer.Name;
             }
-            context.DrawString("TURN: " + playerName, font, Brushes.Bisque, new Point(255, 10));
-
+            if (playerName != null)
+            {
+                context.DrawString("TURN: " + playerName, font, Brushes.Bisque, new Point(255, 10));
+            }
             context.FillRectangle(Brushes.Brown, 2, 2, 155, 70); // wind
             context.DrawRectangle(borderPen, 2, 2, 155, 70); // wind
             context.DrawString("WIND: " + "100", font, Brushes.Bisque, new Point(15, 10));

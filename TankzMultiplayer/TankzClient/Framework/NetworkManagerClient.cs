@@ -64,6 +64,7 @@ namespace TankzClient.Framework
 
         private Task TurnStarted(string playerId)
         {
+            Console.WriteLine("turn started");
             CurrentTurn = playerId;
             OnTurnStarted?.Invoke(null, EventArgs.Empty);
 

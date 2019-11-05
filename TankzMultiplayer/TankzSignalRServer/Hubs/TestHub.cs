@@ -85,14 +85,14 @@ namespace TankzSignalRServer.Hubs
 
             // Tell who starts the turn
             Player startsFirst = SelectRandomPlayerToStart();
-            return Clients.All.SendAsync("TurnStarted", startsFirst.ConnectionId);
+            return Clients.All.SendAsync("Turn", startsFirst.ConnectionId);
         }
 
         private Player SelectRandomPlayerToStart()
         {
             Random rand = new Random();
-            int index = rand.Next(0, _context.Players.Local.Count);
-            Player startsFirst = _context.Players.ElementAt(index);
+            int index = rand.Next(0, _context.Players.Count());
+            Player startsFirst = _context.Players.Skip(index).First();
             currentTurn = index;
             return startsFirst;
         }
@@ -136,7 +136,7 @@ namespace TankzSignalRServer.Hubs
 
         private Task EndTurn()
         {
-            if (currentTurn + 1 >= _context.Players.Local.Count)
+            if (currentTurn + 1 >= _context.Players.Count())
                 currentTurn = 0;
             else
                 currentTurn++;
@@ -153,7 +153,7 @@ namespace TankzSignalRServer.Hubs
             //}
 
             // Advance to the next turn
-            Player currentPlayer = _context.Players.ElementAt(currentTurn);
+            Player currentPlayer = _context.Players.Skip(currentTurn).First();
             Clients.All.SendAsync("Turn", currentPlayer.ConnectionId);
 
             //turnsToNextCrate--;
@@ -252,8 +252,8 @@ namespace TankzSignalRServer.Hubs
         {
             Player player = GetPlayerById(Context.ConnectionId);
             _context.Players.Remove(player);
-            _context.Tanks.Remove(player.Tank);
-            _context.TankStates.Remove(player.TankState);            
+            //_context.Tanks.Remove(player.Tank);
+            //_context.TankStates.Remove(player.TankState);            
             _context.SaveChanges();
 
             Clients.All.SendAsync("Disconnected", Context.ConnectionId);
