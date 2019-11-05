@@ -12,7 +12,6 @@ namespace TankzClient.Game
 {
     class GameplayScene : Scene
     {
-        GameplayUI gameplayUI;
         Background background;
         Terrain terrain;
         Grenade grenade;
@@ -40,7 +39,6 @@ namespace TankzClient.Game
 
             //terrain = CreateEntity(new Terrain()) as Terrain;
 
-            gameplayUI = CreateEntity(new GameplayUI()) as GameplayUI;
             grenade = new ProjectileFactory().Create("grenade") as Grenade;
             grenade.transform.SetPosition(new Vector2(300f, 300f));
 
@@ -90,6 +88,8 @@ namespace TankzClient.Game
             NetworkManager.Instance.OnTurnStarted += Instance_PlayerChanged;
             NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
             NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
+
+            CreateEntity(new GameplayUI());
         }
 
         public override void Render(Graphics context)

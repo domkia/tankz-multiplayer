@@ -39,15 +39,18 @@ namespace TankzClient.Framework
         public virtual void Render(Graphics context)
         {
             context.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            foreach (int layer in renderLayers.Keys)
+            lock (lockObject)
             {
-                foreach (IRenderable renderable in renderLayers[layer])
+                foreach (int layer in renderLayers.Keys)
                 {
-                    if (renderable.IsVisible)
+                    foreach (IRenderable renderable in renderLayers[layer])
                     {
-                        context.Transform = renderable.OrientationMatrix;
-                        renderable.Render(context);
-                        context.ResetTransform();
+                        if (renderable.IsVisible)
+                        {
+                            context.Transform = renderable.OrientationMatrix;
+                            renderable.Render(context);
+                            context.ResetTransform();
+                        }
                     }
                 }
             }
