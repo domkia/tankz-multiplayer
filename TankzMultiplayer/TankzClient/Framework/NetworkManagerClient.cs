@@ -11,6 +11,7 @@ namespace TankzClient.Framework
     {
         private Task Connected(string connectionId)
         {
+            connected = true;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Connected to the server ({connectionId})");
             Console.ResetColor();
@@ -23,6 +24,18 @@ namespace TankzClient.Framework
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"Disconnected from the server ({connectionId})");
             Console.ResetColor();
+
+            return Task.CompletedTask;
+        }
+        private Task Registered(string message)
+        {
+            RegisterSuccess?.Invoke(this, message);
+
+            return Task.CompletedTask;
+        }
+        private Task RegisterError(string message)
+        {
+            RegisterErrorGot?.Invoke(this, message);
 
             return Task.CompletedTask;
         }

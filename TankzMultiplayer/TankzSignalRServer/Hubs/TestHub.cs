@@ -225,6 +225,26 @@ namespace TankzSignalRServer.Hubs
         {
             return Clients.All.SendAsync("Crate", "");
         }
+        [HubMethodName("Register")]
+        public Task Register(string name, string password)
+        {
+            if(name == "" || password == "")
+            {
+                return Clients.All.SendAsync("RegisterError", "Fields can't be empty");
+            }
+            User user = new User { Username = name, Password = password };
+            if (_context.Users.Where(c => c.Username == name).Count() == 0)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                return Clients.All.SendAsync("Registered", "Successful registration");
+            }
+            else
+            {
+                return Clients.All.SendAsync("RegisterError", "User already exists");
+            }
+            
+        }
 
         public override int GetHashCode()
         {

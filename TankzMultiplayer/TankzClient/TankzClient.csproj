@@ -198,6 +198,7 @@
     <Compile Include="Framework\SceneManager.cs" />
     <Compile Include="Game\InventoryUI.cs" />
     <Compile Include="Game\Projectile.cs" />
+    <Compile Include="Game\RegisterScene.cs" />
     <Compile Include="Game\SuicideScene.cs" />
     <Compile Include="Game\Tank.cs" />
     <Compile Include="Game\TankAimCommand.cs" />

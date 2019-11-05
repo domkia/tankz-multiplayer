@@ -13,9 +13,11 @@ namespace TankzClient.Game
     {
         private Button loginButton;
         private Button suicideButton;
+        private Button createAccButton;
         private InputField usernameField;
         private InputField passwordField;
         private Sprite logo;
+        bool connected = false;
         bool nameError = false;
         bool waiting = false;
 
@@ -61,10 +63,13 @@ namespace TankzClient.Game
         }
         public override void Load()
         {
-            NetworkManager.Instance.Start();
-            Thread networkThread = new Thread(NetworkManager.Instance.Connect);
-            networkThread.IsBackground = true;
-            networkThread.Start();
+            if (!NetworkManager.Instance.IsConnected)
+            {
+                NetworkManager.Instance.Start();
+                Thread networkThread = new Thread(NetworkManager.Instance.Connect);
+                networkThread.IsBackground = true;
+                networkThread.Start();
+            }
 
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380,80), new Vector2(500,250)))as Sprite;
             usernameField = CreateEntity(new InputField(140, 200, 120, 20)) as InputField;
@@ -73,6 +78,13 @@ namespace TankzClient.Game
             loginButton.OnClickCallback += LoginButton_OnClickCallback;
             loginButton.SetTextColor(Color.White);
             loginButton.SetColor(Color.Brown);
+
+            createAccButton = CreateEntity(new Button(20, 225, 120, 20, null, "Create Account")) as Button;
+            createAccButton.OnClickCallback += CreateAcc_OnClickCallback;
+            createAccButton.SetTextColor(Color.White);
+            createAccButton.SetColor(Color.Brown);
+
+
 
             suicideButton = CreateEntity(new Button(650, 400, 50, 50, null, "Suicide Scene")) as Button;
             suicideButton.OnClickCallback += SuicideButton_OnClickCallback;
@@ -83,6 +95,11 @@ namespace TankzClient.Game
                 HttpImageDownloader.GetBitmapFromURL("https://avatars3.githubusercontent.com/u/36762328?s=460&v=4", new Size(32, 32)),
                 HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36892013?s=460&v=4", new Size(32, 32))
             };
+        }
+
+        private void CreateAcc_OnClickCallback()
+        {
+            SceneManager.Instance.LoadScene<RegisterScene>(); ;
         }
 
         public override void Render(Graphics context)

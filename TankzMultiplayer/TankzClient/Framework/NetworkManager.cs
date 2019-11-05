@@ -15,6 +15,8 @@ namespace TankzClient.Framework
         public List<Player> Players { get; private set; }
         public Player Me => Players.FirstOrDefault(p => p.ConnectionId == _connection.ConnectionId);
         public bool IsMyTurn => CurrentTurn == _connection.ConnectionId;
+        private bool connected = false;
+        public bool IsConnected =>connected;
         public Player CurrentPlayer => GetPlayerById(CurrentTurn);
         public string CurrentTurn { get; private set; } 
 
@@ -24,6 +26,8 @@ namespace TankzClient.Framework
         public event Action<List<Player>> OnTankConfigsReceived;
         public event EventHandler ConnectedToServer;
         public event EventHandler OnTurnStarted;
+        public event EventHandler<string> RegisterErrorGot;
+        public event EventHandler<string> RegisterSuccess;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
 
@@ -86,7 +90,8 @@ namespace TankzClient.Framework
             _connection.On<float, string>("AngleChange", TankAngleChanged);
             _connection.On<string>("PlayerJoinedLobby", PlayerJoinedLobby);
             _connection.On<string, bool>("PlayerReadyStateChanged", PlayerReadyStateChanged);
-
+            _connection.On<string>("Registered", Registered);
+            _connection.On<string>("RegisterError", RegisterError);
             // Connect to the server
             try
             {
