@@ -174,7 +174,7 @@
     <Compile Include="Game\ITankCommand.cs" />
     <Compile Include="Game\LobbyScene.cs" />
     <Compile Include="Game\LoginScene.cs" />
-    <Compile Include="Game\nesvarbu a bus.cs" />
+    <Compile Include="Game\Adapter_Example.cs" />
     <Compile Include="Game\ParticleFactory.cs" />
     <Compile Include="Game\ParticlesScene.cs" />
     <Compile Include="Game\ProjectileFactory.cs" />

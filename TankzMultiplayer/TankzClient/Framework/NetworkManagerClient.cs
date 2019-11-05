@@ -91,7 +91,7 @@ namespace TankzClient.Framework
             Player player = JsonConvert.DeserializeObject<Player>(playerObject);
             Players.Add(player);
 
-            if (player == Me)
+            if (player.ConnectionId == Me.ConnectionId)
             {
                 SceneManager.Instance.LoadScene<IngobbyScene>();
             }

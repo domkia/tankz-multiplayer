@@ -27,13 +27,7 @@ namespace TankzClient.Game
                 return;
             if (inputField.Text.ToString().Length != 0)
             {
-                waiting = true;
-                NetworkManager.Instance.Start();
-
-                //TODO: move this out of here
-                Thread networkThread = new Thread(NetworkManager.Instance.Connect);
-                networkThread.IsBackground = true;
-                networkThread.Start();
+                waiting = true;       
 
                 string name = inputField.Text.ToString();
                 joining = true;
@@ -65,6 +59,11 @@ namespace TankzClient.Game
         }
         public override void Load()
         {
+            NetworkManager.Instance.Start();
+            Thread networkThread = new Thread(NetworkManager.Instance.Connect);
+            networkThread.IsBackground = true;
+            networkThread.Start();
+
             inputField = CreateEntity(new InputField(140, 13, 120, 20)) as InputField;
             inputField.SetBackgroundColor(Color.Brown);
             loginButton = CreateEntity(new Button(270, 13, 50, 20, null, "Log In")) as Button;

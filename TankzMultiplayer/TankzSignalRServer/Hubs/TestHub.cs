@@ -22,6 +22,16 @@ namespace TankzSignalRServer.Hubs
         {
             _context = context;
             //pct = new PlayersController(context);
+
+            ClearDatabase();
+        }
+
+        private void ClearDatabase()
+        {
+            _context.Players.RemoveRange(_context.Players);
+            _context.TankStates.RemoveRange(_context.TankStates);
+            _context.Tanks.RemoveRange(_context.Tanks);
+            _context.SaveChanges();
         }
 
         public override bool Equals(object obj)
@@ -112,13 +122,13 @@ namespace TankzSignalRServer.Hubs
                 TankState = GetRandomTankState(),
                 Tank = new Tank()
             };
+
+            // Notify caller about players already in the lobby
+            ConnectedPeople().Wait();
             
             // Insert newly created player into database
             _context.Players.Add(newPlayer);
             _context.SaveChanges();
-
-            // Notify caller about players already in the lobby
-            ConnectedPeople();
 
             // Notify all clients about new player
             string json = JsonConvert.SerializeObject(newPlayer);

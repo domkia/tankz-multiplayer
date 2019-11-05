@@ -54,14 +54,6 @@ namespace TankzClient.Framework
         /// </summary>
         public void GetConnectedPlayerList()
         {
-            _connection.InvokeAsync("GetPlayers");
-        }
-
-        /// <summary>
-        /// Ask server for connected users
-        /// </summary>
-        public void GetConnected()
-        {
             _connection.InvokeAsync("GetConnected");
         }
 
