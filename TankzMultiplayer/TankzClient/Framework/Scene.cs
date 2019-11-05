@@ -17,6 +17,8 @@ namespace TankzClient.Framework
 
         public abstract void Load();
 
+        private object lockObject = new object();
+
         /// <summary>
         /// Update all objects in the scene
         /// </summary>
@@ -62,36 +64,38 @@ namespace TankzClient.Framework
             if (newEntity == null)
                 throw new System.NullReferenceException();
 
-            // Put entity into the list
-            // only if it does not already exist
-            if (entities.Contains(newEntity))
-                return null;
-            entities.Add(newEntity);
-
-            // Also don't forget to put children 
-            // into the list as well
-            if (newEntity.children.Count > 0)
+            lock (lockObject)
             {
-                foreach (Entity child in newEntity.children)
+                // Put entity into the list
+                // only if it does not already exist
+                if (entities.Contains(newEntity))
+                    return null;
+                entities.Add(newEntity);
+
+                // Also don't forget to put children 
+                // into the list as well
+                if (newEntity.children.Count > 0)
                 {
-                    CreateEntity(child);
+                    foreach (Entity child in newEntity.children)
+                    {
+                        CreateEntity(child);
+                    }
+                }
+
+                // Check whether entity needs rendering
+                // and if so, insert it into the render list
+                IRenderable renderable = newEntity as IRenderable;
+                if (renderable != null)
+                {
+                    renderable.IsVisible = true;
+                    int layer = renderable.SortingLayer;
+                    if (!renderLayers.ContainsKey(layer))
+                    {
+                        renderLayers.Add(layer, new HashSet<IRenderable>());
+                    }
+                    renderLayers[layer].Add(renderable);
                 }
             }
-
-            // Check whether entity needs rendering
-            // and if so, insert it into the render list
-            IRenderable renderable = newEntity as IRenderable;
-            if (renderable != null)
-            {
-                renderable.IsVisible = true;
-                int layer = renderable.SortingLayer;
-                if (!renderLayers.ContainsKey(layer))
-                {
-                    renderLayers.Add(layer, new HashSet<IRenderable>());
-                }
-                renderLayers[layer].Add(renderable);
-            }
-
             return newEntity;
         }
 
@@ -104,31 +108,33 @@ namespace TankzClient.Framework
             if (entity == null)
                 return false;
 
-            // Remove entity's renderable from render list
-            IRenderable renderable = entity as IRenderable;
-            if (renderable != null)
+            lock (lockObject)
             {
-                int layer = renderable.SortingLayer;
-                if (renderLayers[layer].Contains(renderable))
-                    renderLayers[layer].Remove(renderable);
-            }
-
-            // Don't forget to remove this entity from parent
-            if (entity.parent != null)
-            {
-                entity.parent.children.Remove(entity);
-            }
-
-            // Remove entity from the list
-            if (entities.Contains(entity))
-            {
-                while(entity.children.Count > 0)
+                // Remove entity's renderable from render list
+                IRenderable renderable = entity as IRenderable;
+                if (renderable != null)
                 {
-                    DestroyEntity(entity.children[0]);
+                    int layer = renderable.SortingLayer;
+                    if (renderLayers[layer].Contains(renderable))
+                        renderLayers[layer].Remove(renderable);
                 }
-                return entities.Remove(entity);
-            }
 
+                // Don't forget to remove this entity from parent
+                if (entity.parent != null)
+                {
+                    entity.parent.children.Remove(entity);
+                }
+
+                // Remove entity from the list
+                if (entities.Contains(entity))
+                {
+                    while (entity.children.Count > 0)
+                    {
+                        DestroyEntity(entity.children[0]);
+                    }
+                    return entities.Remove(entity);
+                }
+            }
             return false;
         }
     }
