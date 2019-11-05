@@ -15,6 +15,7 @@ namespace TankzSignalRServer.Hubs
     public class TestHub : Hub
     {
         private readonly TankzContext _context;
+
         private static int currentTurn;
         //private static int turnsToNextCrate;
         //PlayersController pct;
@@ -22,11 +23,9 @@ namespace TankzSignalRServer.Hubs
         {
             _context = context;
             //pct = new PlayersController(context);
-
-            ClearDatabase();
         }
 
-        private void ClearDatabase()
+        public void ClearDatabase()
         {
             _context.Players.RemoveRange(_context.Players);
             _context.TankStates.RemoveRange(_context.TankStates);
@@ -240,6 +239,7 @@ namespace TankzSignalRServer.Hubs
             //Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             //_context.Players.Add(player);
             //_context.SaveChanges();
+
             Clients.Caller.SendAsync("Connected", Context.ConnectionId);
             //ConnectedPeople();
 
@@ -252,12 +252,10 @@ namespace TankzSignalRServer.Hubs
         {
             Player player = GetPlayerById(Context.ConnectionId);
             _context.Players.Remove(player);
-            //_context.SaveChanges();
-            //_context.Tanks.Remove(player.Tank);
-            //_context.SaveChanges();
-            //_context.TankStates.Remove(player.TankState);            
-            //_context.SaveChanges();
-            //ConnectedPeople();
+            _context.Tanks.Remove(player.Tank);
+            _context.TankStates.Remove(player.TankState);            
+            _context.SaveChanges();
+
             Clients.All.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }
