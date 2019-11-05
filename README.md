@@ -1,5 +1,5 @@
-# tankz-multiplayer
-TANKZ is a multiplayer turn-based artillery game.
+![Logo](TankzMultiplayer/TankzClient/res/logo.png)
+<br>TANKZ is a multiplayer turn-based artillery game.
 <br/>
 <br/>Built using plain C# (WinForms, System.Drawing etc.)
 <br/>Server-client communication via SignalR hosted on Azure.
