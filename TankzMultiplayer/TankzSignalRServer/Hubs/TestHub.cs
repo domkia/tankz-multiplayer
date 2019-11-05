@@ -230,7 +230,7 @@ namespace TankzSignalRServer.Hubs
             //Player player = new Player { ConnectionId = Context.ConnectionId, Name = "", Icon = "", ReadyState = false, Tank = tank, TankState =state};
             //_context.Players.Add(player);
             //_context.SaveChanges();
-            //Clients.Caller.SendAsync("Connected", Context.ConnectionId);
+            Clients.Caller.SendAsync("Connected", Context.ConnectionId);
             //ConnectedPeople();
 
             return base.OnConnectedAsync();

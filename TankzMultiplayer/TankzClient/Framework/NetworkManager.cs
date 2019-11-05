@@ -14,7 +14,9 @@ namespace TankzClient.Framework
     {
         public List<Player> Players { get; private set; }
         public Player Me => Players.FirstOrDefault(p => p.ConnectionId == _connection.ConnectionId);
-        public bool IsMyTurn => currentTurn == _connection.ConnectionId;
+        public bool IsMyTurn => CurrentTurn == _connection.ConnectionId;
+        public Player CurrentPlayer => GetPlayerById(CurrentTurn);
+        public string CurrentTurn { get; private set; } 
 
         private static HubConnection _connection;
 
@@ -25,7 +27,6 @@ namespace TankzClient.Framework
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
 
-        private string currentTurn = "";
 
         #region Singleton
 
@@ -97,7 +98,7 @@ namespace TankzClient.Framework
             }
         }
 
-        private Player GetPlayerById(string playerId)
+        public Player GetPlayerById(string playerId)
         {
             Player player = Players.FirstOrDefault(p => p.ConnectionId == playerId);
             if (player == null)

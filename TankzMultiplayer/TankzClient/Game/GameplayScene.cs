@@ -15,7 +15,6 @@ namespace TankzClient.Game
         GameplayUI gameplayUI;
         Background background;
         Terrain terrain;
-        Player[] players;
         Grenade grenade;
         Crate crate;
         PlayerTank tank;
@@ -37,7 +36,7 @@ namespace TankzClient.Game
             //NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
 
 
-            //background = CreateEntity(new Background()) as Background;
+            background = CreateEntity(new Background()) as Background;
 
             //terrain = CreateEntity(new Terrain()) as Terrain;
 
@@ -71,7 +70,7 @@ namespace TankzClient.Game
                          .SetTracks(player.Tank.Trucks_id)
                          .Build() as PlayerTank;
                     CreateEntity(tank);
-                    tank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    tank.UpdateTankState(player.TankState);
                     tankDict.Add(player.ConnectionId, tank);
                 }
                 else
@@ -82,7 +81,7 @@ namespace TankzClient.Game
                         .SetTracks(player.Tank.Trucks_id)
                         .Build();
                     CreateEntity(NPCTank);
-                    NPCTank.transform.SetPosition(new Vector2(player.TankState.Pos_X, player.TankState.Pos_Y));
+                    NPCTank.UpdateTankState(player.TankState);
                     tankDict.Add(player.ConnectionId, NPCTank);
                 }
             }
