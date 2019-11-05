@@ -150,6 +150,7 @@
     <Compile Include="Framework\AnimatedParticleEmitter.cs" />
     <Compile Include="Framework\AnimatedSprite.cs" />
     <Compile Include="Framework\Button.cs" />
+    <Compile Include="Framework\Cipher.cs" />
     <Compile Include="Framework\EntityFactory.cs" />
     <Compile Include="Framework\HttpImageDownloader.cs" />
     <Compile Include="Framework\ICloneable.cs" />
