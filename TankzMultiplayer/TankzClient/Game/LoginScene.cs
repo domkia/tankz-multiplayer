@@ -93,7 +93,7 @@ namespace TankzClient.Game
             {
                 HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36890057?s=460&v=4", new Size(32, 32)),
                 HttpImageDownloader.GetBitmapFromURL("https://avatars3.githubusercontent.com/u/36762328?s=460&v=4", new Size(32, 32)),
-                HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36892013?s=460&v=4", new Size(32, 32))
+                HttpImageDownloader.GetBitmapFromURL("https://cdn2.iconfinder.com/data/icons/ninja-turtles-filledoutline/64/donatello-avatar-people-super_hero-ninja-ninja_turtles-warrior-cultures-japanese-oriental-512.png", new Size(32, 32))
             };
         }
 

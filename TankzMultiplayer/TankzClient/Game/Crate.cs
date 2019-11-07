@@ -10,6 +10,7 @@ namespace TankzClient.Game
 {
     class Crate : Sprite
     {
+        public int id;
         public Projectile weapon;
 
         public Crate(Image image, Vector2 position, Projectile weapon, Vector2 size)
@@ -21,6 +22,15 @@ namespace TankzClient.Game
         public override void Update(float deltaTime)
         {
             
+        }
+
+        public void OnDestroy(int id)
+        {
+            if (this.id == id)
+            {
+                NetworkManager.Instance.OnCrateDestroyed -= this.OnDestroy;
+                Destroy();
+            }
         }
 
     }

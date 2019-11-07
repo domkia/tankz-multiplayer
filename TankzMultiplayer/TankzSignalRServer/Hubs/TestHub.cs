@@ -17,7 +17,8 @@ namespace TankzSignalRServer.Hubs
         private readonly TankzContext _context;
 
         private static int currentTurn;
-        //private static int turnsToNextCrate;
+        private static int turnsToNextCrate;
+        Random rand = new Random();
         //PlayersController pct;
         public TestHub(TankzContext context)
         {
@@ -71,11 +72,11 @@ namespace TankzSignalRServer.Hubs
 
         public Task GameStart()
         {
-            //Random rand = new Random();
-
-            //currentTurn = 0;
-            //turnsToNextCrate = rand.Next(1, 4);
-            //Clients.All.SendAsync("ReceiveMessage", "Turns until next crate spawn: " + turnsToNextCrate);
+            Random rand = new Random();
+            
+            currentTurn = 0;
+            turnsToNextCrate = rand.Next(1, 4);
+            Clients.All.SendAsync("ReceiveMessage", "Turns until next crate spawn: " + turnsToNextCrate);
             //string conn = currentPlayers[currentTurn].ConnectionId;
             //Weapon weapon = new Weapon { ID = 0, Name = "Grenade", Explosion_Radius = 10, Radius = 2 };
             //_context.Weapons.Add(weapon);
@@ -100,7 +101,6 @@ namespace TankzSignalRServer.Hubs
 
         private Player SelectRandomPlayerToStart()
         {
-            Random rand = new Random();
             int index = rand.Next(0, _context.Players.Count());
             Player startsFirst = _context.Players.Skip(index).First();
             currentTurn = index;
@@ -153,22 +153,23 @@ namespace TankzSignalRServer.Hubs
             else
                 currentTurn++;
 
-            //if (turnsToNextCrate <= 0)
-            //{
-            //    Crate crate = new Crate { ID = 0, Weapon = GetWeaponById(1), PositionX = rand.Next(100, 400), PositionY = 300 };
-            //    crate.Name = "Crate of " + crate.Weapon.Name;
-            //    _context.Crates.Add(crate);
-            //    _context.SaveChanges();
-            //    Clients.All.SendAsync("ReceiveMessage", "created Crate: " + crate.Name + ", ID: " + crate.ID + ", Weapon name: " + GetWeaponById(1).Name + ", Position: (" + crate.PositionX + "," + crate.PositionY + ")");
-            //    turnsToNextCrate = rand.Next(1, 4);
-            //    Clients.All.SendAsync("ReceiveMessage", "Turns until next crate: " + turnsToNextCrate);
-            //}
+            if (turnsToNextCrate <= 0)
+            {
+                Crate crate = new Crate { ID = 0, Weapon = GetWeaponById(1), PositionX = rand.Next(100, 400), PositionY = 300 };
+                crate.Name = "Crate of " + crate.Weapon.Name;
+                _context.Crates.Add(crate);
+                _context.SaveChanges();
+                
+                Clients.All.SendAsync("ReceiveMessage", "created Crate: " + crate.Name + ", ID: " + crate.ID + ", Weapon name: " + GetWeaponById(1).Name + ", Position: (" + crate.PositionX + "," + crate.PositionY + ")");
+                turnsToNextCrate = rand.Next(1, 4);
+                Clients.All.SendAsync("ReceiveMessage", "Turns until next crate: " + turnsToNextCrate);
+            }
 
             // Advance to the next turn
             Player currentPlayer = _context.Players.Skip(currentTurn).First();
             Clients.Group("Lobby").SendAsync("Turn", currentPlayer.ConnectionId);
 
-            //turnsToNextCrate--;
+            turnsToNextCrate--;
             return Task.CompletedTask;
         }
 

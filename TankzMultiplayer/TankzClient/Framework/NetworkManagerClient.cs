@@ -123,5 +123,18 @@ namespace TankzClient.Framework
             player.ReadyState = state;
             return Task.CompletedTask;
         }
+
+        private Task CrateDestroyed(int id)
+        {
+            OnCrateDestroyed ?.Invoke(id); //klasutukas reiskia nullable
+            return Task.CompletedTask;
+        }
+
+        private Task CrateSpawned(string crate)
+        {
+            Models.Crate c = JsonConvert.DeserializeObject<Models.Crate>(crate);
+            OnCrateSpawned?.Invoke(c);
+            return Task.CompletedTask;
+        }
     }
 }

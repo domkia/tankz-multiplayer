@@ -222,6 +222,7 @@
     <Compile Include="Game\Terrain.cs" />
     <Compile Include="Game\TestScene.cs" />
     <Compile Include="Game\MainMenuScene.cs" />
+    <Compile Include="Models\Crate.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Tank.cs" />
     <Compile Include="Models\TankState.cs" />

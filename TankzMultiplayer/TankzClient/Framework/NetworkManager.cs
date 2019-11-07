@@ -31,6 +31,8 @@ namespace TankzClient.Framework
         public event EventHandler<string> RegisterSuccess;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
+        public event Action<int> OnCrateDestroyed;
+        public event Action<Models.Crate> OnCrateSpawned;
 
 
         #region Singleton
@@ -93,6 +95,8 @@ namespace TankzClient.Framework
             _connection.On<string, bool>("PlayerReadyStateChanged", PlayerReadyStateChanged);
             _connection.On<string>("Registered", Registered);
             _connection.On<string>("RegisterError", RegisterError);
+            _connection.On<int>("CrateDestroyed", CrateDestroyed);
+            _connection.On<string>("CrateSpawned", CrateSpawned);
             // Connect to the server
             try
             {

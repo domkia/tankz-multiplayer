@@ -45,6 +45,7 @@ namespace TankzClient.Game
             crate = CreateEntity(new Crate(Image.FromFile("../../res/crates/crate_0.png"), new Vector2(200f, 200f), grenade, new Vector2(50f, 50f))) as Crate;
             crate.transform.SetPosition(new Vector2(200f, 300f));
             crate.transform.SetSize(new Vector2(50f, 50f));
+            crate.SetActive(false);
             /*
             Tank usaTank = new TankBuilder()
                 .SetChassis(1, 1)
@@ -88,8 +89,17 @@ namespace TankzClient.Game
             NetworkManager.Instance.OnTurnStarted += Instance_PlayerChanged;
             NetworkManager.Instance.PlayerMoved += Instance_PlayerMoved;
             NetworkManager.Instance.BarrelRotate += Instance_BarrelRotate;
+            NetworkManager.Instance.OnCrateSpawned += Instance_OnCrateSpawned;
 
             CreateEntity(new GameplayUI());
+
+
+        }
+
+        private void Instance_OnCrateSpawned(Models.Crate obj)
+        {
+            Crate crate = CreateEntity(new Crate(Image.FromFile("../../res/crates/crate_0.png"), new Vector2(100, 100), null, new Vector2(50, 50))) as Crate;
+            NetworkManager.Instance.OnCrateDestroyed += crate.OnDestroy; 
         }
 
         public override void Render(Graphics context)
@@ -129,11 +139,6 @@ namespace TankzClient.Game
                     Console.WriteLine("boom");
                 }
             }
-
-            //if (Math.Abs(crate.transform.position.x - tank.transform.position.x) <= (crate.transform.size.x) && Math.Abs(crate.transform.position.y - tank.transform.position.y) <= (crate.transform.size.y))
-            //{
-            //    crate.Destroy();
-            //}
         }
 
         private void Instance_BarrelRotate(object sender, RotateEventArgs e)
