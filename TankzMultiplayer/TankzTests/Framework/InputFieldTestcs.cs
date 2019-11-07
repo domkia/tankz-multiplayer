@@ -11,7 +11,7 @@ namespace TankzClient.Framework.Tests
     public class InputFieldTestcs
     {
         [TestMethod()]
-        public void ClickTestOnButton()
+        public void ClickTestOnInputField()
         {
             InputField field = new InputField(0, 0, 10, 10);
             System.Drawing.Point point = new System.Drawing.Point(2, 2);
@@ -19,7 +19,7 @@ namespace TankzClient.Framework.Tests
             Assert.IsTrue(field.IsFocused, "paspausta ne ant mygtuko");
         }
         [TestMethod()]
-        public void ClickTestOutsideOfButton()
+        public void ClickTestOutsideOfInputField()
         {
             InputField field = new InputField(0, 0, 10, 10);
             System.Drawing.Point point = new System.Drawing.Point(20, 25);

@@ -8,6 +8,10 @@ using System.IO;
 
 namespace TankzClient.Framework
 {
+    /// <summary>
+    /// Code by Selami Güngör
+    /// https://www.selamigungor.com/post/7/encrypt-decrypt-a-string-in-csharp
+    /// </summary>
     public static class Cipher
     {
         /// <summary>
@@ -17,14 +21,14 @@ namespace TankzClient.Framework
         /// <param name="password">Password</param>
         public static string Encrypt(string plainText, string password)
         {
-            if (plainText == null)
+            if (plainText == "" || plainText == null)
             {
-                return null;
+                return "";
             }
 
-            if (password == null)
+            if (password == null || password == "")
             {
-                password = String.Empty;
+                return "";
             }
 
             // Get the bytes of the string
@@ -47,14 +51,14 @@ namespace TankzClient.Framework
         /// <exception cref="FormatException"></exception>
         public static string Decrypt(string encryptedText, string password)
         {
-            if (encryptedText == null)
+            if (encryptedText == "" || encryptedText == null)
             {
-                return null;
+                return "";
             }
 
-            if (password == null)
+            if (password == null || password == "")
             {
-                password = String.Empty;
+                return "";
             }
 
             // Get the bytes of the string

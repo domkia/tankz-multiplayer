@@ -10,6 +10,8 @@ namespace TankzClient.Framework
     {
         public override Entity Create(EntityCreateArgs args)
         {
+            if (args == null ||args.type == null || args.type=="" ||args.type =="\0")
+                return null;
             UICreateArgs ui = args as UICreateArgs;
             UIElement element = null;
             switch (ui.type.ToLower())
@@ -33,6 +35,9 @@ namespace TankzClient.Framework
                         new Rectangle((int)ui.position.x, (int)ui.position.y, 64, 8), 
                         Color.LightGreen, 
                         Color.DarkGreen);
+                    break;
+                case null:
+                    return null;
                     break;
                 default:
                     return null;

@@ -13,7 +13,6 @@ namespace TankzClient.Framework.Tests
         [TestMethod()]
         public void LoadSceneTest()
         {
-            MockScene scene = new MockScene();
             SceneManager.Instance.LoadScene<MockScene>();
             Assert.IsInstanceOfType(SceneManager.Instance.CurrentScene, typeof(MockScene), "wrong scenes");
         }

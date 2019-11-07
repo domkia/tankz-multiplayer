@@ -11,7 +11,7 @@ namespace TankzClient.Framework.Tests
     public class ParticleEmitterTests
     {
         [TestMethod()]
-        public void RenderTest()
+        public void ParticleEmitingTest()
         {
             string path = "../../res/particles/";
             ParticleEmitter emitter = new ParticleEmitter(10, new Sprite(Image.FromFile(path + "shield_particle.png"), new Vector2(6, 5), new Vector2(100, 100)),
@@ -20,11 +20,11 @@ namespace TankzClient.Framework.Tests
             emitter.IsEmitting = false;
             emitter.Render(Graphics.FromImage(map));
             emitter.Emit();
-            Assert.IsTrue(emitter.IsEmitting);
+            Assert.IsTrue(emitter.IsEmitting, "neskleidžiamos dalelės");
         }
 
         [TestMethod()]
-        public void RenderParticleGraphicsTest()
+        public void SpriteAndParticlePostionTest()
         {
             Particle particle = new Particle(5f, 10f);
             particle.position = new Vector2(10f, 10f);

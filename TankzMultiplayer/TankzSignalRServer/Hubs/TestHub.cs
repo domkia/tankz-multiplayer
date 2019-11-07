@@ -24,7 +24,17 @@ namespace TankzSignalRServer.Hubs
             _context = context;
             //pct = new PlayersController(context);
         }
-
+        [HubMethodName("Send")]
+        public void SendAsync(string message)
+        {
+            Clients.All.SendAsync("ReceiveMessage", message);
+        }
+        [HubMethodName("GetMyId")]
+        public Task GetMyId()
+        {
+            return Clients.Caller.SendAsync("ConnectionId", Context.ConnectionId);
+        }
+        [HubMethodName("Cleanup")]
         public void ClearDatabase()
         {
             _context.Players.RemoveRange(_context.Players);
@@ -127,12 +137,12 @@ namespace TankzSignalRServer.Hubs
             _context.SaveChanges();
             // Notify caller about players already in the lobby
             ConnectedPeople().Wait();
-            
-            
+
+
 
             // Notify all clients about new player
             string json = JsonConvert.SerializeObject(newPlayer);
-            
+
             return Clients.Group("Lobby").SendAsync("PlayerJoinedLobby", json);
         }
 
@@ -195,7 +205,7 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("SetPos")]
         public Task SetTankPos(float x, float y)
         {
-            return Clients.GroupExcept("lobby", Context.ConnectionId).SendAsync("PosChange", x, y, Context.ConnectionId);
+            return Clients.GroupExcept("Lobby", Context.ConnectionId).SendAsync("PosChange", x, y, Context.ConnectionId);
         }
         [HubMethodName("SetAngle")]
         public Task SetTankPos(float angle)
@@ -218,7 +228,7 @@ namespace TankzSignalRServer.Hubs
         {
             List<Player> connectedPlayers = _context.Players.ToList();
             string json = JsonConvert.SerializeObject(connectedPlayers);
-            return Clients.Group("Lobby").SendAsync("Players", json);  
+            return Clients.Group("Lobby").SendAsync("Players", json);
         }
         //Gets crate if it was created
         [HubMethodName("GetCrate")]
@@ -229,7 +239,7 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("Register")]
         public Task Register(string name, string password)
         {
-            if(name == "" || password == "")
+            if (name == "" || password == "")
             {
                 return Clients.Caller.SendAsync("RegisterError", "Fields can't be empty");
             }
@@ -244,7 +254,29 @@ namespace TankzSignalRServer.Hubs
             {
                 return Clients.Caller.SendAsync("RegisterError", "User already exists");
             }
-            
+        }
+        [HubMethodName("Login")]
+        public Task Login(string name, string password)
+        {
+            if (name == "" || password == "")
+            {
+                return Clients.Caller.SendAsync("LoginError", "Fields can't be empty");
+            }
+            else if (_context.Users.Where(c => c.Username == name).Count() == 0)
+            {
+                return Clients.Caller.SendAsync("LoginError", "User Does not exist");
+            }
+            else
+            {
+                if(_context.Users.Where(c => c.Username == name).First().Password == password)
+                {
+                    return Clients.Caller.SendAsync("LoginSuccess", "User successfully logged in");
+                }
+                else
+                {
+                    return Clients.Caller.SendAsync("LoginError", "Wrong password");
+                }
+            }
         }
 
         public override int GetHashCode()
@@ -284,6 +316,12 @@ namespace TankzSignalRServer.Hubs
         public Player GetPlayerById(string ConnId)
         {
             return _context.Players.FirstOrDefault(c => c.ConnectionId == ConnId);
+        }
+        [HubMethodName("GetPlayer")]
+        public Task getPlayer(string connId)
+        {
+            string playerData = JsonConvert.SerializeObject(GetPlayerById(connId));
+            return Clients.All.SendAsync("GotPlayer", playerData);
         }
 
         public Weapon GetWeaponById(int ID)
