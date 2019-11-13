@@ -7,8 +7,8 @@ namespace TankzSignalRServer.Models
 {
     public class Map
     {
-        int ID { get; set; }
-        string name { get; set; }
-        int max_players { get; set; }
+        public int ID { get; set; }
+        public string name { get; set; }
+        public int max_players { get; set; }
     }
 }

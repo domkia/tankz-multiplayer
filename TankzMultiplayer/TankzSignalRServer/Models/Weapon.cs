@@ -13,8 +13,9 @@ namespace TankzSignalRServer.Models
         public string Description { get; set; }
         public float Radius { get; set; }
         public float Explosion_Radius { get; set; }
-        public string Rarity { get; set; }
+        public Rarity rarity { get; set; }
 
+        public enum Rarity { Common, Uncommon, Rare, Epic, Legendary}
         public Weapon Clone()
         {
             Weapon weapon = new Weapon{

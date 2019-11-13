@@ -62,9 +62,13 @@ namespace TankzSignalRServer.Hubs
             {
                 return Clients.Caller.SendAsync("RegisterError", "Fields can't be empty");
             }
-            User user = new User { Username = name, Password = password };
+           
             if (_context.Users.Where(c => c.Username == name).Count() == 0)
             {
+                TankState tankstate = GetRandomTankState();
+                Tank tank = new Tank { Chasis_id = 1, Color_id = 1, Trucks_id = 1, Turret_id = 1 };
+                Player player = new Player { ConnectionId = "", Icon = "", Name = name, ReadyState = false, Tank = tank, TankState = tankstate };
+                User user = new User { Username = name, Password = password, Player = player };
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 return Clients.Caller.SendAsync("Registered", "Successful registration");
@@ -89,6 +93,8 @@ namespace TankzSignalRServer.Hubs
             {
                 if (_context.Users.Where(c => c.Username == name).First().Password == password)
                 {
+                    //After loggin in sets id as current connId
+                    _context.Players.Where(c => c.Name == name).FirstOrDefault().ConnectionId = Context.ConnectionId;
                     return Clients.Caller.SendAsync("LoginSuccess", "User successfully logged in");
                 }
                 else

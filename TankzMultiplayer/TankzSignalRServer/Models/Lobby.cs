@@ -16,5 +16,5 @@ namespace TankzSignalRServer.Models
         public string Password { get; set; }
         public Map map { get; set; }
     }
-    public enum LobbyState { waiting, full, ingame, finised };
+    public enum LobbyState { waiting, full, ingame, finished };
 }
