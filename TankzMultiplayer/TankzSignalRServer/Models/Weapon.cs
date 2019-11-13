@@ -10,16 +10,20 @@ namespace TankzSignalRServer.Models
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public float Radius { get; set; }
         public float Explosion_Radius { get; set; }
+        public string Rarity { get; set; }
 
         public Weapon Clone()
         {
             Weapon weapon = new Weapon{
                 ID = this.ID,
+                Description = this.Description,
                 Name = this.Name,
                 Radius = this.Radius,
-                Explosion_Radius = this.Explosion_Radius};
+                Explosion_Radius = this.Explosion_Radius,
+                Rarity = this. Rarity};
             return weapon;
         }
     }
