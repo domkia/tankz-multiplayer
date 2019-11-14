@@ -49,6 +49,9 @@ namespace TankzSignalRServer.Hubs
                 .Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault() != null)
                 .FirstOrDefault().ID;
             Player player = GetPlayerById(Context.ConnectionId);
+            int curr = _context.Lobbies.Include(l => l.Players).Where(p => p.Players.Where(pp => pp.Name == player.Name) != null).FirstOrDefault().CurrPlayers;
+            curr--;
+            _context.Lobbies.Include(l => l.Players).Where(p => p.Players.Where(pp => pp.Name == player.Name) != null).FirstOrDefault().CurrPlayers = curr;
             _context.Lobbies.Include(l => l.Players).Where(p => p.Players.Where(pp => pp.Name==player.Name) != null).FirstOrDefault().Players.Remove(player);
             //_context.Tanks.Remove(player.Tank);
             //_context.TankStates.Remove(player.TankState);      
@@ -152,28 +155,36 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("JoinLobby")]
         public Task JoinLobby(int lobbyId)
         {
-            string clientId = Context.ConnectionId;
-            string lobbyName = "Lobby" + _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().ID;
-            Groups.AddToGroupAsync(clientId, lobbyName).Wait();
-            Player newPlayer = _context.Players
-                .Include(t => t.Tank)
-                .Include(t => t.TankState)
-                .Where(c => c.ConnectionId == clientId)
-                .FirstOrDefault();
-            // Notify all clients about new player
-            string json = JsonConvert.SerializeObject(newPlayer);
-            //_context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players.Add(newPlayer);
-            int playerCount = _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().CurrPlayers;
-            playerCount++;
-            _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().CurrPlayers = playerCount;
-            List<Player> player = _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players.ToList();
-            player.Add(newPlayer);
-            _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players = player;
-            _context.SaveChanges();
+            Lobby lobby = _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault();
+            if (lobby.CurrPlayers < lobby.MaxPlayers)
+            {
+                string clientId = Context.ConnectionId;
+                string lobbyName = "Lobby" + _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().ID;
+                Groups.AddToGroupAsync(clientId, lobbyName).Wait();
+                Player newPlayer = _context.Players
+                    .Include(t => t.Tank)
+                    .Include(t => t.TankState)
+                    .Where(c => c.ConnectionId == clientId)
+                    .FirstOrDefault();
+                // Notify all clients about new player
+                string json = JsonConvert.SerializeObject(newPlayer);
+                //_context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players.Add(newPlayer);
+                int playerCount = _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().CurrPlayers;
+                playerCount++;
+                _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().CurrPlayers = playerCount;
+                List<Player> player = _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players.ToList();
+                player.Add(newPlayer);
+                _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players = player;
+                _context.SaveChanges();
 
-            // Notify caller about players already in the lobby
-            ConnectedPeople(lobbyId).Wait();
-            return Clients.Group(lobbyName).SendAsync("PlayerJoinedLobby", json, lobbyId);
+                // Notify caller about players already in the lobby
+                ConnectedPeople(lobbyId).Wait();
+                return Clients.Group(lobbyName).SendAsync("PlayerJoinedLobby", json, lobbyId);
+            }
+            else
+            {
+                return Clients.Caller.SendAsync("LobbyError", "LobbyIsFull");
+            }
         }
         #endregion
         #region Turns

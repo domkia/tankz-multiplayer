@@ -32,6 +32,7 @@ namespace TankzClient.Framework
         public event EventHandler<string> RegisterSuccess;
         public event EventHandler<string> LoginErrorGot;
         public event EventHandler<string> LoginSuccess;
+        public event EventHandler<string> LobbyErrorGot;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
         public event Action<int> OnCrateDestroyed;
@@ -102,6 +103,7 @@ namespace TankzClient.Framework
             _connection.On<string>("LoginError", LoginError);
             _connection.On<int>("CrateDestroyed", CrateDestroyed);
             _connection.On<string>("CrateSpawned", CrateSpawned);
+            _connection.On<string>("LobbyError", LobbyError);
             // Connect to the server
             try
             {

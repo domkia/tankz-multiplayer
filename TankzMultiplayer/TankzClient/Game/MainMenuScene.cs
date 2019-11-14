@@ -9,8 +9,11 @@ namespace TankzClient.Game
         private Sprite logo;
         private Button start;
         private Button editProfile;
+        bool error = false;
+        string msg;
         public override void Load()
         {
+            NetworkManager.Instance.LobbyErrorGot += Instance_LobbyErrorGot;
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380, 80), new Vector2(500, 250))) as Sprite;
             start = CreateEntity(new Button(350, 250, 100, 20, null, "START")) as Button;
             editProfile = CreateEntity(new Button(350, 280, 100, 20, null, "EDIT PROFILE")) as Button;
@@ -20,6 +23,12 @@ namespace TankzClient.Game
             start.SetColor(Color.Brown);
             editProfile.SetTextColor(Color.White);
             editProfile.SetColor(Color.Brown);
+        }
+
+        private void Instance_LobbyErrorGot(object sender, string e)
+        {
+            error = true;
+            msg = e;
         }
 
         private void EditProfile_OnClickCallback()
@@ -36,10 +45,9 @@ namespace TankzClient.Game
         {
             context.Clear(Color.FromArgb(77, 120, 78));
             base.Render(context);
-            //if(NetworkManager.Instance.MyData != null)
             context.DrawString("Connected as:"+NetworkManager.Instance.MyData.Name, new Font(FontFamily.GenericMonospace, 15f, FontStyle.Bold), Brushes.Black, new Point(5, 300));
-            
-            
+            if(error)
+                context.DrawString("Lobby is full", new Font(FontFamily.GenericMonospace, 15f, FontStyle.Bold), Brushes.Red, new Point(350, 300));
         }
     }
 }

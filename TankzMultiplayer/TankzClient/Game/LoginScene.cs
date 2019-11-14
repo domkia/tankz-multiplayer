@@ -83,7 +83,6 @@ namespace TankzClient.Game
             };
         }
 
-
         private void CreateAcc_OnClickCallback()
         {
             SceneManager.Instance.LoadScene<RegisterScene>(); ;

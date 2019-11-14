@@ -49,6 +49,12 @@ namespace TankzClient.Framework
 
             return Task.CompletedTask;
         }
+        private Task LobbyError(string message)
+        {
+            LobbyErrorGot?.Invoke(this, message);
+
+            return Task.CompletedTask;
+        }
 
         private Task PlayerListReceived(string playerList)
         {
