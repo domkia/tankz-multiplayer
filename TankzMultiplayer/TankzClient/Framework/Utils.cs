@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace TankzClient.Framework
 {
@@ -28,6 +30,17 @@ namespace TankzClient.Framework
         {
             double radians = degrees / 180.0 * Math.PI;
             return radians;
+        }
+
+        public static string PasteFromClipboard()
+        {
+            string data = null;
+            Thread staThread = new Thread(() => { data = Clipboard.GetText(); });
+            staThread.SetApartmentState(ApartmentState.STA);
+            staThread.Start();
+            staThread.Join();
+
+            return data;
         }
     }
 }

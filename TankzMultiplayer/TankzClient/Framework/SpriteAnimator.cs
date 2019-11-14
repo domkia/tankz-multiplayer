@@ -43,7 +43,20 @@ namespace TankzClient.Framework
                     currentAnimation = frameAnimation;
                 }
             }
-            
+            else
+                throw new Exception("There is already an animation with the same name");
+        }
+
+        public void RemoveAnimation(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return;
+            }
+            if (animations.ContainsKey(name))
+            {
+                animations.Remove(name);
+            }
         }
 
         /// <summary>

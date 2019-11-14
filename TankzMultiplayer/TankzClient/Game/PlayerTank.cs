@@ -13,9 +13,9 @@ namespace TankzClient.Game
     /// </summary>
     public class PlayerTank : Tank
     {
-        private Stack<ITankCommand> commands;
+        protected Stack<ITankCommand> commands;
 
-        private TankPhase currentPhase;
+        protected TankPhase currentPhase;
 
         public PlayerTank(Vector2 position, Vector2 size) 
             : base(position, size)

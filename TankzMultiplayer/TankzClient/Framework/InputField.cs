@@ -47,6 +47,7 @@ namespace TankzClient.Framework
 
         public override void Render(Graphics context)
         {
+            cursorOffsetX = (int)context.MeasureString(Text.ToString(), font).Width;
             if (IsFocused)
             {
                 context.FillRectangle(background, base.Rect);
@@ -98,8 +99,6 @@ namespace TankzClient.Framework
                     }
                 }
             }
-            //TODO: find character length
-            cursorOffsetX = Text.Length * 7;
         }
     }
 }

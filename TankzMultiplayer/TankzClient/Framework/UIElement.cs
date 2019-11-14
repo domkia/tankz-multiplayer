@@ -14,6 +14,7 @@ namespace TankzClient.Framework
         protected UIElement(Rectangle rect)
         {
             this.rect = rect;
+            this.tintColor = Color.Gray;
         }
 
         public Size Size
