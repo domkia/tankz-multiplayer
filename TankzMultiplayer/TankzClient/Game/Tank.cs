@@ -44,7 +44,7 @@ namespace TankzClient.Game
         {
             this.state = updatedState;
             transform.SetPosition(new Vector2(state.Pos_X, state.Pos_Y));
-            barrel.transform.SetAngle(state.Angle);
+            barrel.transform.SetAngle(-state.Angle);
         }
 
         public void Shoot()

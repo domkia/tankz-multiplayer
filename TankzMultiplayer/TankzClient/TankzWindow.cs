@@ -60,7 +60,7 @@ namespace TankzClient
                 // Wait for the next frame
                 long frameDuration = (timer.ElapsedMilliseconds - startTime);
                 //Thread.Sleep((int)frameMs - (int)frameDuration);
-                Thread.Sleep(70);
+                Thread.Sleep((int)frameMs);
             }
         }
 
@@ -123,6 +123,11 @@ namespace TankzClient
         protected override void OnMouseMove(MouseEventArgs e)
         {
             Input.HandleMousePosition(e.Location.X, e.Location.Y);
+        }
+
+        private void TankzClient_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

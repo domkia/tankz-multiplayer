@@ -40,6 +40,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "TankzClient";
             this.Text = "Tankz pre-alpha 0.0.1";
+            this.Load += new System.EventHandler(this.TankzClient_Load);
             this.ResumeLayout(false);
 
         }
