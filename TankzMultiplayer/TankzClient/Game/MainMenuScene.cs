@@ -29,7 +29,7 @@ namespace TankzClient.Game
 
         private void Start_OnClickCallback()
         {
-            throw new System.NotImplementedException();
+            NetworkManager.Instance.JoinLobby(1);
         }
 
         public override void Render(Graphics context)

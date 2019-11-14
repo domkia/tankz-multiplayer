@@ -61,12 +61,12 @@ namespace TankzClient.Game
             context.DrawString("POWER", font, Brushes.Bisque, new Point(350, 485));
             context.DrawString("ANGLE", font, Brushes.Bisque, new Point(450, 485));
 
-            if (GameplayScene.tankDict[NetworkManager.Instance.myConnId()] != null)
-            {
-                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Fuel.ToString(), font, Brushes.Bisque, new Point(260, 520));
-                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Power.ToString(), font, Brushes.Bisque, new Point(370, 520));
-                context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Angle.ToString() + "°", font, Brushes.Bisque, new Point(460, 520));
-            }
+            //if (GameplayScene.tankDict[NetworkManager.Instance.myConnId()] != null)
+            //{
+            //    context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Fuel.ToString(), font, Brushes.Bisque, new Point(260, 520));
+            //    context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Power.ToString(), font, Brushes.Bisque, new Point(370, 520));
+            //    context.DrawString(GameplayScene.tankDict[NetworkManager.Instance.myConnId()].Angle.ToString() + "°", font, Brushes.Bisque, new Point(460, 520));
+            //}
             
             context.FillRectangle(Brushes.Chocolate, 644, 421, 138, 138); //bottom right rect
             context.DrawRectangle(borderPen, 644, 421, 138, 138); //bottom right rect border
@@ -77,18 +77,18 @@ namespace TankzClient.Game
             context.DrawRectangle(borderPen, 240, 2, 300, 45); //turn
             //string player = NetworkManager.Instance.getCurrentPlayer();
             string playerName = "";
-            if(NetworkManager.Instance.IsMyTurn)
-            {
-                playerName = "YOU";
-            }
-            else
-            {
-                playerName = NetworkManager.Instance.CurrentPlayer.Name;
-            }
-            if (playerName != null)
-            {
-                context.DrawString("TURN: " + playerName, font, Brushes.Bisque, new Point(255, 10));
-            }
+            //if(NetworkManager.Instance.IsMyTurn)
+            //{
+            //    playerName = "YOU";
+            //}
+            //else
+            //{
+            //    playerName = NetworkManager.Instance.CurrentPlayer.Name;
+            //}
+            //if (playerName != null)
+            //{
+            //    context.DrawString("TURN: " + playerName, font, Brushes.Bisque, new Point(255, 10));
+            //}
             context.FillRectangle(Brushes.Brown, 2, 2, 155, 70); // wind
             context.DrawRectangle(borderPen, 2, 2, 155, 70); // wind
             context.DrawString("WIND: " + "100", font, Brushes.Bisque, new Point(15, 10));

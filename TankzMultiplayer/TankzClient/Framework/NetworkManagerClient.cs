@@ -110,7 +110,7 @@ namespace TankzClient.Framework
             return Task.CompletedTask;
         }
 
-        private Task PlayerJoinedLobby(string playerObject, string currentLobby)
+        private Task PlayerJoinedLobby(string playerObject, int currentLobby)
         {
             Player player = JsonConvert.DeserializeObject<Player>(playerObject);
             Console.WriteLine(player.ConnectionId + " " + Me.ConnectionId);

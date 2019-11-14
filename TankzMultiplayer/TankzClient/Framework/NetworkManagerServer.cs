@@ -8,9 +8,9 @@ namespace TankzClient.Framework
     /// </summary>
     partial class NetworkManager
     {
-        public void JoinLobby(string name, string url = "")
+        public void JoinLobby(int lobbyNr)
         {
-            _connection.InvokeAsync("JoinLobby", name, url);
+            _connection.InvokeAsync("JoinLobby", lobbyNr);
         }
         public void Register(string name, string password)
         {
@@ -23,13 +23,13 @@ namespace TankzClient.Framework
 
         public void ChangeReadyState()
         {
-            _connection.InvokeAsync("ChangeReadyState");
+            _connection.InvokeAsync("ChangeReadyState",CurrentLobby);
         }
 
         public void Shoot(float angle, float power)
         {
             Console.WriteLine("Tank Shoot");
-            _connection.InvokeAsync("Shoot", angle, power);
+            _connection.InvokeAsync("Shoot", angle, power, CurrentLobby);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace TankzClient.Framework
         /// </summary>
         public void SetPos(Vector2 newpos)
         {
-            _connection.InvokeAsync("SetPos", newpos.x, newpos.y);
+            _connection.InvokeAsync("SetPos", newpos.x, newpos.y, CurrentLobby);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace TankzClient.Framework
         /// </summary>
         public void SetAngle(float angle)
         {
-            _connection.InvokeAsync("SetAngle", angle);
+            _connection.InvokeAsync("SetAngle", angle,CurrentLobby);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace TankzClient.Framework
         /// </summary>
         public void GetConnectedPlayerList()
         {
-            _connection.InvokeAsync("GetConnected");
+            _connection.InvokeAsync("GetConnected", CurrentLobby);
         }
 
         public void GetCrate()

@@ -21,7 +21,7 @@ namespace TankzClient.Framework
         public bool IsConnected =>connected;
         public Player CurrentPlayer => GetPlayerById(CurrentTurn);
         public string CurrentTurn { get; private set; } 
-        public string CurrentLobby { get; private set; }
+        public int CurrentLobby { get; private set; }
 
         private static HubConnection _connection;
 
@@ -94,7 +94,7 @@ namespace TankzClient.Framework
             _connection.On<string>("Turn", TurnStarted);
             _connection.On<float, float, string>("PosChange", TankPosChanged);
             _connection.On<float, string>("AngleChange", TankAngleChanged);
-            _connection.On<string, string>("PlayerJoinedLobby", PlayerJoinedLobby);
+            _connection.On<string, int>("PlayerJoinedLobby", PlayerJoinedLobby);
             _connection.On<string, bool>("PlayerReadyStateChanged", PlayerReadyStateChanged);
             _connection.On<string>("Registered", Registered);
             _connection.On<string>("RegisterError", RegisterError);
