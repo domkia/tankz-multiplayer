@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -45,6 +46,19 @@ namespace TankzClient.Game
         }
         public override void Load()
         {
+
+            string path = Directory.GetCurrentDirectory();
+            path = path.Replace("\\", "/");
+            string[] vaflis = path.Split('/');
+            StringBuilder builtPath = new StringBuilder();
+            builtPath.Append(vaflis[0]);
+            for (int i = 1; i < vaflis.Length - 2; i++)
+            {
+                builtPath.Append("/" + vaflis[i]);
+            }
+
+            SoundsPlayer.Instance.AddSound("background", builtPath.ToString() + "/res/sounds/background.mp3");
+            SoundsPlayer.Instance.AddSound("shoot_1", "../../res/sounds/shoot_1.wav");
             if (!NetworkManager.Instance.IsConnected)
             {
                 NetworkManager.Instance.Start();

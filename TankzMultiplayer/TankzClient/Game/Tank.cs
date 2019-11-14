@@ -57,6 +57,7 @@ namespace TankzClient.Game
             Vector2 particleSpawnPoint = barrel.GetReleasePosition();
             ParticleEmitter particle = new ParticleFactory().Create("explosion") as ParticleEmitter;
             particle.transform.SetPosition(particleSpawnPoint);
+            SoundsPlayer.Instance.PlaySound("shoot_1");
             particle.Emit();
         }
 
