@@ -17,49 +17,31 @@ namespace TankzClient.Game
         private InputField usernameField;
         private InputField passwordField;
         private Sprite logo;
-        bool connected = false;
-        bool nameError = false;
-        bool waiting = false;
-
+        bool error = false;
+        private string msg = "";
         private Image[] icons;
-
-        private bool joining = false;
 
         private void LoginButton_OnClickCallback()
         {
-            if (joining == true)
-                return;
-            if (usernameField.Text.ToString().Length != 0)
-            {
-                waiting = true;       
+            string name = usernameField.Text.ToString();
+            string password = passwordField.Text.ToString();
+            string pw = Cipher.Encrypt(passwordField.Text.ToString(), "TankZPasswordCypher");
+            NetworkManager.Instance.Login(usernameField.Text.ToString(), pw);
+        }
+        private void Instance_LoginSuccess(object sender, string e)
+        {
+            SceneManager.Instance.LoadScene<MainMenuScene>();
+        }
 
-                string name = usernameField.Text.ToString();
-                joining = true;
-                NetworkManager.Instance.JoinLobby(name);
-            }
-            else
-            {
-                nameError = true;
-            }
+        private void Instance_LoginErrorGot(object sender, string e)
+        {
+            error = true;
+            msg = e;
         }
 
         private void SuicideButton_OnClickCallback()
         {
-
             SceneManager.Instance.LoadScene<SuicideScene>();
-        }
-
-        private void Instance_ConnectedToServer(object sender, EventArgs e)
-        {
-            //NetworkManager.Instance.SetName(inputField.Text.ToString());
-            //NetworkManager.Instance.DataGained += Instance_DataGained;
-            //NetworkManager.Instance.ConnectedToServer -= Instance_ConnectedToServer;
-        }
-
-        private void Instance_DataGained(object sender, System.EventArgs e)
-        {
-            //SceneManager.Instance.LoadScene<IngobbyScene>();
-            //NetworkManager.Instance.DataGained -= Instance_DataGained;
         }
         public override void Load()
         {
@@ -74,17 +56,21 @@ namespace TankzClient.Game
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380,80), new Vector2(500,250)))as Sprite;
             usernameField = CreateEntity(new InputField(140, 200, 120, 20)) as InputField;
             usernameField.SetBackgroundColor(Color.Brown);
+
+            passwordField = CreateEntity(new InputField(140, 225, 120, 20)) as InputField;
+            passwordField.SetBackgroundColor(Color.Brown);
             loginButton = CreateEntity(new Button(270, 200, 50, 20, null, "Log In")) as Button;
             loginButton.OnClickCallback += LoginButton_OnClickCallback;
             loginButton.SetTextColor(Color.White);
             loginButton.SetColor(Color.Brown);
 
-            createAccButton = CreateEntity(new Button(20, 225, 120, 20, null, "Create Account")) as Button;
+            createAccButton = CreateEntity(new Button(20, 250, 120, 20, null, "Create Account")) as Button;
             createAccButton.OnClickCallback += CreateAcc_OnClickCallback;
             createAccButton.SetTextColor(Color.White);
             createAccButton.SetColor(Color.Brown);
 
-
+            NetworkManager.Instance.LoginErrorGot += Instance_LoginErrorGot;
+            NetworkManager.Instance.LoginSuccess += Instance_LoginSuccess;
 
             suicideButton = CreateEntity(new Button(650, 400, 50, 50, null, "Suicide Scene")) as Button;
             suicideButton.OnClickCallback += SuicideButton_OnClickCallback;
@@ -97,6 +83,7 @@ namespace TankzClient.Game
             };
         }
 
+
         private void CreateAcc_OnClickCallback()
         {
             SceneManager.Instance.LoadScene<RegisterScene>(); ;
@@ -106,25 +93,15 @@ namespace TankzClient.Game
         {
             context.Clear(Color.FromArgb(77,120,78));
             base.Render(context);
-            if (!joining)
+            context.DrawString("USERNAME:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 200));
+            context.DrawString("PASSWORD:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 225));
+            if (error)
             {
-                context.DrawString("USERNAME:", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 200));
-                if (nameError)
-                {
-                    context.DrawString("Username can't be empty", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 230));
-                }
-                if (waiting)
-                {
-                    context.DrawString("Waiting for server...", new Font(FontFamily.GenericMonospace, 30f, FontStyle.Bold), Brushes.Black, new Point(400, 600));
-                }
-            }
-            else
-            {
-                context.DrawString("Joining... Please wait", new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Black, new Point(10, 10));
+                context.DrawString(msg, new Font(FontFamily.GenericMonospace, 16f, FontStyle.Bold), Brushes.Red, new Point(10, 270));
             }
             for (int i = 0; i < icons.Length; i++)
             {
-                context.DrawImage(icons[i], new Point(16, 250 + 36 * i));
+                context.DrawImage(icons[i], new Point(16, 400 + 36 * i));
             }
         }
     }

@@ -24,7 +24,7 @@ namespace TankzSignalRServer.Models
                 Name = this.Name,
                 Radius = this.Radius,
                 Explosion_Radius = this.Explosion_Radius,
-                Rarity = this. Rarity};
+                rarity = this.rarity};
             return weapon;
         }
     }

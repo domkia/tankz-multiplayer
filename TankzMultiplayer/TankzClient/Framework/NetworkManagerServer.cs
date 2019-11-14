@@ -16,6 +16,10 @@ namespace TankzClient.Framework
         {
             _connection.InvokeAsync("Register", name, password);
         }
+        public void Login(string name, string password)
+        {
+            _connection.InvokeAsync("Login", name, password);
+        }
 
         public void ChangeReadyState()
         {

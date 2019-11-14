@@ -27,10 +27,20 @@ namespace TankzClient.Framework
 
             return Task.CompletedTask;
         }
+        private Task LoggedIn(string message)
+        {
+            MyData = JsonConvert.DeserializeObject<Player>(message);
+            LoginSuccess?.Invoke(this, message);
+            return Task.CompletedTask;
+        }
+        private Task LoginError(string message)
+        {
+            LoginErrorGot?.Invoke(this, message);
+            return Task.CompletedTask;
+        }
         private Task Registered(string message)
         {
             RegisterSuccess?.Invoke(this, message);
-
             return Task.CompletedTask;
         }
         private Task RegisterError(string message)
@@ -100,7 +110,7 @@ namespace TankzClient.Framework
             return Task.CompletedTask;
         }
 
-        private Task PlayerJoinedLobby(string playerObject)
+        private Task PlayerJoinedLobby(string playerObject, string currentLobby)
         {
             Player player = JsonConvert.DeserializeObject<Player>(playerObject);
             Console.WriteLine(player.ConnectionId + " " + Me.ConnectionId);
@@ -108,11 +118,12 @@ namespace TankzClient.Framework
 
             if (player.ConnectionId == Me.ConnectionId)
             {
+                CurrentLobby = currentLobby;
                 SceneManager.Instance.LoadScene<IngobbyScene>();
             }
             else
             {
-                Console.WriteLine("bbc");
+                Console.WriteLine(player.Name + " has joined your lobby!");
             }
             return Task.CompletedTask;
         }

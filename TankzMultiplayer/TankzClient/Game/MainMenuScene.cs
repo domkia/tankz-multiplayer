@@ -6,82 +6,40 @@ namespace TankzClient.Game
 {
     public class MainMenuScene : Scene
     {
-        private Button startButton;
-        private InputField inputField;
-        private ProgressBar progressBar;
-        private Button[] testButtons = new Button[3];
-
-        private void StartButton_OnClickCallback()
-        {
-            SceneManager.Instance.LoadScene<IngobbyScene>();
-        }
-
+        private Sprite logo;
+        private Button start;
+        private Button editProfile;
         public override void Load()
         {
-            InventoryUI inventoryUI = new InventoryUI(new Rectangle(100,100,300,300));
-            CreateEntity(inventoryUI);
+            logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380, 80), new Vector2(500, 250))) as Sprite;
+            start = CreateEntity(new Button(350, 250, 100, 20, null, "START")) as Button;
+            editProfile = CreateEntity(new Button(350, 280, 100, 20, null, "EDIT PROFILE")) as Button;
+            start.OnClickCallback += Start_OnClickCallback;
+            editProfile.OnClickCallback += EditProfile_OnClickCallback;
+            start.SetTextColor(Color.White);
+            start.SetColor(Color.Brown);
+            editProfile.SetTextColor(Color.White);
+            editProfile.SetColor(Color.Brown);
+        }
 
-            Tank usaTank =
-                new TankBuilder(true)
-                .SetChassis(1, 1)
-                .SetTurret(1)
-                .SetTracks(0)
-                .Build();
-            CreateEntity(usaTank);
-            usaTank.transform.SetPosition(new Vector2(500, 100));
+        private void EditProfile_OnClickCallback()
+        {
+            throw new System.NotImplementedException();
+        }
 
-            // Apply customiztion
-            usaTank.ApplyCamouflage(0);
-            usaTank.ApplySideskirt(0);
-            usaTank.ApplyAccessory(1);
-
-            Tank nazziTank = new TankBuilder(true)
-                .SetChassis(3, 0)
-                .SetTurret(0)
-                .SetTracks(1)
-                .Build();
-            CreateEntity(nazziTank);
-            nazziTank.transform.SetPosition(new Vector2(500, 200));
-            nazziTank.ApplyCamouflage(4);
-            nazziTank.ApplyAccessory(2);
-
-            Tank jpTank = new TankBuilder(true)
-                .SetChassis(0, 2)
-                .SetTurret(2)
-                .SetTracks(2)
-                .Build();
-            CreateEntity(jpTank);
-            jpTank.transform.SetPosition(new Vector2(500, 300));
-            jpTank.ApplyCamouflage(5);
-            jpTank.ApplySideskirt(1);
-
-            inputField = CreateEntity(new InputField(20, 20, 120, 20)) as InputField;
-            startButton = CreateEntity(new Button(150, 20, 50, 50, null, "Join Lobby")) as Button;
-            startButton.OnClickCallback += StartButton_OnClickCallback;
-
-            progressBar = CreateEntity(new ProgressBar(new Rectangle(170, 100, 64, 8), Color.LightGreen, Color.DarkGreen)) as ProgressBar;
-            progressBar.SetProgress(0.4f);
-
-            UIFactory uiFactory = new UIFactory();
-            for (int i = 0; i < 3; i++)
-            {
-                testButtons[i] = uiFactory.Create(new UICreateArgs("button", new Vector2(200, 200 + i * 50))) as Button;
-            }
-
-            Grenade grenade = new ProjectileFactory().Create("grenade") as Grenade;
-            grenade.transform.SetPosition(new Vector2(400, 100));
+        private void Start_OnClickCallback()
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Render(Graphics context)
         {
-            context.Clear(Color.DarkBlue);
+            context.Clear(Color.FromArgb(77, 120, 78));
             base.Render(context);
-            context.DrawString("Scene: Main Menu", SystemFonts.MenuFont, Brushes.Red, new Point(0, 0));
-        }
-
-        public override void Update(float deltaTime)
-        {
-            base.Update(deltaTime);
+            //if(NetworkManager.Instance.MyData != null)
+            context.DrawString("Connected as:"+NetworkManager.Instance.MyData.Name, new Font(FontFamily.GenericMonospace, 15f, FontStyle.Bold), Brushes.Black, new Point(5, 300));
+            
+            
         }
     }
 }

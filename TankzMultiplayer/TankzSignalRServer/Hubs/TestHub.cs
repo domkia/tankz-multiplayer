@@ -66,8 +66,11 @@ namespace TankzSignalRServer.Hubs
             if (_context.Users.Where(c => c.Username == name).Count() == 0)
             {
                 TankState tankstate = GetRandomTankState();
+                _context.TankStates.Add(tankstate);
                 Tank tank = new Tank { Chasis_id = 1, Color_id = 1, Trucks_id = 1, Turret_id = 1 };
+                _context.Tanks.Add(tank);
                 Player player = new Player { ConnectionId = "", Icon = "", Name = name, ReadyState = false, Tank = tank, TankState = tankstate };
+                _context.Players.Add(player);
                 User user = new User { Username = name, Password = password, Player = player };
                 _context.Users.Add(user);
                 _context.SaveChanges();
@@ -95,7 +98,9 @@ namespace TankzSignalRServer.Hubs
                 {
                     //After loggin in sets id as current connId
                     _context.Players.Where(c => c.Name == name).FirstOrDefault().ConnectionId = Context.ConnectionId;
-                    return Clients.Caller.SendAsync("LoginSuccess", "User successfully logged in");
+                    _context.SaveChanges();
+                    string playerData = JsonConvert.SerializeObject(_context.Players.Where(c => c.Name == name).FirstOrDefault());
+                    return Clients.Caller.SendAsync("LoginSuccess", playerData);
                 }
                 else
                 {
@@ -136,33 +141,19 @@ namespace TankzSignalRServer.Hubs
 
         }
         [HubMethodName("JoinLobby")]
-        public Task JoinLobby(string name, string iconUrl)
+        public Task JoinLobby(int lobbyId)
         {
             string clientId = Context.ConnectionId;
-
-            // Create new player with a given name
-            Player newPlayer = new Player()
-            {
-                ConnectionId = clientId,
-                Name = name,
-                Icon = iconUrl,
-                ReadyState = false,
-                TankState = GetRandomTankState(),
-                Tank = new Tank()
-            };
-            Groups.AddToGroupAsync(clientId, "Lobby").Wait();
-            // Insert newly created player into database
-            _context.Players.Add(newPlayer);
-            _context.SaveChanges();
+            string lobbyName = "Lobby" + _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().ID;
+            Groups.AddToGroupAsync(clientId, lobbyName).Wait();
             // Notify caller about players already in the lobby
             ConnectedPeople().Wait();
 
-
-
+            Player newPlayer = _context.Players.Where(c => c.ConnectionId == clientId).FirstOrDefault();
             // Notify all clients about new player
             string json = JsonConvert.SerializeObject(newPlayer);
 
-            return Clients.Group("Lobby").SendAsync("PlayerJoinedLobby", json);
+            return Clients.Group(lobbyName).SendAsync("PlayerJoinedLobby", json, lobbyName);
         }
         #endregion
         #region Turns

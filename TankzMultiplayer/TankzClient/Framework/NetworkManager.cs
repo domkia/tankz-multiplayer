@@ -12,6 +12,7 @@ namespace TankzClient.Framework
 {
     public partial class NetworkManager
     {
+        public Player MyData { get; set; }
         public List<Player> Players { get; private set; }
         public List<Player> LobbyPlayers = new List<Player>();
         public Player Me => Players.FirstOrDefault(p => p.ConnectionId == _connection.ConnectionId);
@@ -20,15 +21,17 @@ namespace TankzClient.Framework
         public bool IsConnected =>connected;
         public Player CurrentPlayer => GetPlayerById(CurrentTurn);
         public string CurrentTurn { get; private set; } 
+        public string CurrentLobby { get; private set; }
 
         private static HubConnection _connection;
 
         // Events
         public event Action<List<Player>> OnTankConfigsReceived;
-        public event EventHandler ConnectedToServer;
         public event EventHandler OnTurnStarted;
         public event EventHandler<string> RegisterErrorGot;
         public event EventHandler<string> RegisterSuccess;
+        public event EventHandler<string> LoginErrorGot;
+        public event EventHandler<string> LoginSuccess;
         public event EventHandler<MoveEventArtgs> PlayerMoved;
         public event EventHandler<RotateEventArgs> BarrelRotate;
         public event Action<int> OnCrateDestroyed;
@@ -91,10 +94,12 @@ namespace TankzClient.Framework
             _connection.On<string>("Turn", TurnStarted);
             _connection.On<float, float, string>("PosChange", TankPosChanged);
             _connection.On<float, string>("AngleChange", TankAngleChanged);
-            _connection.On<string>("PlayerJoinedLobby", PlayerJoinedLobby);
+            _connection.On<string, string>("PlayerJoinedLobby", PlayerJoinedLobby);
             _connection.On<string, bool>("PlayerReadyStateChanged", PlayerReadyStateChanged);
             _connection.On<string>("Registered", Registered);
             _connection.On<string>("RegisterError", RegisterError);
+            _connection.On<string>("LoginSuccess", LoggedIn);
+            _connection.On<string>("LoginError", LoginError);
             _connection.On<int>("CrateDestroyed", CrateDestroyed);
             _connection.On<string>("CrateSpawned", CrateSpawned);
             // Connect to the server
