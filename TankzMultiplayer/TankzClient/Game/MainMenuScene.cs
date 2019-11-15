@@ -33,7 +33,7 @@ namespace TankzClient.Game
 
         private void EditProfile_OnClickCallback()
         {
-            throw new System.NotImplementedException();
+            SceneManager.Instance.LoadScene<TankEditScene>();
         }
 
         private void Start_OnClickCallback()

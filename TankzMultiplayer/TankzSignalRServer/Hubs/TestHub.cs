@@ -44,10 +44,11 @@ namespace TankzSignalRServer.Hubs
         //Removes player and related elements from database and calls for connectedPeople method
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            string group = "Lobby" + _context.Lobbies.Include(l => l.Players)
+            int lobbyId = _context.Lobbies.Include(l => l.Players)
                 .Where(p => p.Players
                 .Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault() != null)
                 .FirstOrDefault().ID;
+            string group = "Lobby" + lobbyId;
             Player player = GetPlayerById(Context.ConnectionId);
             int curr = _context.Lobbies.Include(l => l.Players).Where(p => p.Players.Where(pp => pp.Name == player.Name) != null).FirstOrDefault().CurrPlayers;
             curr--;
@@ -58,6 +59,7 @@ namespace TankzSignalRServer.Hubs
             _context.Players.Where(p => p.Name == player.Name).FirstOrDefault().ReadyState = false;
             _context.SaveChanges();
             Groups.RemoveFromGroupAsync(Context.ConnectionId, group);
+            ConnectedPeople(lobbyId).Wait();
             Clients.All.SendAsync("Disconnected", Context.ConnectionId);
             return base.OnDisconnectedAsync(exception);
         }

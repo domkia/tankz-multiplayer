@@ -46,15 +46,6 @@ namespace TankzClient.Game
             crate.transform.SetPosition(new Vector2(200f, 300f));
             crate.transform.SetSize(new Vector2(50f, 50f));
             crate.SetActive(false);
-            /*
-            Tank usaTank = new TankBuilder()
-                .SetChassis(1, 1)
-                .SetTurret(1)
-                .SetTracks(0)
-                .Build();
-            CreateEntity(usaTank);
-            usaTank.transform.SetPosition(new Vector2(500, 100));
-            */
         }
 
         private void SpawnTanks(List<Player> playersAndTanks)

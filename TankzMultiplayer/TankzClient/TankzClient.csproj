@@ -222,6 +222,7 @@
     <Compile Include="Game\PlayerTank.cs" />
     <Compile Include="Game\TankCustomization.cs" />
     <Compile Include="Game\TankDecorator.cs" />
+    <Compile Include="Game\TankEditScene.cs" />
     <Compile Include="Game\TankIdle.cs" />
     <Compile Include="Game\TankMoveCommand.cs" />
     <Compile Include="Game\TankMovement.cs" />
