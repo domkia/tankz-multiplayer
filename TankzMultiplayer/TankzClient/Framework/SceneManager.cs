@@ -24,11 +24,18 @@ namespace TankzClient.Framework
 
         public Scene CurrentScene { get; private set; }
 
-        private Scene AddScene<TScene>() where TScene : Scene, new()
+        /// <summary>
+        /// Try get already loaded scene from the list
+        /// </summary>
+        /// <typeparam name="TScene">Type of the scene</typeparam>
+        private Scene GetScene<TScene>() where TScene : Scene
         {
-            Scene scene = new TScene();
-            scenes.Add(typeof(TScene), scene);
-            return scene;
+            Type sceneType = typeof(TScene);
+            if (!scenes.ContainsKey(sceneType))
+            {
+                throw new Exception("Scene you are trying to get does not exist in the scenes list");
+            }
+            return scenes[sceneType];
         }
 
         /// <summary>
@@ -37,16 +44,56 @@ namespace TankzClient.Framework
         public void LoadScene<TScene>() where TScene : Scene, new()
         {
             Type sceneType = typeof(TScene);
-            if (scenes.ContainsKey(sceneType))
+            if (!scenes.ContainsKey(sceneType))
             {
-                Scene sceneToLoad = scenes[sceneType];
-                sceneToLoad.Load();
-                CurrentScene = sceneToLoad;
+                scenes.Add(sceneType, new TScene());
+            }
+
+            // Unload current scene
+            if (scenes.Values.Count > 1 && CurrentScene.GetType() != sceneType)
+            {
+                scenes.Remove(CurrentScene.GetType());
+            }
+
+            // Reload scene
+            CurrentScene = scenes[sceneType];
+            CurrentScene.Load();
+        }
+
+        /// <summary>
+        /// Load new scene without unloading current one
+        /// </summary>
+        /// <typeparam name="TScene"></typeparam>
+        public void LoadSceneAdditively<TScene>() where TScene : Scene, new()
+        {
+            Type sceneType = typeof(TScene);
+            if (!scenes.ContainsKey(sceneType))
+            {
+                scenes.Add(sceneType, new TScene());
+            }
+
+            CurrentScene = scenes[sceneType];
+            CurrentScene.Load();
+        }
+
+        public bool UnloadScene<TScene>() where TScene : Scene
+        {
+            if (scenes.ContainsKey(typeof(TScene)))
+            {
+                if (scenes.Keys.Count > 1)
+                {
+                    // TODO: call dispose method?
+                    scenes.Remove(typeof(TScene));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                CurrentScene = AddScene<TScene>();
-                CurrentScene.Load();
+                return true;
             }
         }
     }
