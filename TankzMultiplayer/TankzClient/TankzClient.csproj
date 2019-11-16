@@ -177,6 +177,7 @@
     <Compile Include="Game\GameplayUI.cs" />
     <Compile Include="Game\Grenade.cs" />
     <Compile Include="Game\IngameLobby.cs" />
+    <Compile Include="Game\IntroScene.cs" />
     <Compile Include="Game\ISounds.cs" />
     <Compile Include="Game\ITank.cs" />
     <Compile Include="Game\ITankBuilder.cs" />

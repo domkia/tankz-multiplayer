@@ -46,27 +46,6 @@ namespace TankzClient.Game
         }
         public override void Load()
         {
-
-            string path = Directory.GetCurrentDirectory();
-            path = path.Replace("\\", "/");
-            string[] vaflis = path.Split('/');
-            StringBuilder builtPath = new StringBuilder();
-            builtPath.Append(vaflis[0]);
-            for (int i = 1; i < vaflis.Length - 2; i++)
-            {
-                builtPath.Append("/" + vaflis[i]);
-            }
-
-            SoundsPlayer.Instance.AddSound("background", builtPath.ToString() + "/res/sounds/background.mp3");
-            SoundsPlayer.Instance.AddSound("shoot_1", "../../res/sounds/shoot_1.wav");
-            if (!NetworkManager.Instance.IsConnected)
-            {
-                NetworkManager.Instance.Start();
-                Thread networkThread = new Thread(NetworkManager.Instance.Connect);
-                networkThread.IsBackground = true;
-                networkThread.Start();
-            }
-
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380,80), new Vector2(500,250)))as Sprite;
             usernameField = CreateEntity(new InputField(140, 200, 120, 20)) as InputField;
             usernameField.SetBackgroundColor(Color.Brown);

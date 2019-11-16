@@ -27,7 +27,8 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<LoginScene>();
+            SceneManager.Instance.LoadScene<IntroScene>();
+
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
             updateThread.IsBackground = true;
