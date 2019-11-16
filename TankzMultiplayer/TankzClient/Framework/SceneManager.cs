@@ -52,6 +52,7 @@ namespace TankzClient.Framework
             // Unload current scene
             if (scenes.Values.Count > 1 && CurrentScene.GetType() != sceneType)
             {
+                CurrentScene.Unload();
                 scenes.Remove(CurrentScene.GetType());
             }
 

@@ -17,6 +17,8 @@ namespace TankzClient.Framework
 
         public abstract void Load();
 
+        public virtual void Unload() { }
+
         private object lockObject = new object();
 
         /// <summary>

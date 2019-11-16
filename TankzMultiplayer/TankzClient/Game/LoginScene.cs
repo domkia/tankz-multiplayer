@@ -76,6 +76,16 @@ namespace TankzClient.Game
             };
         }
 
+        public override void Unload()
+        {
+            NetworkManager.Instance.LoginErrorGot -= Instance_LoginErrorGot;
+            NetworkManager.Instance.LoginSuccess -= Instance_LoginSuccess;
+
+            loginButton.OnClickCallback -= LoginButton_OnClickCallback;
+            createAccButton.OnClickCallback -= CreateAcc_OnClickCallback;
+            suicideButton.OnClickCallback -= SuicideButton_OnClickCallback;
+        }
+
         private void CreateAcc_OnClickCallback()
         {
             SceneManager.Instance.LoadScene<RegisterScene>(); ;
