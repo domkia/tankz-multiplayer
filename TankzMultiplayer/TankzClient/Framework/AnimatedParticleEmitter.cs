@@ -9,8 +9,8 @@ namespace TankzClient.Framework
     {
         private IAnimationData animation;
 
-        public AnimatedParticleEmitter(int particleCount, AnimatedSprite sprite, IAnimationData animation, ParticleProperties props, bool useGravity = false, ParticleEmitMode mode = ParticleEmitMode.Continuous, Entity parent = null) 
-            : base(particleCount, sprite, props, useGravity, mode, parent)
+        public AnimatedParticleEmitter(int particleCount, AnimatedSprite sprite, IAnimationData animation, ParticleProperties props, IParticleEmitMode emitMode, bool useGravity = false, Entity parent = null) 
+            : base(particleCount, sprite, props, emitMode, useGravity, parent)
         {
             this.sprite = sprite;
             this.animation = animation;

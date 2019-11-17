@@ -10,22 +10,22 @@ namespace TankzClient.Framework
     public class ParticleEmitter : Entity, IRenderable, ICloneable<ParticleEmitter>
     {
         protected readonly float gravityMultiplier = 1.5f;
-        protected Particle[] particles;
-        protected int particleCount;
-        protected ParticleEmitMode mode;
-        protected Sprite sprite; //galbut reikia irgi klonuoti
-        protected ParticleProperties props;
-        protected bool useGravity;
+        public Particle[] particles { get; protected set; }
+        public int particleCount { get; protected set; }
+        public IParticleEmitMode emitMode { get; protected set; }
+        public Sprite sprite { get; protected set; }
+        public ParticleProperties props { get; protected set; }
+        public bool useGravity { get; protected set; }
 
         public bool IsEmitting { get; set; }
 
-        public ParticleEmitter(int particleCount, Sprite sprite, ParticleProperties props, bool useGravity = false, ParticleEmitMode mode = ParticleEmitMode.Continuous, Entity parent = null) 
+        public ParticleEmitter(int particleCount, Sprite sprite, ParticleProperties props, IParticleEmitMode emitMode, bool useGravity = false, Entity parent = null) 
             : base(parent)
         {
             this.particleCount = particleCount;
             this.particles = new Particle[particleCount];
             this.sprite = sprite;
-            this.mode = mode;
+            this.emitMode = emitMode;
             this.props = props;
             this.useGravity = useGravity;
         }
@@ -43,17 +43,14 @@ namespace TankzClient.Framework
         public override void Update(float deltaTime)
         {
             if (IsEmitting == false)
-                return;
-            switch (mode)
             {
-                case ParticleEmitMode.Continuous:
-                    Continuous(deltaTime);
-                    break;
-                case ParticleEmitMode.OneShot:
-                    if (OneShot(deltaTime) == false)
-                        IsEmitting = false;
-                    break;
+                return;
             }
+            if (emitMode == null)
+            {
+                throw new Exception("Particle emitting mode was not selected");
+            }
+            IsEmitting = emitMode.Update(this, deltaTime);
         }
 
         public void Simulate(Particle p, float deltaTime)
@@ -89,50 +86,6 @@ namespace TankzClient.Framework
             }
         }
 
-        private bool OneShot(float deltaTime)
-        {
-            bool alive = false;
-            for (int i = 0; i < particleCount; i++)
-            {
-                Simulate(particles[i], deltaTime);
-                if (particles[i].IsAlive == false)
-                    continue;
-                else alive = true;
-            }
-            return alive;
-        }
-
-        float timer = float.MaxValue;
-        private void Continuous(float deltaTime)
-        {
-            // Simulate any alive particles
-            for (int i = 0; i < particleCount; i++)
-            {
-                if (particles[i].IsAlive)
-                {
-                    Simulate(particles[i], deltaTime);
-                }
-            }
-
-            // 'Spawn' new particle
-            timer += deltaTime;
-            if (timer >= props.spawnRate)
-            {
-                for (int i = 0; i < particleCount; i++)
-                {
-                    if (particles[i].IsAlive == false)
-                    {
-                        particles[i].position = transform.position + props.startOffset * ((float)random.NextDouble() * 2f - 1f);
-                        particles[i].size = particles[i].startSize;
-                        particles[i].speed = particles[i].startSpeed;
-                        particles[i].timer = float.Epsilon;
-                        break;
-                    }
-                }
-                timer %= props.spawnRate;
-            }
-        }
-
         public int SortingLayer => 10;
         public Matrix OrientationMatrix => transform.OrientationMatrix;
 
@@ -164,8 +117,8 @@ namespace TankzClient.Framework
                 particleCount,
                 sprite, 
                 props.Clone(),
-                useGravity,
-                mode
+                emitMode,
+                useGravity
                 );
             return emitter;
         }

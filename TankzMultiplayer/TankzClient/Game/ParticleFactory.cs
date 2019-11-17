@@ -25,7 +25,8 @@ namespace TankzClient.Game
                             startSpeed = new Range(100f, 400f),
                             sizeGrow = -32,
                         }, 
-                    true, ParticleEmitMode.OneShot);
+                    new ParticlesOneShotMode(),
+                    true);
                     break;
                 case "shield":
                     image = Image.FromFile(path + "shield_particle.png");
@@ -36,7 +37,7 @@ namespace TankzClient.Game
                         sizeGrow = -128f,
                         spawnRate = 0.4f,
                         startLifetime = 1f
-                    });
+                    }, new ParticlesContinuousMode());
                     break;
                 case "health":
                     image = Image.FromFile(path + "health_particle.png");
@@ -51,7 +52,7 @@ namespace TankzClient.Game
                         spawnRate = 0.2f,
                         startAngle = 270f,
                         startLifetime = 0.5f
-                    });
+                    }, new ParticlesContinuousMode());
                     break;
                 default:
                     return null;
