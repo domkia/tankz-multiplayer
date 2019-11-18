@@ -26,26 +26,39 @@ namespace TankzClient.Game
         public override void Load()
         {
             NetworkManager.Instance.OnTankConfigsReceived += SpawnTanks;
-            //players = NetworkManager.Instance.GetPlayerList();
-            /*
-            
-            */
-            //NetworkManager.Instance.GetCrate();
-
-            //NetworkManager.Instance.PlayerChanged += Instance_PlayerChanged;
-
-
+            NetworkManager.Instance.OnShootStart += Instance_OnShootStart;
+            NetworkManager.Instance.ProjectileMoved += Instance_ProjectileMoved;
+            NetworkManager.Instance.ProjectileExplosion += Instance_ProjectileExplosion;
             background = CreateEntity(new Background()) as Background;
 
             //terrain = CreateEntity(new Terrain()) as Terrain;
 
-            grenade = new ProjectileFactory().Create("grenade") as Grenade;
-            grenade.transform.SetPosition(new Vector2(300f, 300f));
+            
 
             crate = CreateEntity(new Crate(Image.FromFile("../../res/crates/crate_0.png"), new Vector2(200f, 200f), grenade, new Vector2(50f, 50f))) as Crate;
             crate.transform.SetPosition(new Vector2(200f, 300f));
             crate.transform.SetSize(new Vector2(50f, 50f));
             crate.SetActive(false);
+        }
+
+        private void Instance_ProjectileExplosion()
+        {
+            ParticleEmitter particle = new ParticleFactory().Create("explosion") as ParticleEmitter;
+            particle.transform.SetPosition(grenade.transform.position);
+            particle.Emit();
+            grenade.Destroy();
+            grenade = null;
+        }
+
+        private void Instance_ProjectileMoved(Vector2 obj)
+        {
+            grenade.transform.SetPosition(obj);
+        }
+
+        private void Instance_OnShootStart(Vector2 obj)
+        {
+            grenade = new ProjectileFactory().Create("grenade") as Grenade;
+            grenade.transform.SetPosition(obj);
         }
 
         private void SpawnTanks(List<Player> playersAndTanks)
@@ -105,33 +118,7 @@ namespace TankzClient.Game
             base.Update(deltaTime);
             
             currentTime += deltaTime;
-            if (grenade != null)
-            {
-                if (startPositionX == -10)
-                {
-                    startPositionX = grenade.transform.position.x;
-                }
-                if (startPositionY == -10)
-                {
-                    startPositionY = grenade.transform.position.y;
-                }
-                
-                float lastX = grenade.transform.position.x;
-                float lastY = grenade.transform.position.y;
-                if (lastY <= 300f)
-                {
-                    grenade.transform.SetPosition(calculatePos(50f, -9.8f, (float)(50 * (Math.PI / 180.0)), new Vector2(startPositionX, startPositionY), currentTime));
-                    //Console.WriteLine(grenade.transform.position.x + " " + grenade.transform.position.y);
-                }
-                else
-                {
-                    grenade.Destroy();
-                    grenade = null;
-                    Console.WriteLine("boom");
-                }
-            }
         }
-
         private void Instance_BarrelRotate(object sender, RotateEventArgs e)
         {
             Tank movedTank = tankDict[e.ConnID];

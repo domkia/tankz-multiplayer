@@ -8,7 +8,7 @@ namespace TankzClient.Game
         public override void Load()
         {
             // Load sounds
-            SoundsPlayer.Instance.AddSound("background", "../../res/sounds/background.mp3");
+            //SoundsPlayer.Instance.AddSound("background", "../../res/sounds/background.mp3");
             SoundsPlayer.Instance.AddSound("shoot_1", "../../res/sounds/shoot_1.wav");
 
             // Initialize server connection
