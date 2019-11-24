@@ -21,7 +21,7 @@ namespace TankzSignalRServer.Hubs
         private static int turnsToNextCrate;
         Random rand = new Random();
         Timer timer;
-        private ShootArgs args;
+        //private ShootArgs args;
         //PlayersController pct;
         public TestHub(TankzContext context)
         {
@@ -183,6 +183,8 @@ namespace TankzSignalRServer.Hubs
                 playerCount++;
                 _context.Lobbies.Where(c => c.ID == lobbyId).FirstOrDefault().CurrPlayers = playerCount;
                 List<Player> player = _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players.ToList();
+                TankState state = newPlayer.TankState;
+                state.Health = 100;
                 player.Add(newPlayer);
                 _context.Lobbies.Include(l => l.Players).Where(c => c.ID == lobbyId).FirstOrDefault().Players = player;
                 _context.SaveChanges();
@@ -256,7 +258,7 @@ namespace TankzSignalRServer.Hubs
             }
             string lobbyName = "Lobby" + lobbyId;
             // Advance to the next turn
-            Player currentPlayer = _context.Lobbies.Include(l => l.Players).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
+            Player currentPlayer = _context.Lobbies.Include(l => l.Players).ThenInclude(s => s.TankState).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
             Clients.Group(lobbyName).SendAsync("Turn", currentPlayer.ConnectionId);
 
             turnsToNextCrate--;
@@ -265,84 +267,71 @@ namespace TankzSignalRServer.Hubs
         #endregion
         #region Ingame Methods
         [HubMethodName("Shoot")]
-        public Task Shoot(float angle, float power,int lobbyId)
+        public async Task Shoot(float angle, float power,int lobbyId)
         {
-            //var cancelSource = new CancellationTokenSource();
-            //Player currentPlayer = _context.Lobbies.Include(l => l.Players).ThenInclude(s => s.TankState).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
-            //Vector2 startPos = new Vector2(currentPlayer.TankState.Pos_X, currentPlayer.TankState.Pos_Y - 20);
-            //Vector2 newPos = new Vector2(0f, 0f);
-            //float angleDeg = (float)(angle * (Math.PI / 180.0));
+            CancellationTokenSource cancelSource = new CancellationTokenSource();
+            Player currentPlayer = _context.Lobbies.Include(l => l.Players).ThenInclude(s => s.TankState).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
+            Vector2 startPos = new Vector2(currentPlayer.TankState.Pos_X, currentPlayer.TankState.Pos_Y - 20);
+            Vector2 newPos = startPos;
+            float angleDeg = (float)(angle * (Math.PI / 180.0));
             string lobbyName = "Lobby" + lobbyId;
-            //args = new ShootArgs(newPos, power, angleDeg, startPos, lobbyName);
-            //Clients.Group(lobbyName).SendAsync("ShootingStart", startPos.x, startPos.y).Wait();
-            //timer = new Timer(Timer_Elapsed, args, 10, 50);
-            //while (!args.done)
-            //{
-
-            //}
+            Clients.Group(lobbyName).SendAsync("ShootingStart", startPos.x, startPos.y).Wait();
+            float time = 0f;
+            while (newPos.y <= 300f)
+                {
+                    newPos = calculatePos(power * 50f, -9.8f, angleDeg, startPos, time);
+                    Clients.Group(lobbyName).SendAsync("ProjectileMove", newPos.x, newPos.y).Wait();
+                time += 0.1f;
+                await Task.Delay(100);
+            }
+            //cancelSource.Cancel();
+            Explode(newPos.x, newPos.y, lobbyName).Wait();
             Clients.Group(lobbyName).SendAsync("ReceiveMessage", "Done shooting").Wait();
-            return EndTurn(lobbyId);
-        }
-        class ShootArgs
-        {
-            public Vector2 newPos;
-            public float power;
-            public float angleDeg;
-            public Vector2 startPos;
-            public string lobbyName;
-            public DateTime time;
-            public bool done = false;
-            public ShootArgs(Vector2 newpos, float poweri, float angledeg, Vector2 startpos, string lobbyname)
-            {
-                newPos = newpos;
-                power = poweri;
-                angleDeg = angledeg;
-                startPos = startpos;
-                lobbyName = lobbyname;
-                time = DateTime.Now;
-            }
+            await EndTurn(lobbyId);
         }
 
-        private void Timer_Elapsed(object test)
+        //class ShootArgs
+        //{
+        //    public Vector2 newPos;
+        //    public float power;
+        //    public float angleDeg;
+        //    public Vector2 startPos;
+        //    public string lobbyName;
+        //    public DateTime time;
+        //    public bool done = false;
+        //    public ShootArgs(Vector2 newpos, float poweri, float angledeg, Vector2 startpos, string lobbyname)
+        //    {
+        //        newPos = newpos;
+        //        power = poweri;
+        //        angleDeg = angledeg;
+        //        startPos = startpos;
+        //        lobbyName = lobbyname;
+        //        time = DateTime.Now;
+        //    }
+        //}
+
+        public Task Explode(float x, float y, string lobbyName)
         {
-            if (args.newPos.y <= 300f)
-            {
-                DateTime currTime = DateTime.Now;
-                double elapsedTime = currTime.Subtract(args.time).TotalMilliseconds;
-                args.newPos = calculatePos(args.power*50f, -9.8f, args.angleDeg, args.startPos, (float)elapsedTime/1000);
-                Clients.Group(args.lobbyName).SendAsync("ProjectileMove", args.newPos.x, args.newPos.y).Wait();
-            }
-            else
-            {
-                Explode(args.newPos.x, args.newPos.y);
-                args.done = true;
-                timer.Dispose();
-                
-            }
-        }
-        public Task Explode(float x, float y)
-        {
-            //List<Player> connectedPlayers = _context.Lobbies.Include(p => p.Players).Where(l => l.ID == 1).FirstOrDefault().Players.ToList();
+            List<Player> connectedPlayers = _context.Lobbies.Include(p => p.Players).ThenInclude(s => s.TankState).Where(l => l.ID == 1).FirstOrDefault().Players.ToList();
             //var ts = _context.TankStates.Where(m => ids.Contains(m.ID));
-            //foreach (TankState tank in ts)
-            //{
-            //    int t = circle((int)tank.Pos_X, (int)tank.Pos_Y+5, (int)x, (int)y, 30, 10);
-            //    if(t>0)
-            //        Clients.Group(args.lobbyName).SendAsync("SendMessage", "HIT");
-            //    else
-            //        Clients.Group(args.lobbyName).SendAsync("SendMessage", "NOT HIT");
-            //}
-            return Clients.Group(args.lobbyName).SendAsync("ProjectileExplode");
+            foreach (Player player in connectedPlayers)
+            {
+                TankState tank = player.TankState;
+                int t = circle((int)tank.Pos_X, (int)tank.Pos_Y + 5, (int)x, (int)y, 50, 30);
+                if (t >= 0)
+                {
+                    tank.Health = tank.Health - 50;
+                    _context.SaveChanges();
+                    Clients.Client(player.ConnectionId).SendAsync("ReceiveMessage", "You got hit");
+                }
+            }
+            return Clients.Group(lobbyName).SendAsync("ProjectileExplode");
         }
 
         [HubMethodName("SetPos")]
         public Task SetTankPos(float x, float y, int lobbyId)
         {
             string lobbyName = "Lobby" + lobbyId;
-            //TankState state = _context.Players.Include(t => t.TankState).Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault().TankState;
-            //state.Pos_X = x;
-            //state.Pos_Y = y;
-            //_context.SaveChanges();
             return Clients.GroupExcept(lobbyName, Context.ConnectionId).SendAsync("PosChange", x, y, Context.ConnectionId);
         }
         [HubMethodName("SavePos")]
