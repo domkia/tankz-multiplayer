@@ -111,10 +111,13 @@ namespace TankzSignalRServer.Hubs
                 {
                     Player player = _context.Users.Include(p => p.Player).ThenInclude(t => t.Tank).Include(p => p.Player).ThenInclude(t => t.TankState).
                         Where(c => c.Username == name).First().Player;
-                    player.TankState = GetRandomTankState();
+                    
+
                     _context.Lobbies.Include(l => l.Players).Where(p => p.Players.Where(pp => pp.Name == player.Name) != null).FirstOrDefault().Players.Remove(player);
                     _context.Players.Where(c => c.Name == name).FirstOrDefault().ConnectionId = Context.ConnectionId;
-                    _context.Players.Where(c => c.Name == name).FirstOrDefault().ReadyState = false;                    
+                    _context.Players.Where(c => c.Name == name).FirstOrDefault().ReadyState = false;
+                    TankState state = player.TankState;
+                    state.Pos_X = rand.Next(100, 700);
                     _context.SaveChanges();
                     string playerData = JsonConvert.SerializeObject(_context.Players.Where(c => c.Name == name).FirstOrDefault());
                     return Clients.Caller.SendAsync("LoginSuccess", playerData);
@@ -264,18 +267,19 @@ namespace TankzSignalRServer.Hubs
         [HubMethodName("Shoot")]
         public Task Shoot(float angle, float power,int lobbyId)
         {
-            Player currentPlayer = _context.Lobbies.Include(l => l.Players).ThenInclude(s => s.TankState).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
-            Vector2 startPos = new Vector2(currentPlayer.TankState.Pos_X, currentPlayer.TankState.Pos_Y - 20);
-            Vector2 newPos = new Vector2(0f, 0f);
-            float angleDeg = (float)(angle * (Math.PI / 180.0));
+            //var cancelSource = new CancellationTokenSource();
+            //Player currentPlayer = _context.Lobbies.Include(l => l.Players).ThenInclude(s => s.TankState).Where(l => l.ID == lobbyId).FirstOrDefault().Players.Skip(currentTurn).First();
+            //Vector2 startPos = new Vector2(currentPlayer.TankState.Pos_X, currentPlayer.TankState.Pos_Y - 20);
+            //Vector2 newPos = new Vector2(0f, 0f);
+            //float angleDeg = (float)(angle * (Math.PI / 180.0));
             string lobbyName = "Lobby" + lobbyId;
-            args = new ShootArgs(newPos, power, angleDeg, startPos, lobbyName);
-            Clients.Group(lobbyName).SendAsync("ShootingStart", startPos.x, startPos.y).Wait();
-            timer = new Timer(Timer_Elapsed, args, 10, 100);
-            while (!args.done)
-            {
+            //args = new ShootArgs(newPos, power, angleDeg, startPos, lobbyName);
+            //Clients.Group(lobbyName).SendAsync("ShootingStart", startPos.x, startPos.y).Wait();
+            //timer = new Timer(Timer_Elapsed, args, 10, 50);
+            //while (!args.done)
+            //{
 
-            }
+            //}
             Clients.Group(lobbyName).SendAsync("ReceiveMessage", "Done shooting").Wait();
             return EndTurn(lobbyId);
         }
@@ -335,8 +339,7 @@ namespace TankzSignalRServer.Hubs
         public Task SetTankPos(float x, float y, int lobbyId)
         {
             string lobbyName = "Lobby" + lobbyId;
-            //int id = _context.Players.Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault().ID;
-            //TankState state = _context.TankStates.Where(i => i.ID == id).FirstOrDefault();
+            //TankState state = _context.Players.Include(t => t.TankState).Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault().TankState;
             //state.Pos_X = x;
             //state.Pos_Y = y;
             //_context.SaveChanges();
@@ -346,14 +349,11 @@ namespace TankzSignalRServer.Hubs
         public Task SaveTankPos(float x, float y, int lobbyId)
         {
             string lobbyName = "Lobby" + lobbyId;
-            int id = _context.Players.Include(t => t.TankState).Include(e => e.Tank).Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault().ID;
-            TankState beforestate = _context.TankStates.Where(i => i.ID == id).FirstOrDefault();
-            TankState state = _context.TankStates.Where(i => i.ID == id).FirstOrDefault();
+            TankState state = _context.Players.Include(t => t.TankState).Where(c => c.ConnectionId == Context.ConnectionId).FirstOrDefault().TankState;
             state.Pos_X = x;
             state.Pos_Y = y;
             _context.SaveChanges();
-            TankState afterstate = _context.TankStates.Where(i => i.ID == id).FirstOrDefault();
-            return Clients.Group(lobbyName).SendAsync("ReceiveMessage", afterstate.Pos_X.ToString());
+            return Clients.Group(lobbyName).SendAsync("ReceiveMessage", state.Pos_X.ToString());
         }
         [HubMethodName("SetAngle")]
         public Task SetTankPos(float angle, int lobbyId)
