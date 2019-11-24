@@ -12,6 +12,12 @@ namespace TankzClient.Framework
             Console.WriteLine("BRIDGE new ParticleContinuousMode()");
         }
 
+        public IParticleEmitMode Clone()
+        {
+            Console.WriteLine("PROTOTYPE ParticleContinuousMode: Clone()");
+            return new ParticlesContinuousMode();
+        }
+
         public bool Update(ParticleEmitter emitter, float deltaTime)
         {
             // Simulate any alive particles

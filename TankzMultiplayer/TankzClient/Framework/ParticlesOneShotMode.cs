@@ -7,6 +7,12 @@
             System.Console.WriteLine("BRIDGE new ParticlesOneShotMode()");
         }
 
+        public IParticleEmitMode Clone()
+        {
+            System.Console.WriteLine("PROTOYPE ParticlesOneShotMode: Clone()");
+            return new ParticlesOneShotMode();
+        }
+
         public bool Update(ParticleEmitter emitter, float deltaTime)
         {
             bool alive = false;

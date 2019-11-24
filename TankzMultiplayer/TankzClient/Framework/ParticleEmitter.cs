@@ -113,13 +113,16 @@ namespace TankzClient.Framework
 
         public ParticleEmitter Clone()
         {
+            Console.WriteLine("PROTOYPE ParticleEmitter: Clone()");
+
             ParticleEmitter emitter = new ParticleEmitter(
                 particleCount,
                 sprite, 
                 props.Clone(),
-                emitMode,
+                emitMode.Clone(),
                 useGravity
                 );
+            emitter.transform.SetPosition(transform.position);
             return emitter;
         }
     }

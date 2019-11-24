@@ -31,6 +31,8 @@
 
         public ParticleProperties Clone()
         {
+            System.Console.WriteLine("PROTOYPE ParticleProperties: Clone()");
+
             ParticleProperties properties = new ParticleProperties(
                 startSize, startLifetime,
                 startSpeed,

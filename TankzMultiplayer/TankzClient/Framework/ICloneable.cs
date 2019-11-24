@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TankzClient.Framework
 {
-    interface ICloneable<T>
+    public interface ICloneable<T>
     {
         T Clone();
     }

@@ -6,12 +6,18 @@ namespace TankzClient.Game
     public class ParticlesScene : Scene
     {
         private ParticleEmitter explosion;
+        private ParticleEmitter explosionClone;
         private ParticleEmitter shield;
         private ParticleEmitter health;
 
         public override void Load()
         {
             explosion = new ParticleFactory().Create("explosion") as ParticleEmitter;
+            int hash1 = explosion.GetHashCode();
+
+            explosionClone = new ParticleFactory().Create("explosion") as ParticleEmitter;
+            int hash2 = explosionClone.GetHashCode();
+
             shield = new ParticleFactory().Create("shield") as ParticleEmitter;
             health = new ParticleFactory().Create("health") as ParticleEmitter;
 
@@ -26,8 +32,13 @@ namespace TankzClient.Game
             base.Update(deltaTime);
             if (Input.MouseButtonDown)
             {
-                explosion.transform.SetPosition(Input.MousePosition);
+                Vector2 mousePosition = Input.MousePosition;
+
+                explosion.transform.SetPosition(mousePosition);
                 explosion.Emit();
+
+                explosionClone.transform.SetPosition(mousePosition + Vector2.left * 300f);
+                explosionClone.Emit();
             }
         }
 
