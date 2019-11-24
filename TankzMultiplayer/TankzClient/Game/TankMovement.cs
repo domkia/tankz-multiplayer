@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TankzClient.Framework;
 using System.Windows.Forms;
+using TankzClient.Models;
 
 namespace TankzClient.Game
 {
@@ -51,6 +52,10 @@ namespace TankzClient.Game
             // Got to the next phase
             if (Input.IsKeyDown(System.Windows.Forms.Keys.Space))
             {
+                Tank mytank = GameplayScene.tankDict[NetworkManager.Instance.myConnId()];
+                TankState state = mytank.State;
+                state.Pos_X = tank.transform.position.x;
+                state.Pos_Y = tank.transform.position.y;
                 NetworkManager.Instance.SavePos(tank.transform.position);
                 tank.SetPhase(new TankAiming(tank));
             }

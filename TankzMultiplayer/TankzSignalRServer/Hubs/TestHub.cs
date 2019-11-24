@@ -290,30 +290,11 @@ namespace TankzSignalRServer.Hubs
             await EndTurn(lobbyId);
         }
 
-        //class ShootArgs
-        //{
-        //    public Vector2 newPos;
-        //    public float power;
-        //    public float angleDeg;
-        //    public Vector2 startPos;
-        //    public string lobbyName;
-        //    public DateTime time;
-        //    public bool done = false;
-        //    public ShootArgs(Vector2 newpos, float poweri, float angledeg, Vector2 startpos, string lobbyname)
-        //    {
-        //        newPos = newpos;
-        //        power = poweri;
-        //        angleDeg = angledeg;
-        //        startPos = startpos;
-        //        lobbyName = lobbyname;
-        //        time = DateTime.Now;
-        //    }
-        //}
-
         public Task Explode(float x, float y, string lobbyName)
         {
             List<Player> connectedPlayers = _context.Lobbies.Include(p => p.Players).ThenInclude(s => s.TankState).Where(l => l.ID == 1).FirstOrDefault().Players.ToList();
             //var ts = _context.TankStates.Where(m => ids.Contains(m.ID));
+            bool death = false;
             foreach (Player player in connectedPlayers)
             {
                 TankState tank = player.TankState;
@@ -321,11 +302,35 @@ namespace TankzSignalRServer.Hubs
                 if (t >= 0)
                 {
                     tank.Health = tank.Health - 50;
+                    if (tank.Health <= 0)
+                        death = true;
                     _context.SaveChanges();
-                    Clients.Client(player.ConnectionId).SendAsync("ReceiveMessage", "You got hit");
+                    Clients.Client(player.ConnectionId).SendAsync("HealthUpdate", tank.Health).Wait();
                 }
             }
-            return Clients.Group(lobbyName).SendAsync("ProjectileExplode");
+            if (death)
+            {
+
+
+                Clients.Group(lobbyName).SendAsync("ProjectileExplode").Wait();
+                return GameOver(lobbyName);
+            }
+            else
+            {
+                return Clients.Group(lobbyName).SendAsync("ProjectileExplode");
+            }
+        }
+        private Task GameOver(string lobbyName)
+        {
+            string winner = "draw";
+            List<Player> connectedPlayers = _context.Lobbies.Include(p => p.Players).ThenInclude(s => s.TankState).Where(l => l.ID == 1).FirstOrDefault().Players.ToList();
+            foreach(Player player in connectedPlayers)
+            {
+                TankState state = player.TankState;
+                if (state.Health > 0)
+                    winner = player.Name;
+            }
+            return Clients.Group(lobbyName).SendAsync("GameEnd", winner);
         }
 
         [HubMethodName("SetPos")]

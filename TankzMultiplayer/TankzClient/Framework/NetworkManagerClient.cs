@@ -88,6 +88,18 @@ namespace TankzClient.Framework
             return Task.CompletedTask;
         }
 
+        private Task HealthUpdate(int health)
+        {
+            HealthUpdated?.Invoke(health);
+            return Task.CompletedTask;
+        }
+        private Task EndGame(string winner)
+        {
+            SceneManager.Instance.LoadScene<EndGameScene>();
+            GameEnded?.Invoke(winner);
+            return Task.CompletedTask;
+        }
+
         private Task ShootingStart(float x, float y)
         {
             Vector2 vec = new Vector2(x, y);

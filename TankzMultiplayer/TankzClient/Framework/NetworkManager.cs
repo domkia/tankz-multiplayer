@@ -40,6 +40,8 @@ namespace TankzClient.Framework
         public event Action<Vector2> OnShootStart;
         public event Action<Vector2> ProjectileMoved;
         public event Action ProjectileExplosion;
+        public event Action<int> HealthUpdated;
+        public event Action<string> GameEnded;
 
         #region Singleton
 
@@ -109,6 +111,8 @@ namespace TankzClient.Framework
             _connection.On<float, float>("ShootingStart", ShootingStart);
             _connection.On<float, float>("ProjectileMove", ProjectileMove);
             _connection.On("ProjectileExplode", ProjectileExplode);
+            _connection.On<int>("HealthUpdate", HealthUpdate);
+            _connection.On<string>("GameEnd", EndGame);
             // Connect to the server
             try
             {

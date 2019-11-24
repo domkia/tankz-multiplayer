@@ -29,6 +29,7 @@ namespace TankzClient.Game
             NetworkManager.Instance.OnShootStart += Instance_OnShootStart;
             NetworkManager.Instance.ProjectileMoved += Instance_ProjectileMoved;
             NetworkManager.Instance.ProjectileExplosion += Instance_ProjectileExplosion;
+            NetworkManager.Instance.HealthUpdated += Instance_HealthUpdated;
             background = CreateEntity(new Background()) as Background;
 
             //terrain = CreateEntity(new Terrain()) as Terrain;
@@ -39,6 +40,14 @@ namespace TankzClient.Game
             crate.transform.SetPosition(new Vector2(200f, 300f));
             crate.transform.SetSize(new Vector2(50f, 50f));
             crate.SetActive(false);
+        }
+
+        private void Instance_HealthUpdated(int obj)
+        {
+            Tank myTank = tankDict[NetworkManager.Instance.myConnId()];
+            TankState state = myTank.State;
+            state.Health = obj;
+            tank.UpdateTankState(state);
         }
 
         private void Instance_ProjectileExplosion()
