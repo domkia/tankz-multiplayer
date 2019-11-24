@@ -7,6 +7,11 @@ namespace TankzClient.Framework
         private Random random = new Random();
         private float timer = float.MaxValue;
 
+        public ParticlesContinuousMode()
+        {
+            Console.WriteLine("BRIDGE new ParticleContinuousMode()");
+        }
+
         public bool Update(ParticleEmitter emitter, float deltaTime)
         {
             // Simulate any alive particles

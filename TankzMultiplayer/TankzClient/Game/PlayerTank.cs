@@ -32,6 +32,7 @@ namespace TankzClient.Game
 
         public void SetPhase(TankPhase phase)
         {
+            Console.WriteLine("STATE PlayerTank: SetPhase()");
             if (phase is TankIdle)
             {
                 commands.Clear();
@@ -59,6 +60,8 @@ namespace TankzClient.Game
                 undoCommand.Undo();
             }
 
+            Console.WriteLine("COMMAND PlayerTank: Undo()");
+
             // Change back to initial phase
             if (commands.Count > 0)
             {
@@ -77,6 +80,7 @@ namespace TankzClient.Game
         {
             if (Input.IsKeyDown(Keys.Z))
             {
+                Console.WriteLine("Pressed Z Key");
                 Undo();
             }
 

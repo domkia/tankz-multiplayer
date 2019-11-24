@@ -12,6 +12,8 @@ namespace TankzClient.Game
         public TankSideskirtDecorator(int index, TankChassis tank) 
             : base(tank)
         {
+            System.Console.WriteLine("DECORATOR new TankSideskirtDecorator()");
+
             string imageFile = string.Format($"{path}sideskirt_{index}.png");
             image = Image.FromFile(imageFile);
         }

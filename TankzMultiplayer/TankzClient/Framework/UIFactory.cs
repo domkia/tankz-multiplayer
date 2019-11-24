@@ -10,6 +10,7 @@ namespace TankzClient.Framework
     {
         public override Entity Create(EntityCreateArgs args)
         {
+            System.Console.WriteLine($"FACTORY UIFactory: Create()");
             if (args == null ||args.type == null || args.type=="" ||args.type =="\0")
                 return null;
             UICreateArgs ui = args as UICreateArgs;
@@ -17,6 +18,7 @@ namespace TankzClient.Framework
             switch (ui.type.ToLower())
             {
                 case "button":
+                    System.Console.WriteLine($"\tCreating UI Button");
                     element = new Button(
                         (int)ui.position.x,
                         (int)ui.position.y,
@@ -24,6 +26,7 @@ namespace TankzClient.Framework
                         32, null, "new button");
                     break;
                 case "inputfield":
+                    System.Console.WriteLine($"\tCreating UI InputField");
                     element = new InputField(
                         (int)ui.position.x,
                         (int)ui.position.y,
@@ -31,6 +34,7 @@ namespace TankzClient.Framework
                         20);
                     break;
                 case "progressbar":
+                    System.Console.WriteLine($"\tCreating UI ProgressBar");
                     element = new ProgressBar(
                         new Rectangle((int)ui.position.x, (int)ui.position.y, 64, 8), 
                         Color.LightGreen, 

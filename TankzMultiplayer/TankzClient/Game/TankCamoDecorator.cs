@@ -17,6 +17,8 @@ namespace TankzClient.Game
         public TankCamoDecorator(int camoId, TankChassis tank)
             : base(tank)
         {
+            System.Console.WriteLine("DECORATOR new TankCamoDecorator()");
+
             string imageFile = string.Format($"{path}camo_{camoId}.png");
             camo = new Bitmap(Image.FromFile(imageFile), tank.image.Width, tank.image.Height);
             GenerateCamoBitmap();

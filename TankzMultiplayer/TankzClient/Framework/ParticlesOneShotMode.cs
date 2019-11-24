@@ -2,6 +2,11 @@
 {
     public class ParticlesOneShotMode : IParticleEmitMode
     {
+        public ParticlesOneShotMode()
+        {
+            System.Console.WriteLine("BRIDGE new ParticlesOneShotMode()");
+        }
+
         public bool Update(ParticleEmitter emitter, float deltaTime)
         {
             bool alive = false;

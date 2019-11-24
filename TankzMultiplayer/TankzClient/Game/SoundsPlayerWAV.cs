@@ -12,10 +12,13 @@ namespace TankzClient.Game
         SoundPlayer player;
         public SoundsPlayerWAV(string URL)
         {
+            Console.WriteLine("ADAPTER new SoundsPlayerWAV()");
             this.player = new SoundPlayer(URL);
         }
+
         public void Play()
         {
+            Console.WriteLine("ADAPTER SoundsPlayerWAV: Play()");
             player.Play();
         }
     }

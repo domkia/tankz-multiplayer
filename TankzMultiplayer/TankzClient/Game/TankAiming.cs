@@ -16,7 +16,7 @@ namespace TankzClient.Game
 
         public TankAiming(PlayerTank tank) : base (tank)
         {
-
+            Console.WriteLine("STATE new TankAiming() Phase");
         }
 
         private void RotateBarrel(float deltaTime)

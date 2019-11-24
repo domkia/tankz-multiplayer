@@ -10,6 +10,8 @@ namespace TankzClient.Game
     {
         public static void ApplyCamouflage(this Tank tank, int camo)
         {
+            System.Console.WriteLine("DECORATOR ApplyCamouflage()");
+
             TankChassis chassis = tank.FindChild<TankDecorator>();
             if (chassis == null)
                 chassis = tank.FindChild<TankChassis>();
@@ -21,6 +23,8 @@ namespace TankzClient.Game
 
         public static void ApplyAccessory(this Tank tank, int accessory)
         {
+            System.Console.WriteLine("DECORATOR ApplyAccessory()");
+
             TankChassis chassis = tank.FindChild<TankDecorator>();
             if (chassis == null)
                 chassis = tank.FindChild<TankChassis>();
@@ -32,6 +36,8 @@ namespace TankzClient.Game
 
         public static void ApplySideskirt(this Tank tank, int sideskirt)
         {
+            System.Console.WriteLine("DECORATOR ApplySideskirt()");
+
             TankChassis chassis = tank.FindChild<TankDecorator>();
             if (chassis == null)
                 chassis = tank.FindChild<TankChassis>();

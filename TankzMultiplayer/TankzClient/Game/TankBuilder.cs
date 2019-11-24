@@ -17,6 +17,7 @@ namespace TankzClient.Game
 
         public TankBuilder(bool isPlayer)
         {
+            Console.WriteLine($"BUILDER: new TankBuilder()");
             if (isPlayer)
             {
                 // Player controller tank
@@ -46,6 +47,8 @@ namespace TankzClient.Game
             {
                 throw new Exception("Incomplete tank: You forgot to add tracks");
             }
+
+            Console.WriteLine("BUILDER TankBuilder: Build()");
             return tank;
         }
 
@@ -62,6 +65,7 @@ namespace TankzClient.Game
                 throw new Exception("Tank already has a chassis");
             }
 
+            Console.WriteLine("BUILDER TankBuilder: SetChassis()");
             string path = string.Format($"{spritesPath}chassis_{colorId}_{id}.png");
             TankChassis chassis = new TankChassis(Image.FromFile(path),
                     tank.transform.position,
@@ -75,6 +79,7 @@ namespace TankzClient.Game
             if (id < 0 || id >= TRACKS_COUNT)
                 throw new IndexOutOfRangeException();
 
+            Console.WriteLine("BUILDER TankBuilder: SetTracks()");
             string path = string.Format($"{spritesPath}tracks_{id}.png");
             Sprite tracks = new Sprite(
                 Image.FromFile(path),
@@ -95,6 +100,7 @@ namespace TankzClient.Game
                 throw new Exception("Tank already has a barrel");
             }
 
+            Console.WriteLine("BUILDER TankBuilder: SetTurret()");
             string path = string.Format($"{spritesPath}turret_{id}.png");
             TankBarrel turret = new TankBarrel(
                 tank, 

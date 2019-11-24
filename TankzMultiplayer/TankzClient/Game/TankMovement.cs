@@ -17,7 +17,7 @@ namespace TankzClient.Game
 
         public TankMovement(PlayerTank tank) : base (tank)
         {
-            
+            Console.WriteLine("STATE new TankMovement() Phase");
         }
 
         private void MoveTank(float deltaTime)

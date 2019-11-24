@@ -10,7 +10,7 @@ namespace TankzClient.Game
     {
         public TankIdle(PlayerTank tank) : base(tank)
         {
-
+            Console.WriteLine("STATE new TankIdle() Phase");
         }
 
         public override void Update(float deltaTime)

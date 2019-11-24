@@ -12,8 +12,12 @@ namespace TankzClient.Framework
         {
             get
             {
+                Console.WriteLine($"SINGLETON SceneManager: GetInstance()");
                 if (instance == null)
+                {
+                    Console.WriteLine($"\tSceneManager: Creating new instance");
                     instance = new SceneManager();
+                }
                 return instance;
             }
         }

@@ -7,12 +7,14 @@ namespace TankzClient.Game
     {
         public override Entity Create(EntityCreateArgs args)
         {
+            System.Console.WriteLine($"BUILDER ParticleFactory: Create()");
             ParticleEmitter particleEmitter = null;
             string path = "../../res/particles/";
             Image image;
             switch (args.type.ToLower())
             {
                 case "explosion":
+                    System.Console.WriteLine($"\tCreating Explosion");
                     image = Image.FromFile(path + "explosion_spritesheet.png");
                     AnimatedSprite explosionSprite = new AnimatedSprite(image, new Vector2(), new Vector2(100, 100), 4, 4);
                     FrameAnimation animation = new FrameAnimation(1f, false, 0, 12);
@@ -29,6 +31,7 @@ namespace TankzClient.Game
                     true);
                     break;
                 case "shield":
+                    System.Console.WriteLine($"\tCreating Shield");
                     image = Image.FromFile(path + "shield_particle.png");
                     Sprite shieldSprite = new Sprite(image, new Vector2(), new Vector2(100, 100));
                     particleEmitter = new ParticleEmitter(5, shieldSprite, new ParticleProperties()
@@ -40,6 +43,7 @@ namespace TankzClient.Game
                     }, new ParticlesContinuousMode());
                     break;
                 case "health":
+                    System.Console.WriteLine($"\tCreating Health");
                     image = Image.FromFile(path + "health_particle.png");
                     Sprite healthSprite = new Sprite(image, new Vector2(), new Vector2(100, 100));
                     particleEmitter = new ParticleEmitter(8, healthSprite, new ParticleProperties()

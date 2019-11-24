@@ -46,8 +46,10 @@ namespace TankzClient.Framework
         {
             get
             {
+                Console.WriteLine($"SINGLETON NetworkManager: GetInstance()");
                 if (instance == null)
                 {
+                    Console.WriteLine($"\t NetworkManager: Creating new instance");
                     instance = new NetworkManager();
                 }
                 return instance;

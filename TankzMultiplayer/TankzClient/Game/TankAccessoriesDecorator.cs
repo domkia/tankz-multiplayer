@@ -13,6 +13,7 @@ namespace TankzClient.Game
         public TankAccessoriesDecorator(int index, TankChassis tank)
             : base(tank)
         {
+            System.Console.WriteLine("DECORATOR new TankAccessoriesDecorator()");
             string imageFile = string.Format($"{path}accessory_{index}.png");
             image = Image.FromFile(imageFile);
         }

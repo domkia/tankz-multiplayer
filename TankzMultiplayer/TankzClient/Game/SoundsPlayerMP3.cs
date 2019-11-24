@@ -13,7 +13,8 @@ namespace TankzClient.Game
         WindowsMediaPlayer mp3player;
 
         public SoundsPlayerMP3(string URL, bool autoplay = true)
-        {            
+        {
+            Console.WriteLine("ADAPTER new SoundsPlayerMP3()");
             this.mp3player = new WindowsMediaPlayer();
             if (autoplay == false)
             {
@@ -50,6 +51,7 @@ namespace TankzClient.Game
 
         public void Play()
         {
+            Console.WriteLine("ADAPTER SoundsPlayerMP3: Play()");
             mp3player.controls.play();
         }
     }
