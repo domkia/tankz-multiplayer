@@ -28,7 +28,7 @@ namespace TankzClient.Framework
 
         public void Shoot(float angle, float power)
         {
-            Console.WriteLine("Tank Shoot");
+            Console.WriteLine("Tank Shoot " + angle);
             _connection.InvokeAsync("Shoot", angle, power, CurrentLobby);
         }
 
@@ -48,7 +48,10 @@ namespace TankzClient.Framework
         {
             _connection.InvokeAsync("SetPos", newpos.x, newpos.y, CurrentLobby);
         }
-
+        public void SavePos(Vector2 newpos)
+        {
+            _connection.InvokeAsync("SavePos", newpos.x, newpos.y, CurrentLobby);
+        }
         /// <summary>
         /// Send tank angle
         /// </summary>

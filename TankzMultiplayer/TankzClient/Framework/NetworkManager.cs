@@ -37,7 +37,11 @@ namespace TankzClient.Framework
         public event EventHandler<RotateEventArgs> BarrelRotate;
         public event Action<int> OnCrateDestroyed;
         public event Action<Models.Crate> OnCrateSpawned;
-
+        public event Action<Vector2> OnShootStart;
+        public event Action<Vector2> ProjectileMoved;
+        public event Action ProjectileExplosion;
+        public event Action<int> HealthUpdated;
+        public event Action<string> GameEnded;
 
         #region Singleton
 
@@ -63,8 +67,8 @@ namespace TankzClient.Framework
         public void Start()
         {
             _connection = new HubConnectionBuilder()
-                //.WithUrl("https://localhost:44311/TestHub")
-                .WithUrl("https://tankzsignalrserver.azurewebsites.net/TestHub")
+                .WithUrl("https://localhost:44311/TestHub")
+                //.WithUrl("https://tankzsignalrserver.azurewebsites.net/TestHub")
                 .Build();
 
             _connection.Closed += async (error) =>
@@ -106,6 +110,11 @@ namespace TankzClient.Framework
             _connection.On<int>("CrateDestroyed", CrateDestroyed);
             _connection.On<string>("CrateSpawned", CrateSpawned);
             _connection.On<string>("LobbyError", LobbyError);
+            _connection.On<float, float>("ShootingStart", ShootingStart);
+            _connection.On<float, float>("ProjectileMove", ProjectileMove);
+            _connection.On("ProjectileExplode", ProjectileExplode);
+            _connection.On<int>("HealthUpdate", HealthUpdate);
+            _connection.On<string>("GameEnd", EndGame);
             // Connect to the server
             try
             {

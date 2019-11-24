@@ -128,6 +128,11 @@ namespace TankzClient.Game
             }
         }
 
+        public override void Unload()
+        {
+            base.Unload();
+        }
+
         private void ColorDown_OnClickCallback()
         {
             if (currColor >0)
