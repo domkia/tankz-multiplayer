@@ -12,6 +12,7 @@ namespace TankzClient.Framework
 {
     public partial class NetworkManager
     {
+        bool debug = true;
         public Player MyData { get; set; }
         public List<Player> Players { get; private set; }
         public List<Player> LobbyPlayers = new List<Player>();
@@ -50,7 +51,7 @@ namespace TankzClient.Framework
         {
             get
             {
-                Console.WriteLine($"SINGLETON NetworkManager: GetInstance()");
+                //Console.WriteLine($"SINGLETON NetworkManager: GetInstance()");
                 if (instance == null)
                 {
                     Console.WriteLine($"\t NetworkManager: Creating new instance");
@@ -67,8 +68,8 @@ namespace TankzClient.Framework
         public void Start()
         {
             _connection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:44311/TestHub")
-                //.WithUrl("https://tankzsignalrserver.azurewebsites.net/TestHub")
+                //.WithUrl("https://localhost:44311/TestHub")
+                .WithUrl("https://tankzsignalrserver.azurewebsites.net/TestHub")
                 .Build();
 
             _connection.Closed += async (error) =>

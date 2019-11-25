@@ -11,6 +11,8 @@ namespace TankzClient.Framework
     {
         private Task Connected(string connectionId)
         {
+            if(debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient Connected");
             connected = true;
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"Connected to the server ({connectionId})");
@@ -21,6 +23,8 @@ namespace TankzClient.Framework
 
         private Task Disconnected(string connectionId)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient Disconnected");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"Disconnected from the server ({connectionId})");
             Console.ResetColor();
@@ -29,28 +33,38 @@ namespace TankzClient.Framework
         }
         private Task LoggedIn(string message)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient LoggedIn");
             MyData = JsonConvert.DeserializeObject<Player>(message);
             LoginSuccess?.Invoke(this, message);
             return Task.CompletedTask;
         }
         private Task LoginError(string message)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient LoginError");
             LoginErrorGot?.Invoke(this, message);
             return Task.CompletedTask;
         }
         private Task Registered(string message)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient Registered");
             RegisterSuccess?.Invoke(this, message);
             return Task.CompletedTask;
         }
         private Task RegisterError(string message)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient RegisterError");
             RegisterErrorGot?.Invoke(this, message);
 
             return Task.CompletedTask;
         }
         private Task LobbyError(string message)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient LobbyError");
             LobbyErrorGot?.Invoke(this, message);
 
             return Task.CompletedTask;
@@ -58,6 +72,8 @@ namespace TankzClient.Framework
 
         private Task PlayerListReceived(string playerList)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient PlayerListReceived");
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(playerList);
             Console.ResetColor();
@@ -69,7 +85,8 @@ namespace TankzClient.Framework
 
         private Task GameStarted(string playersTanksObject)
         {
-            Console.WriteLine("Game Starting");
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient GameStarted");
 
             // Load gameplay scene
             SceneManager.Instance.LoadScene<GameplayScene>();
@@ -83,6 +100,8 @@ namespace TankzClient.Framework
 
         private Task ProjectileMove(float x, float y)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient ProjectileMove");
             Vector2 vec = new Vector2(x, y);
             ProjectileMoved?.Invoke(vec);
             return Task.CompletedTask;
@@ -90,11 +109,15 @@ namespace TankzClient.Framework
 
         private Task HealthUpdate(int health)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient HealthUpdate");
             HealthUpdated?.Invoke(health);
             return Task.CompletedTask;
         }
         private Task EndGame(string winner)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient EndGame");
             SceneManager.Instance.LoadScene<EndGameScene>();
             GameEnded?.Invoke(winner);
             return Task.CompletedTask;
@@ -102,19 +125,24 @@ namespace TankzClient.Framework
 
         private Task ShootingStart(float x, float y)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient ShootingStart");
             Vector2 vec = new Vector2(x, y);
             OnShootStart?.Invoke(vec);
             return Task.CompletedTask;
         }
         private Task ProjectileExplode()
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient ProjectileExpode");
             ProjectileExplosion?.Invoke();
             return Task.CompletedTask;
         }
 
         private Task MessageReceived(string message)
         {
-            //Debug, not used anymore
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient MessageReceived");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"Message: {message}");
             Console.ResetColor();
@@ -124,6 +152,8 @@ namespace TankzClient.Framework
 
         private Task TurnStarted(string playerId)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient TurnStarted");
             Console.WriteLine("turn started");
             CurrentTurn = playerId;
             OnTurnStarted?.Invoke(null, EventArgs.Empty);
@@ -133,6 +163,8 @@ namespace TankzClient.Framework
 
         private Task TankPosChanged(float x, float y, string playerId)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient TankPosChanged");
             MoveEventArtgs args = new MoveEventArtgs { X = x, Y = y, ConnID = playerId };
             PlayerMoved(this, args);
 
@@ -141,6 +173,8 @@ namespace TankzClient.Framework
 
         private Task TankAngleChanged(float angle, string playerId)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient TankAngleChanged");
             RotateEventArgs args = new RotateEventArgs { Angle = angle, ConnID = playerId };
             BarrelRotate(this, args);
 
@@ -149,6 +183,8 @@ namespace TankzClient.Framework
 
         private Task PlayerJoinedLobby(string playerObject, int currentLobby)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient PlayerJoinedLobby");
             Player player = JsonConvert.DeserializeObject<Player>(playerObject);
             Console.WriteLine(player.ConnectionId + " " + Me.ConnectionId);
             LobbyPlayers.Add(player);
@@ -167,6 +203,8 @@ namespace TankzClient.Framework
 
         private Task PlayerReadyStateChanged(string playerId, bool state)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient PlayerReadyStateChanged");
             Player player = GetPlayerById(playerId);
             player.ReadyState = state;
             return Task.CompletedTask;
@@ -174,12 +212,16 @@ namespace TankzClient.Framework
 
         private Task CrateDestroyed(int id)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient CrateDestroyed");
             OnCrateDestroyed ?.Invoke(id); //klasutukas reiskia nullable
             return Task.CompletedTask;
         }
 
         private Task CrateSpawned(string crate)
         {
+            if (debug)
+                Console.WriteLine($"OBSERVER: NetworkManagerClient CrateSpawned");
             Models.Crate c = JsonConvert.DeserializeObject<Models.Crate>(crate);
             OnCrateSpawned?.Invoke(c);
             return Task.CompletedTask;
