@@ -162,7 +162,9 @@
     <Compile Include="Framework\EntityFactory.cs" />
     <Compile Include="Framework\HttpImageDownloader.cs" />
     <Compile Include="Framework\ICloneable.cs" />
+    <Compile Include="Framework\IExpression.cs" />
     <Compile Include="Framework\IParticleEmitMode.cs" />
+    <Compile Include="Framework\MethodExpression.cs" />
     <Compile Include="Framework\MoveEventArgs.cs" />
     <Compile Include="Framework\NetworkManagerClient.cs" />
     <Compile Include="Framework\NetworkManagerServer.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Framework\ParticlesOneShotMode.cs" />
     <Compile Include="Framework\RotateEventArgs.cs" />
     <Compile Include="Framework\Sound.cs" />
+    <Compile Include="Framework\StringExpression.cs" />
     <Compile Include="Framework\Utils.cs" />
     <Compile Include="Game\Background.cs" />
     <Compile Include="Game\Cannonball.cs" />

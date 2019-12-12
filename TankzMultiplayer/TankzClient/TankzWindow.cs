@@ -78,6 +78,14 @@ namespace TankzClient
             Invalidate();
 
             timer += deltaTime;
+
+            if (Input.IsKeyDown(System.Windows.Forms.Keys.C))
+            {
+                string line = Console.ReadLine();
+                IExpression exp = new StringExpression(line);
+                IExpression query = new MethodExpression(exp);
+                Console.WriteLine(query.executeMethod());
+            }
         }
 
         /// <summary>

@@ -159,8 +159,26 @@ namespace TankzClient.Game
         public void CreateEnumerators()
         {
             shootingEnum = shootingSounds.GetEnumerator();
+            shootingEnum.MoveNext();
             backgroundEnum = backgroundSounds.GetEnumerator();
+            backgroundEnum.MoveNext();
             environmentEnum = environmentSounds.GetEnumerator();
+            environmentEnum.MoveNext();
+        }
+
+        public string getCurrentSound(string type)
+        {
+            switch(type)
+            {
+                case "shooting":
+                    return shootingEnum.Current.getName();
+                case "background":
+                    return backgroundEnum.Current.getName();
+                case "environment":
+                    return environmentEnum.Current.Key;
+                default:
+                    return "tokio tipo garso nera";
+            }
         }
     }
 }
