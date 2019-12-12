@@ -19,7 +19,7 @@ namespace TankzClient.Game
 
         public override Entity Create(EntityCreateArgs args)
         {
-            System.Console.WriteLine($"BUILDER ParticleFactory: Create()");
+            System.Console.WriteLine($"FACTORY ParticleFactory: Create()");
             ParticleEmitter particleEmitter = null;
             string path = "../../res/particles/";
             Image image;

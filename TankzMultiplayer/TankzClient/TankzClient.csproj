@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -171,6 +172,7 @@
     <Compile Include="Framework\ParticlesContinuousMode.cs" />
     <Compile Include="Framework\ParticlesOneShotMode.cs" />
     <Compile Include="Framework\RotateEventArgs.cs" />
+    <Compile Include="Framework\Sound.cs" />
     <Compile Include="Framework\Utils.cs" />
     <Compile Include="Game\Background.cs" />
     <Compile Include="Game\Cannonball.cs" />
@@ -225,6 +227,7 @@
     <Compile Include="Game\TankChassis.cs" />
     <Compile Include="Game\PlayerTank.cs" />
     <Compile Include="Game\TankCustomization.cs" />
+    <Compile Include="Game\TankDead.cs" />
     <Compile Include="Game\TankDecorator.cs" />
     <Compile Include="Game\TankEditScene.cs" />
     <Compile Include="Game\TankIdle.cs" />

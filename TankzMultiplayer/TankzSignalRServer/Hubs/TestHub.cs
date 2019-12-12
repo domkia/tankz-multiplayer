@@ -20,7 +20,6 @@ namespace TankzSignalRServer.Hubs
         private static int currentTurn;
         private static int turnsToNextCrate;
         Random rand = new Random();
-        Timer timer;
         //private ShootArgs args;
         //PlayersController pct;
         public TestHub(TankzContext context)

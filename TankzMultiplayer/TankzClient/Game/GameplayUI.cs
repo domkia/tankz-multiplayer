@@ -76,7 +76,6 @@ namespace TankzClient.Game
             context.FillRectangle(Brushes.Brown, 240, 2, 300, 45); //turn
             context.DrawRectangle(borderPen, 240, 2, 300, 45); //turn
             //string player = NetworkManager.Instance.getCurrentPlayer();
-            string playerName = "";
             //if(NetworkManager.Instance.IsMyTurn)
             //{
             //    playerName = "YOU";

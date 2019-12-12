@@ -7,9 +7,11 @@ namespace TankzClient.Game
     {
         public override void Load()
         {
-            // Load sounds
-            //SoundsPlayer.Instance.AddSound("background", "../../res/sounds/background.mp3");
-            SoundsPlayer.Instance.AddSound("shoot_1", "../../res/sounds/shoot_1.wav");
+            SoundsPlayer.Instance.AddSoundIter("background", "../../res/sounds/background.mp3", "background");
+            SoundsPlayer.Instance.AddSoundIter("shoot_0", "../../res/sounds/shoot_0.wav", "shooting");
+            SoundsPlayer.Instance.AddSoundIter("shoot_1", "../../res/sounds/shoot_1.wav", "shooting");
+            SoundsPlayer.Instance.AddSoundIter("shoot_2", "../../res/sounds/shoot_2.wav", "shooting");
+            SoundsPlayer.Instance.CreateEnumerators();
 
             // Initialize server connection
             if (!NetworkManager.Instance.IsConnected)

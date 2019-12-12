@@ -14,7 +14,6 @@ namespace TankzClient.Game
         private Pen markedBorderPen = new Pen(Color.Bisque, 4);
         private int weaponElementSize = 120;
         private int padding = 15;
-        private int selectedWeapon = 1;
 
         public override void Render(Graphics context)
         {

@@ -42,7 +42,6 @@ namespace TankzClient.Framework
                     break;
                 case null:
                     return null;
-                    break;
                 default:
                     return null;
             }

@@ -13,13 +13,9 @@ namespace TankzClient.Game
     class GameplayScene : Scene
     {
         Background background;
-        Terrain terrain;
         Grenade grenade;
         Crate crate;
         PlayerTank tank;
-        float startPositionX = -10;
-        float startPositionY = -10;
-        float currentTime = 0;
 
         public static Dictionary<string, Game.Tank> tankDict = new Dictionary<string, Game.Tank>();
 
@@ -125,8 +121,6 @@ namespace TankzClient.Game
         {
 
             base.Update(deltaTime);
-            
-            currentTime += deltaTime;
         }
         private void Instance_BarrelRotate(object sender, RotateEventArgs e)
         {

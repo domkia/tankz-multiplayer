@@ -14,7 +14,6 @@ namespace TankzClient.Game
         public readonly float Speed = 50f;
 
         int movDir;
-        Vector2 position;
 
         public TankMovement(PlayerTank tank) : base (tank)
         {

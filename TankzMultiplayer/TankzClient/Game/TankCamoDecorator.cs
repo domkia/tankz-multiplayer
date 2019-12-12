@@ -56,7 +56,7 @@ namespace TankzClient.Game
                 tankBitmap.UnlockBits(src);
                 camo.UnlockBits(dest);
             }
-            catch (InvalidOperationException e) { }
+            catch (InvalidOperationException e) { Console.WriteLine(e.Message); }
         }
 
         public override void Render(Graphics context)

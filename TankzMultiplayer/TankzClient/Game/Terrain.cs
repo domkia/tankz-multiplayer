@@ -115,7 +115,7 @@ namespace TankzClient.Game
             }
             catch (InvalidOperationException e)
             {
-                
+                Console.WriteLine(e.Message);
             }
 
             terrainPixels.MakeTransparent(Color.Transparent);
@@ -195,7 +195,7 @@ namespace TankzClient.Game
             }
             catch (InvalidOperationException e)
             {
-
+                Console.WriteLine(e.Message);
             }
         }
 

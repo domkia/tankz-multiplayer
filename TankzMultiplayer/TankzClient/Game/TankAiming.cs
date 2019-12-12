@@ -12,7 +12,6 @@ namespace TankzClient.Game
         public readonly float RotationSpeed = 90.0f;
 
         int rotDir = 0;
-        bool isKeyDown = false;
 
         public TankAiming(PlayerTank tank) : base (tank)
         {
@@ -79,7 +78,6 @@ namespace TankzClient.Game
         {
             if (Input.IsKeyDown(System.Windows.Forms.Keys.Left) || Input.IsKeyDown(System.Windows.Forms.Keys.Right))
             {
-                isKeyDown = true;
                 if (Input.IsKeyDown(System.Windows.Forms.Keys.Left))
                 {
                     rotDir = 1;
@@ -92,7 +90,6 @@ namespace TankzClient.Game
             else if (Input.IsKeyUp(System.Windows.Forms.Keys.Left) || Input.IsKeyUp(System.Windows.Forms.Keys.Right))
             {
                 rotDir = 0;
-                isKeyDown = false;
             }
 
             RotateBarrel(deltaTime);

@@ -6,7 +6,6 @@ namespace TankzClient.Game
 {
     class TankChassis : Sprite
     {
-        private float leanAngle = 5f;
         private float bobFrequency = 16f;
         private float bobAmplitude = 1.2f;
 
