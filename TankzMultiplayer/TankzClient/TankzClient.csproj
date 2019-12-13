@@ -216,6 +216,7 @@
     <Compile Include="Game\InventoryUI.cs" />
     <Compile Include="Game\Projectile.cs" />
     <Compile Include="Game\RegisterScene.cs" />
+    <Compile Include="Game\RussianTankBuilder.cs" />
     <Compile Include="Game\SoundsPlayerMP3.cs" />
     <Compile Include="Game\SoundsPlayer.cs" />
     <Compile Include="Game\SoundsPlayerWAV.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Game\Terrain.cs" />
     <Compile Include="Game\TestScene.cs" />
     <Compile Include="Game\MainMenuScene.cs" />
+    <Compile Include="Game\UsaTankBuilder.cs" />
     <Compile Include="Models\Crate.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Tank.cs" />

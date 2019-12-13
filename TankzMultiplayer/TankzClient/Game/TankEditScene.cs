@@ -144,11 +144,13 @@ namespace TankzClient.Game
         public void UpdateTank(int color, int chassis, int turret, int tracks)
         {
             SceneManager.Instance.CurrentScene.DestroyEntity(NPCTank);
-            NPCTank = new TankBuilder(false)
+            TankBuilder builder = new UsaTankBuilder(false);
+            NPCTank = builder.Build();
+            /*NPCTank = new TankBuilder(false)
                         .SetChassis(color, chassis)
                         .SetTurret(turret)
                         .SetTracks(tracks)
-                        .Build();
+                        .Build();*/
             CreateEntity(NPCTank);
             TankState state = new TankState { Pos_X = 360, Pos_Y = 300 };
             NPCTank.UpdateTankState(state);

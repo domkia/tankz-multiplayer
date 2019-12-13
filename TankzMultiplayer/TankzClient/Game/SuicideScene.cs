@@ -15,12 +15,13 @@ namespace TankzClient.Game
 
         public override void Load()
         {
-            Tank usaTank =
-                new TankBuilder(true)
+            TankBuilder builder = new UsaTankBuilder(false);
+            Tank usaTank = builder.Build();
+                /*new TankBuilder(true)
                 .SetChassis(1, 1)
                 .SetTurret(1)
                 .SetTracks(0)
-                .Build();
+                .Build();*/
             CreateEntity(usaTank);
             usaTank.transform.SetPosition(new Vector2(500, 100));
 

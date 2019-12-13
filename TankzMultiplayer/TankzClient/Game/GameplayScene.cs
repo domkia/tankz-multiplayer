@@ -72,22 +72,26 @@ namespace TankzClient.Game
             {
                 if (player.ConnectionId == NetworkManager.Instance.myConnId())
                 {
-                    tank = new TankBuilder(true)
+                    TankBuilder usaTankBuilder = new UsaTankBuilder(true);
+                    tank = usaTankBuilder.Build() as PlayerTank;
+                    /*tank = new TankBuilder(true)
                          .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
                          .SetTurret(player.Tank.Chasis_id)
                          .SetTracks(player.Tank.Trucks_id)
-                         .Build() as PlayerTank;
+                         .Build() as PlayerTank;*/
                     CreateEntity(tank);
                     tank.UpdateTankState(player.TankState);
                     tankDict.Add(player.ConnectionId, tank);
                 }
                 else
                 {
-                    Tank NPCTank = new TankBuilder(false)
+                    TankBuilder russianTankBuilder = new RussianTankBuilder(false);
+                    Tank NPCTank = russianTankBuilder.Build();
+                    /*Tank NPCTank = new TankBuilder(false)
                         .SetChassis(player.Tank.Color_id, player.Tank.Chasis_id)
                         .SetTurret(player.Tank.Chasis_id)
                         .SetTracks(player.Tank.Trucks_id)
-                        .Build();
+                        .Build();*/
                     CreateEntity(NPCTank);
                     NPCTank.UpdateTankState(player.TankState);
                     tankDict.Add(player.ConnectionId, NPCTank);
