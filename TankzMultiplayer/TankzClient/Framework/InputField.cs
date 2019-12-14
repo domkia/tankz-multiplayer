@@ -93,10 +93,11 @@ namespace TankzClient.Framework
                 else
                 {
                     char character = (char)key;
-                    if (char.IsLetterOrDigit(character))
-                    {
+                    // TODO: read all keys
+                    //if (char.IsLetterOrDigit(character))
+                    //{
                         Text.Append(character);
-                    }
+                    //}
                 }
             }
         }

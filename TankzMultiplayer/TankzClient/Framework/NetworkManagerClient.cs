@@ -69,7 +69,7 @@ namespace TankzClient.Framework
 
         private Task GameStarted(string playersTanksObject)
         {
-            Console.WriteLine("Game Starting");
+            Console.WriteLine("NetworkManager: Game Starting");
 
             // Load gameplay scene
             SceneManager.Instance.LoadScene<GameplayScene>();
@@ -88,12 +88,14 @@ namespace TankzClient.Framework
             Console.WriteLine($"Message: {message}");
             Console.ResetColor();
 
+            OnChatMessageReceived?.Invoke(message);
+
             return Task.CompletedTask;
         }
 
         private Task TurnStarted(string playerId)
         {
-            Console.WriteLine("turn started");
+            Console.WriteLine("NetworkManager: Turn started");
             CurrentTurn = playerId;
             OnTurnStarted?.Invoke(null, EventArgs.Empty);
 

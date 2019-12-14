@@ -37,7 +37,7 @@ namespace TankzClient.Framework
         public event EventHandler<RotateEventArgs> BarrelRotate;
         public event Action<int> OnCrateDestroyed;
         public event Action<Models.Crate> OnCrateSpawned;
-
+        public event Action<string> OnChatMessageReceived;
 
         #region Singleton
 
