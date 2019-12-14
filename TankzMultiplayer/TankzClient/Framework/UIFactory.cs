@@ -40,11 +40,10 @@ namespace TankzClient.Framework
                         Color.LightGreen, 
                         Color.DarkGreen);
                     break;
-                case null:
-                    return null;
-                    break;
                 default:
-                    return null;
+                    element = new NullUIElement(
+                        new Rectangle((int)ui.position.x, (int)ui.position.y, 100, 100));
+                    break;
             }
             return SceneManager.Instance.CurrentScene.CreateEntity(element);
         }
