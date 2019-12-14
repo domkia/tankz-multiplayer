@@ -10,7 +10,7 @@ namespace TankzClient.Framework
     {
         public float Progress { get; protected set; }
         public Color FillColor { get; protected set; }
-        protected int Margin { get; set; }
+        public int Margin { get; set; }
 
         private Brush background;
         private Brush fill;
@@ -24,6 +24,13 @@ namespace TankzClient.Framework
 
             this.background = new SolidBrush(backColor);
             this.fill = new SolidBrush(fillColor);
+            this.Progress = 1.0f;
+        }
+
+        public override void SetColor(Color color)
+        {
+            base.SetColor(color);
+            background = new SolidBrush(color);
         }
 
         public void SetProgress(float progress)

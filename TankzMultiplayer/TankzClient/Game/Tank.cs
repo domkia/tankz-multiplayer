@@ -13,7 +13,7 @@ namespace TankzClient.Game
     /// <summary>
     /// Base tank class
     /// </summary>
-    public class Tank : Sprite, ITank
+    public class Tank : Sprite, ITank, IMediatorClient
     {
         public int Fuel => state.Fuel;
         public float Power => state.Power;
@@ -24,7 +24,7 @@ namespace TankzClient.Game
         public TankState State => state;
 
         private TankBarrel _barrel = null;
-        public TankBarrel barrel
+        public TankBarrel Barrel
         {
             get
             {
@@ -44,7 +44,10 @@ namespace TankzClient.Game
         {
             this.state = updatedState;
             transform.SetPosition(new Vector2(state.Pos_X, state.Pos_Y));
-            barrel.transform.SetAngle(-state.Angle);
+            SetAngle(state.Angle);
+            SetFuel(state.Fuel);
+            SetPower(state.Power);
+            //TODO: SetHealth
         }
 
         public void Shoot()
@@ -54,7 +57,7 @@ namespace TankzClient.Game
             NetworkManager.Instance.Shoot(angle, power);
 
             // Spawn shoot particle at the barrel tip point
-            Vector2 particleSpawnPoint = barrel.GetReleasePosition();
+            Vector2 particleSpawnPoint = Barrel.GetReleasePosition();
             ParticleEmitter particle = new ParticleFactory().Create("explosion") as ParticleEmitter;
             particle.transform.SetPosition(particleSpawnPoint);
             SoundsPlayer.Instance.PlaySound("shoot_1");
@@ -65,16 +68,16 @@ namespace TankzClient.Game
         {
             if (state.Fuel == 0)
             {
-            //    return;
+                return;
             }
             Vector2 pos = transform.position + offset;
             NetworkManager.Instance.SetPos(pos);
             transform.SetPosition(transform.position + offset);
             float distance = offset.Magnitude;
-            state.Fuel -= (int)distance;
+            SetFuel(state.Fuel - (int)distance);
         }
 
-        public void SetAngle(float angle)
+        public virtual void SetAngle(float angle)
         {
             if (angle < 0.0f)
             {
@@ -84,11 +87,12 @@ namespace TankzClient.Game
             {
                 angle = 180.0f;
             }
-            barrel.transform.SetAngle(-angle);
+            Barrel.transform.SetAngle(-angle);
             state.Angle = angle;
+            ui?.Notify(this, "angle");
         }
 
-        public void SetPower(float power)
+        public virtual void SetPower(float power)
         {
             if (power < 0.0f)
             {
@@ -99,9 +103,10 @@ namespace TankzClient.Game
                 power = 1.0f;
             }
             state.Power = power;
+            ui?.Notify(this, "power");
         }
 
-        public void SetFuel(int fuel)
+        public virtual void SetFuel(int fuel)
         {
             if (fuel < 0)
             {
@@ -112,6 +117,7 @@ namespace TankzClient.Game
                 fuel = 100;
             }
             state.Fuel = fuel;
+            ui?.Notify(this, "fuel");
         }
 
         public override void Render(Graphics context)
@@ -126,6 +132,13 @@ namespace TankzClient.Game
             context.DrawString($" Power: {state.Power}", SystemFonts.CaptionFont, Brushes.LightPink, rect.Location);
             rect.Y += 14;
             context.DrawString($"  Fuel: {state.Fuel}", SystemFonts.CaptionFont, Brushes.LightGray, rect.Location);
+        }
+
+        protected IMediator ui;
+
+        public void SetMediator(IMediator mediator)
+        {
+            this.ui = mediator;
         }
     }
 }
