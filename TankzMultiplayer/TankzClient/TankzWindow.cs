@@ -17,6 +17,9 @@ namespace TankzClient
             // Use double buffering in order to prevent flickering
             DoubleBuffered = true;
 
+            // Setup custom console output
+            Console.SetOut(new TankzConsole());
+
             // Start the actuall game
             GameStart();
         }
@@ -27,7 +30,7 @@ namespace TankzClient
             // ...
 
             // Load starting scene
-            SceneManager.Instance.LoadScene<IntroScene>();
+            SceneManager.Instance.LoadScene<UITestScene>();
 
             // Begin counting frames
             Thread updateThread = new Thread(GameLoop);
