@@ -17,6 +17,7 @@ namespace TankzClient.Game
         private Button createAccButton;
         private InputField usernameField;
         private InputField passwordField;
+        private Button editProfile;
         private Sprite logo;
         bool error = false;
         private string msg = "";
@@ -68,12 +69,21 @@ namespace TankzClient.Game
             suicideButton = CreateEntity(new Button(650, 400, 50, 50, null, "Suicide Scene")) as Button;
             suicideButton.OnClickCallback += SuicideButton_OnClickCallback;
 
+            editProfile = CreateEntity(new Button(350, 280, 100, 20, null, "Tank Editor")) as Button;
+            editProfile.OnClickCallback += EditProfile_OnClickCallback;
+            editProfile.SetTextColor(Color.White);
+            editProfile.SetColor(Color.Brown);
+
             icons = new Image[]
             {
                 HttpImageDownloader.GetBitmapFromURL("https://avatars2.githubusercontent.com/u/36890057?s=460&v=4", new Size(32, 32)),
                 HttpImageDownloader.GetBitmapFromURL("https://avatars3.githubusercontent.com/u/36762328?s=460&v=4", new Size(32, 32)),
                 HttpImageDownloader.GetBitmapFromURL("https://cdn2.iconfinder.com/data/icons/ninja-turtles-filledoutline/64/donatello-avatar-people-super_hero-ninja-ninja_turtles-warrior-cultures-japanese-oriental-512.png", new Size(32, 32))
             };
+        }
+        private void EditProfile_OnClickCallback()
+        {
+            SceneManager.Instance.LoadScene<TankEditScene>();
         }
 
         public override void Unload()

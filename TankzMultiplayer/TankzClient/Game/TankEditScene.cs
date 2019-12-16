@@ -23,10 +23,11 @@ namespace TankzClient.Game
         private Button tracksDown;
         private Button tracksUp;
         private Button backButton;
-        private int currColor = 0;
-        private int currChassis = 0;
-        private int currTurret =0;
-        private int currTracks =0;
+        private Button undoConfig;
+        private Button showHistory;
+        private TankConfig config;
+        Originator originator;
+        Caretaker caretaker;
 
         Tank NPCTank;
 
@@ -34,8 +35,12 @@ namespace TankzClient.Game
 
         public override void Load()
         {
+            config = new TankConfig(0, 0, 0, 0);
+            originator = new Originator(config);
+            caretaker = new Caretaker(originator);
+            caretaker.Backup();
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380, 80), new Vector2(500, 250))) as Sprite;
-            UpdateTank(0, 0, 0, 0);
+            UpdateTank();
             //Color edits
             colorDown = CreateEntity(new Button(300, 260, 15, 15, null, "<")) as Button;
             colorUp = CreateEntity(new Button(400, 260, 15, 15, null, ">")) as Button;
@@ -63,68 +68,87 @@ namespace TankzClient.Game
             saveConfig = CreateEntity(new Button(300, 360, 120, 15, null, "Save tank configuration")) as Button;
             saveConfig.OnClickCallback += SaveConfig_OnClickCallback;
 
+            undoConfig = CreateEntity(new Button(300, 390, 120, 15, null, "Undo tank configuration")) as Button;
+            undoConfig.OnClickCallback += UndoConfig_OnClickCallback;
+
+
+            showHistory = CreateEntity(new Button(300, 420, 120, 15, null, "Show config history")) as Button;
+            showHistory.OnClickCallback += ShowHistory_OnClickCallback; ;
+
             backButton = CreateEntity(new Button(10, 400, 40, 15, null, "BACK")) as Button;
             backButton.OnClickCallback += BackButton_OnClickCallback;
         }
 
+        private void ShowHistory_OnClickCallback()
+        {
+            caretaker.ShowHistory();
+        }
+
         private void BackButton_OnClickCallback()
         {
-            SceneManager.Instance.LoadScene<MainMenuScene>();
+            SceneManager.Instance.LoadScene<LoginScene>();
         }
 
         private void TracksUp_OnClickCallback()
         {
-            if(currTracks < 3)
+            if(config.getTracks() < 3)
             {
-                UpdateTank(currColor, currChassis, currTurret, ++currTracks);
+                config.seTracks(config.getTracks()+1);
+                UpdateTank();
             }
         }
 
         private void TracksDown_OnClickCallback()
         {
-            if (currTracks > 0)
+            if (config.getTracks() > 0)
             {
-                UpdateTank(currColor, currChassis, currTurret, --currTracks);
+                config.seTracks(config.getTracks() - 1);
+                UpdateTank();
             }
         }
 
         private void TurretUp_OnClickCallback()
         {
-            if (currTurret < 2)
+            if (config.getTurret() < 2)
             {
-                UpdateTank(currColor, currChassis, ++currTurret, currTracks);
+                config.setTurret(config.getTurret() + 1);
+                UpdateTank();
             }
         }
 
         private void TurretDown_OnClickCallback()
         {
-            if (currTurret > 0)
+            if (config.getTurret() > 0)
             {
-                UpdateTank(currColor, currChassis, --currTurret, currTracks);
+                config.setTurret(config.getTurret() - 1);
+                UpdateTank();
             }
         }
 
         private void ChassisUp_OnClickCallback()
         {
-            if (currChassis < 3)
+            if (config.getChassis() < 3)
             {
-                UpdateTank(currColor, ++currChassis, currTurret, currTracks);
+                config.setChassis(config.getChassis() + 1);
+                UpdateTank();
             }
         }
 
         private void ChassisDown_OnClickCallback()
         {
-            if (currChassis > 0)
+            if (config.getChassis() > 0)
             {
-                UpdateTank(currColor, --currChassis, currTurret, currTracks);
+                config.setChassis(config.getChassis() - 1);
+                UpdateTank();
             }
         }
 
         private void ColorUp_OnClickCallback()
         {
-            if (currColor < 3)
+            if (config.getColor() < 3)
             {
-                UpdateTank(++currColor, currChassis, currTurret, currTracks);
+                config.setColor(config.getColor() + 1);
+                UpdateTank();
             }
         }
 
@@ -135,22 +159,21 @@ namespace TankzClient.Game
 
         private void ColorDown_OnClickCallback()
         {
-            if (currColor >0)
+            if (config.getColor() >0)
             {
-                UpdateTank(--currColor, currChassis, currTurret, currTracks);
+                config.setColor(config.getColor() - 1);
+                UpdateTank();
             }
         }
 
-        public void UpdateTank(int color, int chassis, int turret, int tracks)
+        public void UpdateTank()
         {
             SceneManager.Instance.CurrentScene.DestroyEntity(NPCTank);
-            TankBuilder builder = new UsaTankBuilder(false);
-            NPCTank = builder.Build();
-            /*NPCTank = new TankBuilder(false)
-                        .SetChassis(color, chassis)
-                        .SetTurret(turret)
-                        .SetTracks(tracks)
-                        .Build();*/
+            NPCTank = new CustomizableTankBuilder(false)
+                        .SetChassis(config.getColor(), config.getChassis())
+                        .SetTurret(config.getTurret())
+                        .SetTracks(config.getTracks())
+                        .Build();
             CreateEntity(NPCTank);
             TankState state = new TankState { Pos_X = 360, Pos_Y = 300 };
             NPCTank.UpdateTankState(state);
@@ -158,13 +181,23 @@ namespace TankzClient.Game
 
         private void SaveConfig_OnClickCallback()
         {
-            throw new NotImplementedException();
+            caretaker.Backup();
+        }
+
+        private void UndoConfig_OnClickCallback()
+        {
+            caretaker.Undo();
+            ConcreteMemento memento = caretaker.getCurrent() as ConcreteMemento;
+            if (memento != null)
+            config = memento.GetState();
+            UpdateTank();
         }
 
         public override void Render(Graphics context)
         {
             context.Clear(Color.FromArgb(77, 120, 78));
             base.Render(context);
+            context.DrawString(config.ToString(), new Font(FontFamily.GenericMonospace, 15f, FontStyle.Bold), Brushes.Black, new Point(125, 450));
         }
     }
 }

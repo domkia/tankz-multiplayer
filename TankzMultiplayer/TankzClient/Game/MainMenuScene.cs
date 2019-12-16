@@ -8,7 +8,7 @@ namespace TankzClient.Game
     {
         private Sprite logo;
         private Button start;
-        private Button editProfile;
+        
         bool error = false;
         string msg;
         public override void Load()
@@ -16,13 +16,12 @@ namespace TankzClient.Game
             NetworkManager.Instance.LobbyErrorGot += Instance_LobbyErrorGot;
             logo = CreateEntity(new Sprite(Image.FromFile("../../res/logo.png"), new Vector2(380, 80), new Vector2(500, 250))) as Sprite;
             start = CreateEntity(new Button(350, 250, 100, 20, null, "START")) as Button;
-            editProfile = CreateEntity(new Button(350, 280, 100, 20, null, "EDIT PROFILE")) as Button;
+           
             start.OnClickCallback += Start_OnClickCallback;
-            editProfile.OnClickCallback += EditProfile_OnClickCallback;
+            
             start.SetTextColor(Color.White);
             start.SetColor(Color.Brown);
-            editProfile.SetTextColor(Color.White);
-            editProfile.SetColor(Color.Brown);
+            
         }
 
         private void Instance_LobbyErrorGot(object sender, string e)
@@ -31,10 +30,7 @@ namespace TankzClient.Game
             msg = e;
         }
 
-        private void EditProfile_OnClickCallback()
-        {
-            SceneManager.Instance.LoadScene<TankEditScene>();
-        }
+        
 
         private void Start_OnClickCallback()
         {
