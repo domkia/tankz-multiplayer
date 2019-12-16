@@ -4,7 +4,7 @@
     {
         public ParticlesOneShotMode()
         {
-            System.Console.WriteLine("BRIDGE new ParticlesOneShotMode()");
+           // System.Console.WriteLine("BRIDGE new ParticlesOneShotMode()");
         }
 
         public IParticleEmitMode Clone()

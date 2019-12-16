@@ -19,7 +19,7 @@ namespace TankzClient.Game
 
         public override Entity Create(EntityCreateArgs args)
         {
-            System.Console.WriteLine($"FACTORY ParticleFactory: Create()");
+            //System.Console.WriteLine($"FACTORY ParticleFactory: Create()");
             ParticleEmitter particleEmitter = null;
             string path = "../../res/particles/";
             Image image;
@@ -27,7 +27,7 @@ namespace TankzClient.Game
             string particleType = args.type.ToLower();
             if (cache.ContainsKey(particleType))
             {
-                particleEmitter = Clone(particleType);
+                return cache[particleType];
             }
             else
             {
